@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TradeLab - Group</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#10c16c",
+                        "background-light": "#F7F9FC",
+                        "background-dark": "#102219",
+                        "surface": "#FFFFFF",
+                        "text-main": "#12151A",
+                        "text-muted": "#8A94A6"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "md": "1rem",
+                        "lg": "1.5rem",
+                        "xl": "24px",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'card': '0 12px 40px rgba(0, 102, 255, 0.05)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: theme('colors.background-light');
+            color: theme('colors.text-main');
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased h-screen flex overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-[240px] h-full bg-background-light dark:bg-background-dark flex flex-col justify-between p-4 shrink-0 border-r border-slate-200 dark:border-slate-800">
+<div class="flex flex-col gap-8 mt-2">
+<div class="flex flex-col px-3">
+<h1 class="text-text-main dark:text-slate-100 text-xl font-bold tracking-tight">TradeLab</h1>
+<p class="text-text-muted text-sm font-medium mt-1">Good afternoon, User</p>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-text-muted hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-[24px] group-hover:text-text-main dark:group-hover:text-slate-100 transition-colors">home</span>
+<span class="text-sm font-semibold group-hover:text-text-main dark:group-hover:text-slate-100 transition-colors">Home</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-text-muted hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-[24px] group-hover:text-text-main dark:group-hover:text-slate-100 transition-colors">swap_horiz</span>
+<span class="text-sm font-semibold group-hover:text-text-main dark:group-hover:text-slate-100 transition-colors">Trade</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-primary/10 text-primary" href="#">
+<span class="material-symbols-outlined text-[24px] group-hover:text-text-main dark:group-hover:text-slate-100 transition-colors" style="font-variation-settings: 'FILL' 1;">groups</span>
+<span class="text-sm font-bold text-text-main dark:text-slate-100">Group</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-text-muted hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-[24px] group-hover:text-text-main dark:group-hover:text-slate-100 transition-colors">emoji_events</span>
+<span class="text-sm font-semibold group-hover:text-text-main dark:group-hover:text-slate-100 transition-colors">Rank</span>
+</a>
+</nav>
+</div>
+<div class="px-3 pb-4">
+<button class="flex items-center gap-3 text-text-muted hover:text-text-main dark:hover:text-slate-100 transition-colors text-sm font-semibold">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+                Sign Out
+            </button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 h-full overflow-y-auto overflow-x-hidden p-8">
+<div class="max-w-[1000px] mx-auto flex flex-col gap-8 pb-12">
+<!-- Header -->
+<header class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex flex-col gap-1">
+<h2 class="text-[32px] font-bold text-text-main dark:text-slate-100 tracking-tight">Social &amp; Pods</h2>
+<p class="text-text-muted text-base">See what your friends are trading and manage your investing clubs.</p>
+</div>
+<button class="flex items-center justify-center gap-2 h-12 px-6 bg-primary hover:bg-[#0eba62] text-white rounded-full font-bold text-sm shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 whitespace-nowrap">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                    Create Pod
+                </button>
+</header>
+<!-- 60/40 Split Layout -->
+<div class="flex flex-col lg:flex-row gap-8 items-start">
+<!-- Left Column (60%): Activity Feed -->
+<div class="w-full lg:w-3/5 flex flex-col gap-6">
+<div class="bg-surface dark:bg-slate-900 rounded-xl shadow-card p-6 border border-slate-100 dark:border-slate-800">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-bold text-text-main dark:text-slate-100">Activity Feed</h3>
+<button class="text-sm font-semibold text-primary hover:text-[#0eba62] transition-colors">View All</button>
+</div>
+<div class="flex flex-col gap-1">
+<!-- Feed Item 1 -->
+<div class="flex items-start gap-4 p-4 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer group">
+<img alt="Avatar of a young woman" class="w-10 h-10 rounded-full object-cover shrink-0 border border-slate-200 dark:border-slate-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOSJD3oHuqCtKjbyMlc5XaGTTBdrQFw6zzxJxUYJm2syxOIMXxudvk4M0ZF3ejbtPjFsO-ri5TdgJ1g6w4CVuvxebglc2Pr99wTeoXUslS7Nu7BBVAApa-DfLDRc3BuEyJg_FobBwIMWZJPIbiHO6hCJofXgvTQuXfAW07JL1WrKfXeTSe32NZMiatdxBws8JlMspR-JKenj10QEYqjAtS1kL8r_s7zrUZb7zUPoqar2g4hMqdmXVLqRzV8Mkci-QhP-jI_no_rxo"/>
+<div class="flex flex-col gap-1 flex-1">
+<p class="text-text-main dark:text-slate-200 text-[15px] leading-snug">
+<span class="font-bold">Priya</span> bought <span class="font-semibold">₹5,000</span> of <span class="font-bold bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-sm">RELIANCE</span>
+</p>
+<span class="text-text-muted text-sm group-hover:text-slate-500 transition-colors">2h ago</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">trending_up</span>
+</div>
+</div>
+<div class="h-px bg-slate-100 dark:bg-slate-800 mx-4"></div>
+<!-- Feed Item 2 -->
+<div class="flex items-start gap-4 p-4 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer group">
+<img alt="Avatar of a man with glasses" class="w-10 h-10 rounded-full object-cover shrink-0 border border-slate-200 dark:border-slate-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIabuFsb3yEACq8ef_S1V4ROEQr-1ole761LcmH3o_Z1EJyebPFZPkr9ImBjQZU75ny0tWbF-BWLFifBi1IMkHHXk_DgGbFaSsMZjYhv5IuFW49a6VD3uz6aig0nx5n0ukdNY9WFoKIPXsRY4nH57VtRoj-hvTorkWLUKEyOLNUqEN1vlh5J_g5jJADi0anmbz5M6_wNXapvqIYmLC556_70cyi6mgODw1wr_TNGdD4JJRC1aczebH5gBUjFpX_SzQmFtnDNLyHqU"/>
+<div class="flex flex-col gap-1 flex-1">
+<p class="text-text-main dark:text-slate-200 text-[15px] leading-snug">
+<span class="font-bold">Rahul</span> joined the <span class="font-bold text-primary">Tech Bulls</span> pod.
+                                    </p>
+<span class="text-text-muted text-sm group-hover:text-slate-500 transition-colors">4h ago</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-text-muted shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">groups</span>
+</div>
+</div>
+<div class="h-px bg-slate-100 dark:bg-slate-800 mx-4"></div>
+<!-- Feed Item 3 -->
+<div class="flex items-start gap-4 p-4 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer group">
+<img alt="Avatar of a young man" class="w-10 h-10 rounded-full object-cover shrink-0 border border-slate-200 dark:border-slate-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOZZyZOsVvrZTRn2DsNsOeP6A_O8Udm9_cGMfMYf_RC_jmRTjhvveUhW5APyN7XIULhDPxgWSrKc26he3SdaIkSQjMwzsWnS14e36ZmaJZfEKTKCM5fHRwHPAmCNLZrl2rlrtvFy-xmX91RWYgGWbqajnJ3m9s5CaVTGr1xaor4yBo7nGlm3sCKo8Wpq9iJWQgdzst4ctKPh3w-Gb2DAq1ccK4xHoOqqT2bJ5NF2osZoLyPuRUI9_MgeZq-3NYAS50JToKiFm-AL4"/>
+<div class="flex flex-col gap-1 flex-1">
+<p class="text-text-main dark:text-slate-200 text-[15px] leading-snug">
+<span class="font-bold">Amit</span> sold 10 shares of <span class="font-bold bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-sm">HDFCBANK</span>
+</p>
+<span class="text-text-muted text-sm group-hover:text-slate-500 transition-colors">Yesterday</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">trending_down</span>
+</div>
+</div>
+<div class="h-px bg-slate-100 dark:bg-slate-800 mx-4"></div>
+<!-- Feed Item 4 -->
+<div class="flex items-start gap-4 p-4 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer group">
+<div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-indigo-600 dark:text-indigo-300 font-bold shrink-0 border border-slate-200 dark:border-slate-700">
+                                    S
+                                </div>
+<div class="flex flex-col gap-1 flex-1">
+<p class="text-text-main dark:text-slate-200 text-[15px] leading-snug">
+<span class="font-bold">Sneha</span> reached a new milestone: <span class="font-semibold text-[#f59e0b]">Top 10% Global Rank!</span>
+</p>
+<span class="text-text-muted text-sm group-hover:text-slate-500 transition-colors">Yesterday</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center text-[#f59e0b] shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">emoji_events</span>
+</div>
+</div>
+</div>
+<button class="w-full mt-4 py-3 rounded-lg text-text-main dark:text-slate-200 font-semibold text-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700">
+                            Load More
+                        </button>
+</div>
+</div>
+<!-- Right Column (40%): Pod Cards -->
+<div class="w-full lg:w-2/5 flex flex-col gap-6">
+<h3 class="text-lg font-bold text-text-main dark:text-slate-100 px-1">Active Pods</h3>
+<div class="flex flex-col gap-4">
+<!-- Pod Card 1 -->
+<div class="bg-surface dark:bg-slate-900 rounded-xl shadow-card p-6 border border-slate-100 dark:border-slate-800 hover:-translate-y-1 transition-transform cursor-pointer group relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
+<div class="flex justify-between items-start mb-6 relative z-10">
+<div>
+<h4 class="text-xl font-bold text-text-main dark:text-slate-100 tracking-tight">Tech Bulls</h4>
+<p class="text-text-muted text-sm mt-1">Aggressive growth</p>
+</div>
+<div class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+                                    12.4%
+                                </div>
+</div>
+<div class="flex flex-col gap-4 relative z-10">
+<div>
+<p class="text-text-muted text-xs font-semibold uppercase tracking-wider mb-1">Total Value</p>
+<p class="text-2xl font-bold text-text-main dark:text-slate-100">₹1,45,000</p>
+</div>
+<div class="flex items-center justify-between mt-2">
+<div class="flex -space-x-3">
+<img alt="Pod member avatar" class="w-9 h-9 rounded-full border-2 border-surface dark:border-slate-900 relative z-30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAD6S4YZkOLdYC4LENjMmmbUtpReEMUWtI28Jo6Uh390Zo1a1dfczyOqo8ARggBV1FX6oWFOo_oVmfTfLPE38SfRxVLhpSlBoOEiUnnag_pGnv9GUrqEDnVX5ebAa74WoPCqGJOkFMtAUnouDjNCpCvryaQWQRwX8Cs0uzng2RpU0q9-tXgDmV1Sneq-H2u9xoX4PGnadPZ1p-b0y4NbBOtiE58Mik4MDE3vpmP0DhPmzyBLwpehchFXapuLSbZM9ppQCkSouZdF0Y"/>
+<img alt="Pod member avatar" class="w-9 h-9 rounded-full border-2 border-surface dark:border-slate-900 relative z-20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB62HWOWj3qAY1WPkbVOBdi16LCAhNfSn7r4dc0nKH5_mNx8wYCITVCHi8Bm8k6IZDzab4tdp5maEWCO3Y4_NikjshJnB8a4ysCKHXb8G-IY150UEosgVBZ114zEzsjLaCkn-jcEcyLUlgf7jXcuNzJZF6iJ7b3dsu7sgqu6wLBJ8Y8DSZxy0rDRJte1Dhzs3YLeUY-SNE9VIQa1_MBiklrFR7MeakM4GTNmShUyAWzyjwVENlDB7q1SWObtfMfTpJZsH5dSRF_wTw"/>
+<img alt="Pod member avatar" class="w-9 h-9 rounded-full border-2 border-surface dark:border-slate-900 relative z-10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHI_s_Aq0vgyPWx4iB-buo6roM1H3k1i8m_nSOJwiVinvaF421_F2y0ytfFqWSKyEhKseDRi_8Q0cZXXdvJq4OR8j4Tsb6hZPJ5UKf6llNsfoMd03yTDYoGLa_4J5LuiIoKY_KWJNrv8viA1rvSFjhMne2e5J_PysOIaYL-3TfY82vnAedsfbgtuah14OX_wiJkKS-aO8t4XeAAZXc-yvEAQfbRpFhcusltm8nCScBWLW9vtewy--evb9IP5Hp0BpgZKSLMfmGbm8"/>
+<div class="w-9 h-9 rounded-full border-2 border-surface dark:border-slate-900 bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-xs font-bold text-text-muted relative z-0">
+                                            +2
+                                        </div>
+</div>
+<span class="text-primary text-sm font-semibold group-hover:underline">View Details</span>
+</div>
+</div>
+</div>
+<!-- Pod Card 2 -->
+<div class="bg-surface dark:bg-slate-900 rounded-xl shadow-card p-6 border border-slate-100 dark:border-slate-800 hover:-translate-y-1 transition-transform cursor-pointer group relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
+<div class="flex justify-between items-start mb-6 relative z-10">
+<div>
+<h4 class="text-xl font-bold text-text-main dark:text-slate-100 tracking-tight">Family Fund</h4>
+<p class="text-text-muted text-sm mt-1">Dividend focus</p>
+</div>
+<div class="bg-blue-500/10 text-blue-600 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+                                    4.2%
+                                </div>
+</div>
+<div class="flex flex-col gap-4 relative z-10">
+<div>
+<p class="text-text-muted text-xs font-semibold uppercase tracking-wider mb-1">Total Value</p>
+<p class="text-2xl font-bold text-text-main dark:text-slate-100">₹8,50,000</p>
+</div>
+<div class="flex items-center justify-between mt-2">
+<div class="flex -space-x-3">
+<img alt="Pod member avatar" class="w-9 h-9 rounded-full border-2 border-surface dark:border-slate-900 relative z-20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA20D8Oprxxby4D1dN8XKfcctMKKIIHLqR8u94-RNYJEK0jLAA95ZmK3nZF4lcUYjiUw-ZQcPPUAbzMzvl4H_2YTTneVPI7pBwyWS45Nb7q93qfCUuYHYbXC2mULtP8lVIufTo-NPRSd3wylHqMOgaXK1HC-DWozq7GCnI7cIk5K8p999UaLbSD2neEXUKBVWW4nEZlmbbcaEWziz3J2HEmIf5Q1O46JWpLSpj0FhCc-QXhx1DzXY2q58tpLaykYHnsQpti5P1qESw"/>
+<img alt="Pod member avatar" class="w-9 h-9 rounded-full border-2 border-surface dark:border-slate-900 relative z-10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxbc-3rcai8-17YtGTEOii6aFw_ToZ13boUQi4Ro_5iVnPnUc74TohZJZG8pHQsLHqfVbsaEr3SYDs4DICqcV29y3BnQlFS-aIIVNwokbeU13Kt0QFtfDOlembT3TXk9su-NL-b7vE9d3p35TqJB9L-fa8n_RAViGJyobYrnx_Zn9WxlScXOIC4i-XEe3WJLr-mA64EdgZNCIFZhjUu3KKBVHNZf0DKmkuwWo4jB-tu_BRCcgFlfvEo3Ko8ySnWaN7xfV4SHHdUfY"/>
+</div>
+<span class="text-primary text-sm font-semibold group-hover:underline">View Details</span>
+</div>
+</div>
+</div>
+<!-- Invite Card -->
+<div class="mt-2 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 p-6 flex flex-col items-center justify-center text-center hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer group">
+<div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-text-muted mb-3 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px]">person_add</span>
+</div>
+<h4 class="text-text-main dark:text-slate-100 font-bold mb-1">Invite Friends</h4>
+<p class="text-text-muted text-sm max-w-[200px]">Investing is better with friends. Grow your network.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
