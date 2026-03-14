@@ -1,0 +1,578 @@
+
+<style>
+* { box-sizing: border-box; }
+.wrap { padding: 1rem 0; font-size: 14px; color: var(--color-text-primary); }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+.tab { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; border: 0.5px solid var(--color-border-secondary); background: var(--color-background-secondary); color: var(--color-text-secondary); transition: all .15s; }
+.tab.active { background: #534AB7; color: #EEEDFE; border-color: #534AB7; }
+.panel { display: none; }
+.panel.active { display: block; }
+.section-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: var(--color-text-tertiary); margin: 20px 0 10px; }
+.divider { height: 0.5px; background: var(--color-border-tertiary); margin: 20px 0; }
+
+/* Design tokens */
+.token-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+.token-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px; text-align: center; border: 0.5px solid var(--color-border-tertiary); }
+.color-swatch { width: 32px; height: 32px; border-radius: 8px; margin: 0 auto 8px; }
+.token-name { font-size: 11px; font-weight: 500; color: var(--color-text-primary); }
+.token-val  { font-size: 10px; color: var(--color-text-tertiary); margin-top: 2px; }
+
+/* Screen mockups */
+.phone-frame { width: 220px; background: var(--color-background-secondary); border: 1.5px solid var(--color-border-secondary); border-radius: 24px; padding: 12px; margin: 0 auto 20px; }
+.phone-bar { width: 60px; height: 4px; background: var(--color-border-secondary); border-radius: 2px; margin: 0 auto 12px; }
+.screen-title { font-size: 11px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 8px; }
+
+/* Nav bar mockup */
+.nav-bar { display: flex; justify-content: space-around; background: var(--color-background-secondary); border-top: 0.5px solid var(--color-border-tertiary); border-radius: 0 0 16px 16px; padding: 8px 0 4px; margin-top: 10px; }
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 9px; color: var(--color-text-tertiary); }
+.nav-item.active-nav { color: #7F77DD; }
+.nav-dot { width: 18px; height: 18px; border-radius: 5px; background: var(--color-border-tertiary); }
+.nav-dot.active-nav-dot { background: #EEEDFE; }
+
+/* Mini components for screens */
+.mini-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: 10px; padding: 8px 10px; margin-bottom: 6px; }
+.mini-row { display: flex; justify-content: space-between; align-items: center; }
+.mini-label { font-size: 10px; color: var(--color-text-secondary); }
+.mini-val { font-size: 11px; font-weight: 500; color: var(--color-text-primary); }
+.mini-green { color: #1D9E75; }
+.mini-red   { color: #E24B4A; }
+.mini-badge { font-size: 9px; padding: 1px 6px; border-radius: 8px; }
+.badge-green { background: #E1F5EE; color: #0F6E56; }
+.badge-red   { background: #FCEBEB; color: #A32D2D; }
+.badge-amber { background: #FAEEDA; color: #854F0B; }
+.badge-purple { background: #EEEDFE; color: #3C3489; }
+@media (prefers-color-scheme: dark) {
+  .badge-green  { background: #04342C; color: #5DCAA5; }
+  .badge-red    { background: #501313; color: #F09595; }
+  .badge-amber  { background: #412402; color: #EF9F27; }
+  .badge-purple { background: #26215C; color: #AFA9EC; }
+}
+
+.mini-progress { height: 3px; background: var(--color-border-tertiary); border-radius: 2px; margin-top: 4px; }
+.mini-fill { height: 100%; border-radius: 2px; }
+.mini-btn { background: #534AB7; color: #EEEDFE; border-radius: 8px; padding: 5px 0; text-align: center; font-size: 10px; font-weight: 500; margin-top: 6px; }
+.mini-btn-outline { border: 0.5px solid var(--color-border-secondary); border-radius: 8px; padding: 5px 0; text-align: center; font-size: 10px; color: var(--color-text-secondary); margin-top: 4px; }
+
+/* UX principles */
+.principle { display: flex; gap: 12px; padding: 12px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.principle:last-child { border-bottom: none; }
+.p-num { font-size: 11px; font-weight: 500; color: #7F77DD; min-width: 22px; padding-top: 2px; }
+.p-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 3px; }
+.p-desc { font-size: 12px; color: var(--color-text-secondary); line-height: 1.6; }
+
+/* Flow steps */
+.flow-step { display: flex; gap: 12px; margin-bottom: 14px; }
+.step-num { width: 24px; height: 24px; border-radius: 50%; background: #EEEDFE; color: #3C3489; font-size: 11px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+@media (prefers-color-scheme: dark) { .step-num { background: #26215C; color: #AFA9EC; } }
+.step-body .st { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.step-body .ss { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; margin-top: 2px; }
+
+.two-phone { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.two-phone .phone-frame { width: 180px; }
+
+.autopsy-box { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-left: 3px solid #E24B4A; border-radius: 0 8px 8px 0; padding: 7px 9px; margin-bottom: 5px; }
+.autopsy-box.good { border-left-color: #1D9E75; }
+.autopsy-title { font-size: 9px; font-weight: 500; color: #A32D2D; margin-bottom: 2px; }
+.autopsy-title.good { color: #0F6E56; }
+.autopsy-text { font-size: 9px; color: var(--color-text-secondary); line-height: 1.5; }
+
+.vote-row { display: flex; gap: 4px; margin-bottom: 5px; }
+.vote-btn { flex: 1; padding: 4px; border-radius: 6px; text-align: center; font-size: 9px; font-weight: 500; }
+.vote-yes { background: #E1F5EE; color: #0F6E56; }
+.vote-no  { background: #FCEBEB; color: #A32D2D; }
+@media (prefers-color-scheme: dark) {
+  .vote-yes { background: #04342C; color: #5DCAA5; }
+  .vote-no  { background: #501313; color: #F09595; }
+}
+
+.lb-row { display: flex; align-items: center; gap: 6px; padding: 4px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.lb-rank { font-size: 9px; font-weight: 500; color: var(--color-text-tertiary); min-width: 14px; }
+.lb-name { font-size: 10px; color: var(--color-text-primary); flex: 1; }
+.lb-val  { font-size: 10px; font-weight: 500; }
+
+.screen-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+</style>
+
+<div class="wrap">
+<div class="tabs">
+  <div class="tab active" onclick="show('design')">Design System</div>
+  <div class="tab" onclick="show('screens')">All Screens</div>
+  <div class="tab" onclick="show('ux')">UX Principles</div>
+  <div class="tab" onclick="show('flow')">User Flows</div>
+</div>
+
+<!-- DESIGN SYSTEM -->
+<div id="design" class="panel active">
+  <div class="section-label">Personality</div>
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:14px 16px;margin-bottom:16px;font-size:13px;color:var(--color-text-secondary);line-height:1.7;">
+    Dark-first, terminal-meets-fintech aesthetic. Think <strong style="color:var(--color-text-primary)">Robinhood clarity</strong> + <strong style="color:var(--color-text-primary)">Duolingo warmth</strong>. Numbers are always big and readable. Colors carry meaning — green = good trade, red = loss, amber = warning, purple = AI. No decoration for decoration's sake.
+  </div>
+
+  <div class="section-label">Color system</div>
+  <div class="token-grid">
+    <div class="token-card">
+      <div class="color-swatch" style="background:#7F77DD;"></div>
+      <div class="token-name">Brand purple</div>
+      <div class="token-val">#7F77DD</div>
+      <div class="token-val">AI, CTAs</div>
+    </div>
+    <div class="token-card">
+      <div class="color-swatch" style="background:#1D9E75;"></div>
+      <div class="token-name">Profit green</div>
+      <div class="token-val">#1D9E75</div>
+      <div class="token-val">Gains, success</div>
+    </div>
+    <div class="token-card">
+      <div class="color-swatch" style="background:#E24B4A;"></div>
+      <div class="token-name">Loss red</div>
+      <div class="token-val">#E24B4A</div>
+      <div class="token-val">Losses, errors</div>
+    </div>
+    <div class="token-card">
+      <div class="color-swatch" style="background:#BA7517;"></div>
+      <div class="token-name">Warning amber</div>
+      <div class="token-val">#BA7517</div>
+      <div class="token-val">Mistakes, caution</div>
+    </div>
+  </div>
+
+  <div class="section-label">Typography rules</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+    <div class="mini-card">
+      <div style="font-size:22px;font-weight:500;color:var(--color-text-primary);">₹10,240</div>
+      <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:2px;">Portfolio value — 22px 500</div>
+    </div>
+    <div class="mini-card">
+      <div style="font-size:16px;font-weight:500;color:var(--color-text-primary);">RELIANCE</div>
+      <div style="font-size:11px;color:var(--color-text-secondary);">₹2,847.60</div>
+      <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:2px;">Stock title — 16px 500</div>
+    </div>
+    <div class="mini-card">
+      <div style="font-size:13px;color:#1D9E75;font-weight:500;">+₹240.50 (2.4%)</div>
+      <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:2px;">P&L — 13px, color-coded</div>
+    </div>
+    <div class="mini-card">
+      <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.5;">RSI was 82 — overbought territory before entry.</div>
+      <div style="font-size:10px;color:var(--color-text-tertiary);margin-top:2px;">AI text — 12px secondary</div>
+    </div>
+  </div>
+
+  <div class="section-label">Component library (key components)</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+    <div class="mini-card">
+      <div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:6px;">Primary CTA button</div>
+      <div class="mini-btn">Buy RELIANCE</div>
+    </div>
+    <div class="mini-card">
+      <div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:6px;">Status badge</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;">
+        <span class="mini-badge badge-green">+2.4%</span>
+        <span class="mini-badge badge-red">-1.2%</span>
+        <span class="mini-badge badge-amber">Warning</span>
+        <span class="mini-badge badge-purple">AI</span>
+      </div>
+    </div>
+    <div class="mini-card">
+      <div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:6px;">RSI gauge</div>
+      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--color-text-tertiary);">
+        <span>0</span><span>RSI: 74</span><span>100</span>
+      </div>
+      <div style="height:6px;background:var(--color-border-tertiary);border-radius:3px;margin-top:3px;position:relative;">
+        <div style="height:100%;width:74%;background:linear-gradient(90deg,#1D9E75,#BA7517,#E24B4A);border-radius:3px;"></div>
+        <div style="position:absolute;top:-1px;left:74%;width:2px;height:8px;background:var(--color-text-primary);border-radius:1px;"></div>
+      </div>
+    </div>
+    <div class="mini-card">
+      <div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:6px;">Trade quality score</div>
+      <div style="text-align:center;">
+        <div style="font-size:20px;font-weight:500;color:#BA7517;">62</div>
+        <div style="font-size:9px;color:var(--color-text-tertiary);">/ 100 — Fair</div>
+      </div>
+      <div class="mini-progress"><div class="mini-fill" style="width:62%;background:#BA7517;"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ALL SCREENS -->
+<div id="screens" class="panel">
+  <div class="section-label">5 core screens</div>
+  <div class="screen-grid">
+
+    <!-- Screen 1: Dashboard -->
+    <div>
+      <div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;text-align:center;">1. Dashboard</div>
+      <div class="phone-frame">
+        <div class="phone-bar"></div>
+        <div style="font-size:9px;color:var(--color-text-tertiary);margin-bottom:2px;">Good morning, Pranav</div>
+        <div style="font-size:18px;font-weight:500;color:var(--color-text-primary);">₹10,840</div>
+        <div style="font-size:9px;color:#1D9E75;margin-bottom:8px;">+₹840 (8.4%) all time</div>
+        <div class="mini-card">
+          <div class="mini-row">
+            <div>
+              <div style="font-size:10px;font-weight:500;color:var(--color-text-primary);">RELIANCE</div>
+              <div style="font-size:9px;color:var(--color-text-tertiary);">5 shares</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:10px;font-weight:500;color:var(--color-text-primary);">₹14,238</div>
+              <div style="font-size:9px;color:#1D9E75;">+2.4%</div>
+            </div>
+          </div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-row">
+            <div>
+              <div style="font-size:10px;font-weight:500;color:var(--color-text-primary);">INFY</div>
+              <div style="font-size:9px;color:var(--color-text-tertiary);">3 shares</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:10px;font-weight:500;color:var(--color-text-primary);">₹4,620</div>
+              <div style="font-size:9px;color:#E24B4A;">-0.8%</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:9px;color:var(--color-text-tertiary);margin:6px 0 4px;">Cash remaining</div>
+        <div style="font-size:11px;font-weight:500;color:var(--color-text-primary);">₹1,802</div>
+        <div class="nav-bar">
+          <div class="nav-item active-nav"><div class="nav-dot active-nav-dot"></div>Home</div>
+          <div class="nav-item"><div class="nav-dot"></div>Trade</div>
+          <div class="nav-item"><div class="nav-dot"></div>Group</div>
+          <div class="nav-item"><div class="nav-dot"></div>Rank</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 2: Stock + Buy -->
+    <div>
+      <div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;text-align:center;">2. Stock + Trade</div>
+      <div class="phone-frame">
+        <div class="phone-bar"></div>
+        <div class="mini-row" style="margin-bottom:2px;">
+          <div style="font-size:12px;font-weight:500;color:var(--color-text-primary);">RELIANCE.NS</div>
+          <span class="mini-badge badge-green">+1.2%</span>
+        </div>
+        <div style="font-size:18px;font-weight:500;color:var(--color-text-primary);margin-bottom:1px;">₹2,847</div>
+        <div style="font-size:9px;color:var(--color-text-tertiary);margin-bottom:6px;">Reliance Industries</div>
+        <div style="height:40px;background:var(--color-background-primary);border-radius:6px;border:0.5px solid var(--color-border-tertiary);margin-bottom:6px;display:flex;align-items:flex-end;padding:4px;gap:2px;">
+          <div style="flex:1;height:60%;background:#1D9E75;border-radius:2px;opacity:0.5;"></div>
+          <div style="flex:1;height:75%;background:#1D9E75;border-radius:2px;opacity:0.6;"></div>
+          <div style="flex:1;height:55%;background:#1D9E75;border-radius:2px;opacity:0.5;"></div>
+          <div style="flex:1;height:80%;background:#1D9E75;border-radius:2px;opacity:0.7;"></div>
+          <div style="flex:1;height:90%;background:#1D9E75;border-radius:2px;"></div>
+        </div>
+        <div class="mini-row" style="margin-bottom:4px;">
+          <div style="font-size:9px;color:var(--color-text-tertiary);">RSI: 74</div>
+          <div style="font-size:9px;color:var(--color-text-tertiary);">Vol: Falling</div>
+          <span class="mini-badge badge-amber">Caution</span>
+        </div>
+        <div style="font-size:9px;color:var(--color-text-tertiary);margin-bottom:3px;">Qty</div>
+        <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:6px;padding:5px 8px;font-size:10px;color:var(--color-text-primary);margin-bottom:5px;">2 shares — ₹5,694</div>
+        <div class="mini-btn">Buy Now</div>
+        <div class="mini-btn-outline">Sell</div>
+      </div>
+    </div>
+
+    <!-- Screen 3: AI Autopsy -->
+    <div>
+      <div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;text-align:center;">3. AI Autopsy</div>
+      <div class="phone-frame">
+        <div class="phone-bar"></div>
+        <div style="font-size:10px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px;">Trade Analysis</div>
+        <div style="font-size:9px;color:var(--color-text-tertiary);margin-bottom:6px;">RELIANCE — BUY — 2 shares</div>
+        <div style="text-align:center;background:var(--color-background-primary);border-radius:8px;padding:8px;margin-bottom:6px;border:0.5px solid var(--color-border-tertiary);">
+          <div style="font-size:20px;font-weight:500;color:#BA7517;">62</div>
+          <div style="font-size:9px;color:var(--color-text-tertiary);">Trade Score / 100</div>
+          <div class="mini-progress" style="margin-top:4px;"><div class="mini-fill" style="width:62%;background:#BA7517;"></div></div>
+        </div>
+        <div class="autopsy-box">
+          <div class="autopsy-title">Overbought Entry</div>
+          <div class="autopsy-text">RSI was 74 when you entered. Volume also falling — weak confirmation.</div>
+        </div>
+        <div style="background:var(--color-background-primary);border-radius:8px;padding:7px;border:0.5px solid #7F77DD;margin-bottom:5px;">
+          <div style="font-size:9px;font-weight:500;color:#7F77DD;margin-bottom:3px;">AI Mentor</div>
+          <div style="font-size:9px;color:var(--color-text-secondary);line-height:1.5;">RSI of 74 signals the stock is near overbought. With volume declining, buyers are losing momentum. Next time, wait for RSI to cool below 55 before entering.</div>
+        </div>
+        <div style="font-size:9px;color:var(--color-text-tertiary);">Fix: Wait for RSI pullback to 45–55 before entering trending stocks.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-label" style="margin-top:24px;">Second row of screens</div>
+  <div class="screen-grid">
+
+    <!-- Screen 4: Group Portfolio -->
+    <div>
+      <div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;text-align:center;">4. Group Portfolio</div>
+      <div class="phone-frame">
+        <div class="phone-bar"></div>
+        <div style="font-size:10px;font-weight:500;color:var(--color-text-primary);margin-bottom:1px;">KSIT Investment Club</div>
+        <div style="font-size:9px;color:var(--color-text-tertiary);margin-bottom:5px;">3 members · Majority vote</div>
+        <div style="background:var(--color-background-primary);border-radius:8px;padding:7px;border:0.5px solid var(--color-border-tertiary);margin-bottom:5px;">
+          <div style="font-size:9px;color:var(--color-text-tertiary);">Group corpus</div>
+          <div style="font-size:16px;font-weight:500;color:var(--color-text-primary);">₹30,840</div>
+          <div style="font-size:9px;color:#1D9E75;">+₹840 (2.8%)</div>
+        </div>
+        <div style="font-size:9px;color:var(--color-text-tertiary);margin-bottom:4px;">Open proposal</div>
+        <div class="mini-card">
+          <div class="mini-row" style="margin-bottom:4px;">
+            <div style="font-size:10px;font-weight:500;color:var(--color-text-primary);">Buy TCS · 3 shares</div>
+            <span class="mini-badge badge-amber">23h left</span>
+          </div>
+          <div style="font-size:9px;color:var(--color-text-secondary);margin-bottom:4px;">"Strong Q4 results expected"</div>
+          <div style="font-size:9px;color:var(--color-text-tertiary);margin-bottom:4px;">Pranav proposed · 1/3 yes</div>
+          <div class="vote-row">
+            <div class="vote-btn vote-yes">Yes</div>
+            <div class="vote-btn vote-no">No</div>
+          </div>
+        </div>
+        <div style="font-size:9px;color:var(--color-text-tertiary);margin:4px 0;">Invite code: TL-X7K2</div>
+      </div>
+    </div>
+
+    <!-- Screen 5: Leaderboard -->
+    <div>
+      <div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;text-align:center;">5. Leaderboard</div>
+      <div class="phone-frame">
+        <div class="phone-bar"></div>
+        <div style="font-size:10px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px;">This week's rankings</div>
+        <div style="display:flex;gap:4px;margin-bottom:8px;">
+          <div style="flex:1;background:#EEEDFE;border-radius:6px;padding:3px;text-align:center;font-size:9px;color:#3C3489;font-weight:500;">Students</div>
+          <div style="flex:1;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:3px;text-align:center;font-size:9px;color:var(--color-text-tertiary);">Colleges</div>
+        </div>
+        <div class="lb-row">
+          <div class="lb-rank" style="color:#BA7517;">1</div>
+          <div class="lb-name">Arjun K.</div>
+          <div class="lb-val" style="color:#1D9E75;">+18.4%</div>
+        </div>
+        <div class="lb-row">
+          <div class="lb-rank" style="color:#888;">2</div>
+          <div class="lb-name">Sneha M.</div>
+          <div class="lb-val" style="color:#1D9E75;">+14.1%</div>
+        </div>
+        <div class="lb-row" style="background:#EEEDFE;border-radius:6px;padding:4px 0;margin:2px 0;">
+          <div class="lb-rank" style="color:#7F77DD;padding-left:4px;">3</div>
+          <div class="lb-name" style="color:#3C3489;font-weight:500;">You</div>
+          <div class="lb-val" style="color:#1D9E75;">+8.4%</div>
+        </div>
+        <div class="lb-row">
+          <div class="lb-rank">4</div>
+          <div class="lb-name">Rahul T.</div>
+          <div class="lb-val" style="color:#E24B4A;">-2.1%</div>
+        </div>
+        <div class="lb-row">
+          <div class="lb-rank">5</div>
+          <div class="lb-name">Priya S.</div>
+          <div class="lb-val" style="color:#E24B4A;">-4.8%</div>
+        </div>
+        <div style="font-size:9px;color:var(--color-text-tertiary);margin-top:8px;text-align:center;">Resets every Sunday midnight</div>
+      </div>
+    </div>
+
+    <!-- Screen 6: Onboarding -->
+    <div>
+      <div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;text-align:center;">6. Onboarding</div>
+      <div class="phone-frame">
+        <div class="phone-bar"></div>
+        <div style="text-align:center;padding:8px 0;">
+          <div style="width:40px;height:40px;border-radius:12px;background:#EEEDFE;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;">
+            <div style="width:20px;height:20px;border-radius:4px;background:#7F77DD;"></div>
+          </div>
+          <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);">TradeLab</div>
+          <div style="font-size:9px;color:var(--color-text-secondary);margin:4px 0 10px;">Learn to invest. Risk-free.</div>
+        </div>
+        <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:8px;margin-bottom:5px;">
+          <div style="font-size:9px;color:var(--color-text-tertiary);margin-bottom:2px;">Your name</div>
+          <div style="font-size:10px;color:var(--color-text-primary);">Pranav</div>
+        </div>
+        <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:8px;margin-bottom:8px;">
+          <div style="font-size:9px;color:var(--color-text-tertiary);margin-bottom:2px;">College</div>
+          <div style="font-size:10px;color:var(--color-text-primary);">KSIT, Bengaluru</div>
+        </div>
+        <div style="font-size:9px;color:var(--color-text-tertiary);margin-bottom:4px;text-align:center;">Starting with ₹10,000 virtual cash</div>
+        <div class="mini-btn">Start Trading</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- UX PRINCIPLES -->
+<div id="ux" class="panel">
+  <div class="section-label">Core UX rules for the build</div>
+
+  <div class="principle">
+    <div class="p-num">01</div>
+    <div>
+      <div class="p-title">AI Autopsy is a bottom sheet, not a page</div>
+      <div class="p-desc">After every buy or sell, the Autopsy slides up as a bottom sheet over the current screen. Student reads it, dismisses it, stays on the trade screen. Never navigate away — breaking flow kills the habit loop. The sheet must appear within 2 seconds of trade execution.</div>
+    </div>
+  </div>
+
+  <div class="principle">
+    <div class="p-num">02</div>
+    <div>
+      <div class="p-title">RSI is always visible on the stock screen</div>
+      <div class="p-desc">The RSI gauge sits permanently below the price, color-coded: green (below 50), amber (50–70), red (above 70). Students shouldn't have to look it up — it should feel like a traffic light they instinctively check before buying. This one element teaches RSI passively.</div>
+    </div>
+  </div>
+
+  <div class="principle">
+    <div class="p-num">03</div>
+    <div>
+      <div class="p-title">Vote countdown is a pressure mechanic, not a bug</div>
+      <div class="p-desc">The 24-hour countdown on group proposals is displayed as a large amber timer. When under 2 hours, it turns red and pulses. This urgency is intentional — it mimics real market time pressure and drives daily active use. Don't soften it.</div>
+    </div>
+  </div>
+
+  <div class="principle">
+    <div class="p-num">04</div>
+    <div>
+      <div class="p-title">Green and red are sacred — use nothing else for P&L</div>
+      <div class="p-desc">Every profit number is #1D9E75. Every loss is #E24B4A. No exceptions, no purple gains, no gray losses. Students' brains need to wire color → meaning instantly. Using these colors for anything else (decorative, branding, status) destroys the cognitive shortcut.</div>
+    </div>
+  </div>
+
+  <div class="principle">
+    <div class="p-num">05</div>
+    <div>
+      <div class="p-title">Onboarding is one screen, no tutorial</div>
+      <div class="p-desc">Name + college. That's it. Students get ₹10,000 virtual cash and land directly on the dashboard. No 5-step tutorial, no permission dialogs, no "how it works" carousel. Let them explore and make their first mistake — the AI Autopsy teaches them more than any tutorial would.</div>
+    </div>
+  </div>
+
+  <div class="principle">
+    <div class="p-num">06</div>
+    <div>
+      <div class="p-title">Trade score (0–100) replaces the P&L as the primary metric</div>
+      <div class="p-desc">Making money through luck is a 100% P&L but a 40/100 trade score (bad entry, got lucky). This reframes success from outcome to process — the key lesson for a beginner. Show the score prominently. Show the P&L secondarily.</div>
+    </div>
+  </div>
+
+  <div class="principle">
+    <div class="p-num">07</div>
+    <div>
+      <div class="p-title">Bottom nav has exactly 4 items — no more</div>
+      <div class="p-desc">Home (portfolio), Trade (search + buy/sell), Group (club), Rank (leaderboard). Everything else is reachable from these 4. Adding a 5th item for Settings or Learn fragments attention. Settings go in a top-right avatar menu.</div>
+    </div>
+  </div>
+
+  <div class="principle">
+    <div class="p-num">08</div>
+    <div>
+      <div class="p-title">Empty states teach, they don't apologise</div>
+      <div class="p-desc">Empty portfolio: "You have ₹10,000 to invest. Search any NSE stock to make your first trade." Empty group proposals: "No proposals yet. Be the first to suggest a stock for the group." Every empty state is a nudge to act, not an apology for having nothing.</div>
+    </div>
+  </div>
+</div>
+
+<!-- USER FLOWS -->
+<div id="flow" class="panel">
+  <div class="section-label">Flow 1 — First trade (most important for demo)</div>
+  <div class="flow-step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <div class="st">Open app → land on dashboard</div>
+      <div class="ss">Show ₹10,000 cash, empty holdings, "Make your first trade" nudge card</div>
+    </div>
+  </div>
+  <div class="flow-step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <div class="st">Tap Trade tab → search "RELIANCE"</div>
+      <div class="ss">Results appear instantly from /stocks/search. Tap the result.</div>
+    </div>
+  </div>
+  <div class="flow-step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <div class="st">Stock screen loads with live price, RSI gauge, mini chart</div>
+      <div class="ss">RSI is 74 → amber gauge → subtle "Caution" badge. Student notices it.</div>
+    </div>
+  </div>
+  <div class="flow-step">
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <div class="st">Enter quantity → tap Buy</div>
+      <div class="ss">POST /portfolio/buy — instant response. Cash updates live on screen.</div>
+    </div>
+  </div>
+  <div class="flow-step">
+    <div class="step-num">5</div>
+    <div class="step-body">
+      <div class="st">AI Autopsy bottom sheet slides up automatically</div>
+      <div class="ss">Shows: Trade Score (62/100), mistake flag ("Overbought Entry"), AI explanation in 3 sentences, "Fix" tip. This is the WOW moment.</div>
+    </div>
+  </div>
+  <div class="flow-step">
+    <div class="step-num">6</div>
+    <div class="step-body">
+      <div class="st">Student dismisses sheet → sees updated portfolio</div>
+      <div class="ss">New holding appears. Cash reduced. They immediately want to make another trade.</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label">Flow 2 — Group trade proposal (demo highlight)</div>
+  <div class="flow-step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <div class="st">Tap Group tab → create a club or join via invite code</div>
+      <div class="ss">POST /groups/create or POST /groups/join with a 6-char code like TL-X7K2</div>
+    </div>
+  </div>
+  <div class="flow-step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <div class="st">Propose a trade — ticker, qty, rationale</div>
+      <div class="ss">POST /groups/propose. Proposal appears immediately in all members' Group tabs with 24h countdown.</div>
+    </div>
+  </div>
+  <div class="flow-step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <div class="st">Other members see the proposal, vote Yes or No</div>
+      <div class="ss">POST /groups/vote. Vote count updates live. When 2/3 vote yes — trade auto-executes.</div>
+    </div>
+  </div>
+  <div class="flow-step">
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <div class="st">Group holdings update, corpus changes, vote history locked in</div>
+      <div class="ss">"Approved 3/3 · Executed at ₹2,847 · Pranav proposed" — permanent record. No blame shifting.</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label">Interaction timings (non-negotiable for demo feel)</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+    <div class="mini-card">
+      <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);">&lt; 300ms</div>
+      <div style="font-size:11px;color:var(--color-text-secondary);margin-top:3px;">Search results appear</div>
+    </div>
+    <div class="mini-card">
+      <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);">&lt; 2s</div>
+      <div style="font-size:11px;color:var(--color-text-secondary);margin-top:3px;">AI Autopsy slides up after trade</div>
+    </div>
+    <div class="mini-card">
+      <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);">Instant</div>
+      <div style="font-size:11px;color:var(--color-text-secondary);margin-top:3px;">Cash balance updates post-trade</div>
+    </div>
+    <div class="mini-card">
+      <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);">&lt; 1s</div>
+      <div style="font-size:11px;color:var(--color-text-secondary);margin-top:3px;">Vote reflects in proposal count</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const tabs = ['design','screens','ux','flow'];
+  document.querySelectorAll('.tab')[tabs.indexOf(id)].classList.add('active');
+}
+</script>
