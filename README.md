@@ -42,9 +42,51 @@ A beginner-to-advanced learning path spanning 5+ structured lessons, taking you 
 ---
 
 ## 💻 Tech Stack
-- **Core Logic:** Python (Logic Engine for Trade Analysis)
-- **Data:** Live NSE/BSE Market Data Hooks
-- **Target Platform:** Mobile App (Optimized for Gen Z)
+- **Backend:** FastAPI (Python 3.10+)
+- **Database:** PostgreSQL with SQLAlchemy (Async)
+- **AI Engine:** Rule-based Logic + Anthropic Claude API
+- **Market Data:** Live NSE/BSE via yfinance
+
+---
+
+## 🛠️ Getting Started (Backend)
+
+### 1. Prerequisites
+- Python 3.10 or higher
+- PostgreSQL installed and running
+
+### 2. Setup
+```bash
+# Navigate to the backend directory
+cd backend
+
+# Create a virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+### 3. Configuration
+Edit the `backend/.env` file with your database credentials and optional Anthropic API key.
+
+### 4. Run the API
+```bash
+cd backend
+uvicorn main:app --reload
+```
+The API will be available at `http://localhost:8000` and the interactive docs at `http://localhost:8000/docs`.
+
+---
+
+## 📂 Project Structure
+- `backend/`: Core API and logic.
+  - `routers/`: API endpoints for stocks, portfolios, AI, and groups.
+  - `models.py`: Database schema definitions.
+  - `analyzer.py`: The proprietary Trade Analysis engine.
+- `files/`: (Legacy) Original source files.
+- `Logic-Engine.py`: (Legacy) Initial prototype logic.
 
 ---
 
