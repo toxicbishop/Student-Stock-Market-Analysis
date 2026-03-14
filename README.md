@@ -54,11 +54,10 @@ npm run dev
 4. Environment Variables:
 Create a .env file in the root directory with your DATABASE_URL and your specific Market API keys.
 
-👥 The Team
-Pranav Arun
-Mithil N
-Supreeth N
+👥 The Team<br>
+Mithil<br>
+Pranav Arun<br>
+Supreeth N<br>
 <p align="center">
-  *Developed with ❤️ at Electrohack 3.0, K.S. Institute of Technology.*
+  Developed with ❤️ at Electrohack 3.0, K.S. Institute of Technology.
 </p>
-
