@@ -1,0 +1,228 @@
+# Modern Neobank Dashboard
+
+## Product Overview
+
+**The Pitch:** TradeLab makes retail investing in the NSE intuitive, approachable, and social. It strips away the intimidating clutter of traditional brokerages, presenting portfolio health and trading tools in a bright, friendly, and consumer-first desktop experience.
+
+**For:** Millennial and Gen-Z retail investors in India who want a frictionless, jargon-free way to track wealth and trade stocks alongside friends.
+
+**Device:** desktop
+
+**Design Direction:** Bright, airy, and friendly. Generous whitespace, ultra-soft rounded corners, deep diffuse shadows, and hyper-legible typography paired with high-contrast neon data visualizations. 
+
+**Inspired by:** Robinhood, Monzo, and Public.com.
+
+---
+
+## Screens
+
+- **Home Dashboard:** Portfolio value, high-contrast chart, cash/invested breakdown, and holdings list.
+- **Trade Hub:** Searchable NSE stock index, detailed asset pages, and frictionless buy/sell flows.
+- **Group:** Collaborative investing clubs, shared watchlists, and activity feeds.
+- **Rank:** Gamified leaderboard showing portfolio performance against peers.
+
+---
+
+## Key Flows
+
+**Make First Trade:** From empty portfolio to first stock purchase.
+
+1. User is on **Home Dashboard** -> sees empty holdings state.
+2. User clicks **Start trading** CTA -> navigates to **Trade Hub**.
+3. User searches `RELIANCE`, clicks asset, enters ₹1,000, and clicks **Buy**.
+4. Screen triggers confetti animation -> updates portfolio cash/invested balance.
+
+---
+
+<details>
+<summary>Design System</summary>
+
+## Color Palette
+
+- **Primary:** `#00D06A` - Buy buttons, positive numbers, primary CTAs
+- **Background:** `#F7F9FC` - App background, sidebar backing
+- **Surface:** `#FFFFFF` - Main content area, cards, modals
+- **Text:** `#12151A` - Headings, primary body text
+- **Muted:** `#8A94A6` - Secondary text, placeholders, subtle borders
+- **Accent:** `#0066FF` - Portfolio line chart, focus states
+
+## Typography
+
+Distinctive, modern geometric sans-serifs that feel both financial and approachable.
+
+- **Headings:** Clash Display, 600, 24-48px
+- **Body:** Satoshi, 500, 16px
+- **Small text:** Satoshi, 500, 13px
+- **Buttons:** Satoshi, 700, 15px
+
+**Style notes:** Ultra-smooth `24px` border radii on main cards. Shadows are large, soft, and slightly tinted with blue. Generous `32px` padding on all modular surfaces. Minimal visible borders; separation achieved via whitespace and shadow.
+
+## Design Tokens
+
+```css
+:root {
+  --color-primary: #00D06A;
+  --color-background: #F7F9FC;
+  --color-surface: #FFFFFF;
+  --color-text: #12151A;
+  --color-muted: #8A94A6;
+  --color-accent: #0066FF;
+  
+  --font-headings: 'Clash Display', sans-serif;
+  --font-body: 'Satoshi', sans-serif;
+  
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+  
+  --shadow-card: 0 12px 40px rgba(0, 102, 255, 0.05);
+  
+  --spacing-4: 16px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-12: 48px;
+}
+```
+
+</details>
+
+---
+
+<details>
+<summary>Screen Specifications</summary>
+
+### Home Dashboard
+
+**Purpose:** Primary landing view summarizing overall portfolio health and current holdings.
+
+**Layout:** Left sidebar (`240px` wide). Main content area split into top header, hero chart section (full width), and two-column bottom section (Holdings + Balances).
+
+**Key Elements:**
+- **Sidebar Navigation:** Flat, borderless links (`Home`, `Trade`, `Group`, `Rank`). Active state: `#12151A` text with `#F7F9FC` rounded background.
+- **Top Header:** Left: `TradeLab` logo + "Good afternoon, [Name]". Right: `Sign Out` button (`#8A94A6` text, hover `#12151A`).
+- **Portfolio Hero:** 
+  - Large value: `₹10,000` (`Clash Display`, `48px`, `#12151A`).
+  - Return: `+₹0 (0.00%)` (`Satoshi`, `16px`, `#8A94A6`).
+  - Chart: Smooth SVG line chart (`#0066FF`), glowing drop shadow.
+- **Balance Cards:** Two side-by-side cards (`Cash: ₹10,000`, `Invested: ₹0`).
+- **Holdings Section:** Empty state container.
+
+**States:**
+- **Empty:** "Your holdings" -> "No holdings yet. Search any NSE stock to make your first trade." Prominent `Start trading` CTA (`#00D06A` background, `white` text).
+- **Loading:** Shimmering gray skeleton rectangles for chart line and numbers.
+- **Error:** Red toast notification (`#FF3B30`) top right.
+
+**Components:**
+- **Balance Card:** `width: 50%`, `#FFFFFF` bg, `--radius-lg`, `--shadow-card`, `32px` padding.
+- **Primary CTA:** `height: 48px`, `--radius-full`, `#00D06A` bg, `padding: 0 24px`.
+
+**Interactions:**
+- **Hover Chart:** Scrubbing line appears, portfolio value updates to historical point, haptic/visual snap to data points.
+- **Click Start Trading:** Fast fade transition to Trade Hub.
+
+**Responsive:**
+- **Desktop:** `240px` fixed sidebar, max-width `1200px` content.
+- **Tablet:** Sidebar collapses to icon-only.
+- **Mobile:** Sidebar moves to bottom sticky nav.
+
+### Trade Hub
+
+**Purpose:** Search, discovery, and execution of NSE stock trades.
+
+**Layout:** Top search bar spanning `800px`. Grid of popular stocks below. Right-side panel for active trade execution when a stock is selected.
+
+**Key Elements:**
+- **Search Bar:** Large `56px` high input, magnifying glass icon, "Search NSE stocks..." placeholder.
+- **Discovery Grid:** 3x3 grid of trending stocks. Each card shows Ticker, Company Name, Current Price, and 24h sparkline.
+- **Order Panel:** Slides in from right. Input for `Amount in ₹`. Big `#00D06A` `Review Order` button.
+
+**States:**
+- **Empty:** "Trending Stocks" shown before search query entered.
+- **Loading:** Spinner (`#0066FF`) inside search bar during typing.
+- **Error:** "Stock not found" empty state illustration.
+
+**Components:**
+- **Stock Card:** `#FFFFFF`, `--radius-md`, hover state adds `translate-y:-2px` and intensifies shadow.
+- **Order Panel:** `width: 400px`, fixed to right viewport edge, `--shadow-card`.
+
+**Interactions:**
+- **Type in Search:** Real-time dropdown overlay with matching tickers.
+- **Click Stock:** Order panel slides in from right (`duration: 300ms`, `cubic-bezier(0.4, 0, 0.2, 1)`).
+
+**Responsive:**
+- **Desktop:** Right panel side-by-side with grid.
+- **Tablet:** Order panel becomes modal overlay.
+- **Mobile:** Full screen push transition for order flow.
+
+### Group
+
+**Purpose:** Social feed and collaborative investing pods.
+
+**Layout:** Standard sidebar. Main area split 60/40. Left 60%: Activity feed. Right 40%: Active Pods/Clubs.
+
+**Key Elements:**
+- **Activity Feed:** List of friends' public trades. "Rahul bought ₹5,000 of TATAMOTORS".
+- **Pod Cards:** Groups user belongs to. Shows avatar stack of members and group portfolio value.
+- **Create Pod Button:** Floating action button style or prominent header CTA.
+
+**States:**
+- **Empty:** "Investing is better with friends." CTA to `Invite Friends`.
+- **Loading:** Ghost text lines for feed items.
+
+**Components:**
+- **Feed Item:** `padding: 16px 0`, bottom border `#F7F9FC`. Avatar circle (`40px`), text block, timestamp (`#8A94A6`).
+- **Avatar Stack:** Overlapping circles with `2px` `#FFFFFF` stroke.
+
+**Interactions:**
+- **Hover Feed Item:** Subtle `#F7F9FC` background highlight.
+- **Click Pod:** Opens detailed pod dashboard (similar to home dashboard but aggregated).
+
+**Responsive:**
+- **Desktop:** Two-column split.
+- **Tablet:** Feed full width, Pods pushed below.
+- **Mobile:** Tabs to switch between Feed and Pods.
+
+### Rank
+
+**Purpose:** Gamified leaderboard against friends and global Top 100.
+
+**Layout:** Segmented control at top (Friends | Global). List view dominating the center.
+
+**Key Elements:**
+- **Podium Header:** Top 3 users get special visual treatment (Gold, Silver, Bronze accent rings).
+- **List View:** Ranks 4-100. Shows Rank #, Avatar, Name, Weekly Return %.
+- **Current User Banner:** Sticky banner at bottom showing user's current rank and return to next level.
+
+**States:**
+- **Empty:** N/A (Always populates with global if no friends).
+- **Loading:** Skeleton list items.
+
+**Components:**
+- **Podium Avatar:** `80px` circle, `4px` colored border (Gold: `#FFD700`).
+- **List Item:** `height: 64px`, flex-row, center-aligned. Green text for positive returns, standard text for negative.
+
+**Interactions:**
+- **Switch Tab:** Crossfade content.
+- **Hover List Item:** Scale up `1.02`.
+
+**Responsive:**
+- **Desktop:** `800px` max width, centered.
+- **Tablet/Mobile:** Full width list.
+
+</details>
+
+---
+
+<details>
+<summary>Build Guide</summary>
+
+**Stack:** HTML + Tailwind CSS v3
+
+**Build Order:**
+1. **Design System & Shell:** Set CSS variables in Tailwind config. Build the Sidebar and main layout wrapper.
+2. **Home Dashboard:** Establish the core visual language. Build the complex SVG chart, balance cards, and the Empty State component.
+3. **Trade Hub:** Implement search input, grid cards, and the right-side sliding panel for the core utility loop.
+4. **Group & Rank:** Re-use list items, avatars, and typography tokens built in steps 2/3 to populate social features quickly.
+
+</details>
