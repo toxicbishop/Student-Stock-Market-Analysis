@@ -1,111 +1,64 @@
-# 📉 TradeLab: India's First AI-Powered Student Trading Platform
+# TradeLab 📈
+### AI-Guided Paper Trading & Financial Learning Platform
 
-> **"Turning paper trading from a simulator into a school."**
-
-TradeLab is a revolutionary fintech-edtech platform designed specifically for Indian college students. We remove the fear of losing real money and replace it with a structured, AI-guided learning path to financial literacy.
-
----
-
-## 🚀 The Vision
-To become India's largest financial literacy platform, empowering 5 million+ students within 5 years to navigate the stock market with confidence and strategy.
+**TradeLab** was developed for **ELECTROHACK 3.0**, a National Level Hackathon at K.S. Institute of Technology. Our mission is to bridge the massive gap in financial literacy among Indian students (ages 18–24) by providing a risk-free environment to learn, practice, and master the stock market.
 
 ---
 
-## 🧐 The Problem
-India has 1.5 billion people but fewer than 8 crore demat accounts. Most students (18–24) want to invest but face significant barriers:
-- **Complexity:** Existing platforms are built for pros, not beginners.
-- **Fear:** 90% of students fear losing their limited capital (₹5,000–₹20,000).
-- **Lack of Guidance:** When students lose virtual money on other simulators, they don't know *why*.
-- **No Path:** No platform combines learning, practice, and feedback in one place.
+## 🚀 The Problem
+India has a population of 1.5 billion, yet fewer than 8 crore demat accounts exist. Most students want to invest but face significant barriers:
+* **Intimidating Complexity:** Existing platforms are built for professionals, not beginners.
+* **Capital Risk:** 90% of students fear losing their limited savings.
+* **Lack of Guidance:** When students lose virtual money on other simulators, they don't know *why*.
 
-## ✨ Our Solution: Why TradeLab is Different
-TradeLab doesn't just let you trade; it teaches you how to trade better.
+## ✨ Our Solution
+TradeLab is a learning-first ecosystem designed to turn market fear into financial confidence.
+* **Risk-Free Paper Trading:** Trade with virtual currency in real-market conditions without losing real money.
+* **AI-Powered Insights:** Real-time feedback explaining the "why" behind trade successes or failures.
+* **Structured Learning Path:** A simplified UI that focuses on education over raw data-overload.
+* **Campus Leaderboards:** Competitive learning to encourage students to grow together.
 
-### 🤖 AI Trade Mentor
-Our proprietary AI engine (trained on Indian market patterns) analyzes every trade and explains the "WHY" behind every profit or loss in plain language.
-- *Example:* "You bought when the RSI was over 75. The market was exhausted. Next time, wait for a cooldown (RSI < 50)."
+## 🛠️ Tech Stack
+* **Frontend:** React.js (with Tailwind CSS)
+* **Backend:** Python (Flask/FastAPI)
+* **Database:** PostgreSQL (Relational data for transaction integrity)
+* **APIs:** Market Data APIs & AI Analysis Integration
 
-### 🏆 Gamified Learning
-We host **College-vs-College Tournaments** to make learning social and competitive. Rank up on the leaderboard and represent your institution!
+## 🗄️ Database Schema
+We utilized **PostgreSQL** to ensure ACID compliance for all virtual financial transactions.
 
-### 📚 Structured Curriculum
-A beginner-to-advanced learning path spanning 5+ structured lessons, taking you from "Zero" to a "Confident Investor."
+| Table | Purpose | Key Columns |
+| :--- | :--- | :--- |
+| **Users** | Profile & Auth | `username`, `email`, `password_hash`, `virtual_balance` |
+| **Stocks** | Market Data Cache | `symbol`, `company_name`, `sector` |
+| **Trades** | Transaction History | `trade_type` (Buy/Sell), `quantity`, `price_at_execution` |
+| **Portfolios** | User Holdings | `quantity_held`, `avg_buy_price`, `user_id` |
 
----
+## ⚙️ Installation & Setup
 
-## 🛠️ Key Features
-- **Real-time Simulation:** Live NSE/BSE data with a ₹10,000 virtual portfolio.
-- **Mistake Analyzer:** Uses a logic engine to identify common pitfalls like "The FOMO Peak" or "Catching a Falling Knife."
-- **Regional Support:** Built for the Indian context with plans for multi-language support.
-- **Institutional Access:** Partnering with universities to integrate financial literacy into the curriculum.
-
----
-
-## 💻 Tech Stack
-- **Backend:** FastAPI (Python 3.10+)
-- **Database:** PostgreSQL with SQLAlchemy (Async)
-- **AI Engine:** Rule-based Logic + Anthropic Claude API
-- **Market Data:** Live NSE/BSE via yfinance
-
----
-
-## 🛠️ Getting Started (Backend)
-
-### 1. Prerequisites
-- Python 3.10 or higher
-- PostgreSQL installed and running
-
-### 2. Setup
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/toxicbishop/Student-Stock-Market-Analysis.git](https://github.com/toxicbishop/Student-Stock-Market-Analysis.git)
+2. **Backend Setup (Python):**
 ```bash
-# Navigate to the backend directory
-cd backend
-
-# Create a virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
+   cd server
 pip install -r requirements.txt
+python app.py
 ```
-
-### 3. Configuration
-Edit the `backend/.env` file with your database credentials and optional Anthropic API key.
-
-### 4. Run the API
+3. Frontend Setup (React):
 ```bash
-cd backend
-uvicorn main:app --reload
+cd client
+npm install
+npm run dev
 ```
-The API will be available at `http://localhost:8000` and the interactive docs at `http://localhost:8000/docs`.
+4. Environment Variables:
+Create a .env file in the root directory with your DATABASE_URL and your specific Market API keys.
 
----
+👥 The Team
+Pranav Arun
+Mithil N
+Supreeth N
+<p align="center">
+  *Developed with ❤️ at Electrohack 3.0, K.S. Institute of Technology.*
+</p>
 
-## 📂 Project Structure
-- `backend/`: Core API and logic.
-  - `routers/`: API endpoints for stocks, portfolios, AI, and groups.
-  - `models.py`: Database schema definitions.
-  - `analyzer.py`: The proprietary Trade Analysis engine.
-- `files/`: (Legacy) Original source files.
-- `Logic-Engine.py`: (Legacy) Initial prototype logic.
-
----
-
-## 👥 The Team
-We are a dedicated team of engineering students from KSIT, building the solution we wished existed when we started our investing journey.
-
-| Name | Role / USN |
-| :--- | :--- |
-| **Mithil** | 1KG23CB030 |
-| **Pranav** | 1KG23CB038 |
-| **Supreeth** | 1KG23CB051 |
-
----
-
-## 📈 Market Impact
-- **TAM:** 39 Million Indian College Students.
-- **Validation:** Surveyed 200+ students; 82% want a gamified simulator.
-- **Momentum:** 50+ active beta users already testing our MVP.
-
----
-
-*TradeLab is more than an app; it's a movement to bridge the financial literacy gap in India. Join us as we build the future of retail investing!*
