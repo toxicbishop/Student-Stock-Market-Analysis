@@ -19,7 +19,7 @@ function MobileNav() {
   ]
 
   return (
-    <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-32px)] max-w-[400px] h-[72px] bg-surface/90 backdrop-blur-xl border border-gray-100 rounded-2xl shadow-2xl z-50 flex items-center justify-around px-4">
+    <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-32px)] max-w-[400px] h-[72px] bg-surface/90 backdrop-blur-xl border border-border rounded-2xl shadow-2xl z-50 flex items-center justify-around px-4">
       {navItems.map((item) => {
         const isActive = location.pathname === item.path
         const Icon = item.icon
@@ -94,7 +94,7 @@ function Onboarding({ onDone }: { onDone: (name: string) => void }) {
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <div className="p-4 bg-surface rounded-xl shadow-soft border border-gray-50 flex flex-col items-center text-center gap-1">
+          <div className="p-4 bg-surface rounded-xl shadow-soft border border-border-subtle flex flex-col items-center text-center gap-1">
             <span className="text-primary font-bold">₹10K</span>
             <span className="text-[10px] text-text-muted font-bold uppercase tracking-wider leading-none">Capital</span>
           </div>
@@ -108,15 +108,20 @@ function Onboarding({ onDone }: { onDone: (name: string) => void }) {
   )
 }
 
-function Shell() {
+interface ShellProps {
+  darkMode: boolean;
+  toggleDarkMode: () => void;
+  onLogout: () => void;
+}
+
+function Shell({ darkMode, toggleDarkMode, onLogout }: ShellProps) {
   const { userName } = useUser()
   const location = useLocation()
-  const { handleLogout, darkMode, toggleDarkMode } = (window as any)._appActions || {}
 
   return (
-    <div className="bg-background-light h-screen flex overflow-hidden">
+    <div className="bg-background-light h-screen flex overflow-hidden font-display antialiased">
       <Sidebar 
-        onLogout={handleLogout} 
+        onLogout={onLogout} 
         darkMode={darkMode} 
         onToggleDarkMode={toggleDarkMode} 
       />
@@ -124,7 +129,7 @@ function Shell() {
       <main className="flex-1 flex flex-col h-full overflow-y-auto overflow-x-hidden relative">
         <header className="h-[88px] shrink-0 flex items-center justify-between px-6 md:px-12 w-full max-w-6xl mx-auto sticky top-0 bg-background-light/80 backdrop-blur-md z-40">
           <div className="flex items-center gap-4">
-            <button className="md:hidden text-text-main p-2 -ml-2 rounded-lg hover:bg-black/5">
+            <button className="md:hidden text-text-main p-2 -ml-2 rounded-lg hover:bg-surface-subtle">
               <Menu size={24} />
             </button>
             <h2 className="text-xl font-bold tracking-tight text-text-main">
@@ -151,13 +156,20 @@ function Shell() {
 function AppInner() {
   const { setUser } = useUser()
   const [ready, setReady] = useState(!!localStorage.getItem('tl_user'))
-  const [darkMode, setDarkMode] = useState(localStorage.getItem('tl_theme') === 'dark')
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem('tl_theme')
+    return saved === 'dark'
+  })
 
   useEffect(() => {
     const saved = localStorage.getItem('tl_user')
     if (saved) {
-      const { name } = JSON.parse(saved)
-      setUser('demo-user-1', name)
+      try {
+        const { name } = JSON.parse(saved)
+        setUser('demo-user-1', name)
+      } catch (e) {
+        localStorage.removeItem('tl_user')
+      }
     }
   }, [])
 
@@ -183,16 +195,17 @@ function AppInner() {
     setReady(false)
   }
 
-  const toggleDarkMode = () => setDarkMode(!darkMode);
-
-  // Inject handleLogout and darkMode actions so Shell can access them
-  (window as any)._appActions = { handleLogout, darkMode, toggleDarkMode };
+  const toggleDarkMode = () => setDarkMode(prev => !prev);
 
   if (!ready) return <Onboarding onDone={handleOnboard} />
 
   return (
     <BrowserRouter>
-      <Shell />
+      <Shell 
+        darkMode={darkMode} 
+        toggleDarkMode={toggleDarkMode} 
+        onLogout={handleLogout} 
+      />
     </BrowserRouter>
   )
 }

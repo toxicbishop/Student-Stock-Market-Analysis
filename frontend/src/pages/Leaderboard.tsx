@@ -140,12 +140,12 @@ export function Leaderboard() {
                         {Math.abs(entry.total_pnl_pct).toFixed(1)}%
                       </div>
                     </div>
-                    <ChevronRight size={20} className="text-gray-200 ml-4 group-hover:text-primary transition-all group-hover:translate-x-1" />
+                    <ChevronRight size={20} className="text-border ml-4 group-hover:text-primary transition-all group-hover:translate-x-1" />
                   </li>
                 ))}
               </ul>
               
-              <div className="p-8 text-center border-t border-gray-50 bg-gray-50/30">
+              <div className="p-8 text-center border-t border-border-subtle bg-surface-subtle/30">
                 <button className="text-primary font-black text-sm uppercase tracking-[0.2em] hover:tracking-[0.3em] transition-all">Load More Talent</button>
               </div>
             </div>

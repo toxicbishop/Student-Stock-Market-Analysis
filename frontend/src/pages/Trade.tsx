@@ -214,7 +214,7 @@ export function Trade() {
               </div>
               <button 
                 onClick={() => setQuote(null)}
-                className="text-text-muted hover:text-text-main transition-colors p-2 rounded-full hover:bg-white shadow-sm"
+                className="text-text-muted hover:text-text-main transition-colors p-2 rounded-full hover:bg-background-light shadow-sm"
               >
                 <X size={24} />
               </button>
