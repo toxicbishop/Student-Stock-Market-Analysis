@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TradeLab - Rank</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#10c16c",
+                        "background-light": "#F7F9FC",
+                        "background-dark": "#102219",
+                        "surface": "#FFFFFF",
+                        "text-main": "#12151A",
+                        "text-muted": "#8A94A6",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'card': '0 12px 40px rgba(0, 102, 255, 0.05)',
+                        'sticky': '0 -12px 40px rgba(0, 102, 255, 0.05)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-main font-display antialiased min-h-screen flex">
+<!-- Sidebar -->
+<aside class="w-[240px] fixed h-screen bg-background-light dark:bg-background-dark border-r border-gray-100 flex-shrink-0 flex flex-col hidden md:flex z-10">
+<div class="p-6 flex items-center gap-3">
+<div class="text-primary">
+<svg class="w-8 h-8" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M13.8261 30.5736C16.7203 29.8826 20.2244 29.4783 24 29.4783C27.7756 29.4783 31.2797 29.8826 34.1739 30.5736C36.9144 31.2278 39.9967 32.7669 41.3563 33.8352L24.8486 7.36089C24.4571 6.73303 23.5429 6.73303 23.1514 7.36089L6.64374 33.8352C8.00331 32.7669 11.0856 31.2278 13.8261 30.5736Z" fill="currentColor"></path>
+<path clip-rule="evenodd" d="M39.998 35.764C39.9944 35.7463 39.9875 35.7155 39.9748 35.6706C39.9436 35.5601 39.8949 35.4259 39.8346 35.2825C39.8168 35.2403 39.7989 35.1993 39.7813 35.1602C38.5103 34.2887 35.9788 33.0607 33.7095 32.5189C30.9875 31.8691 27.6413 31.4783 24 31.4783C20.3587 31.4783 17.0125 31.8691 14.2905 32.5189C12.0012 33.0654 9.44505 34.3104 8.18538 35.1832C8.17384 35.2075 8.16216 35.233 8.15052 35.2592C8.09919 35.3751 8.05721 35.4886 8.02977 35.589C8.00356 35.6848 8.00039 35.7333 8.00004 35.7388C8.00004 35.739 8 35.7393 8.00004 35.7388C8.00004 35.7641 8.0104 36.0767 8.68485 36.6314C9.34546 37.1746 10.4222 37.7531 11.9291 38.2772C14.9242 39.319 19.1919 40 24 40C28.8081 40 33.0758 39.319 36.0709 38.2772C37.5778 37.7531 38.6545 37.1746 39.3151 36.6314C39.9006 36.1499 39.9857 35.8511 39.998 35.764ZM4.95178 32.7688L21.4543 6.30267C22.6288 4.4191 25.3712 4.41909 26.5457 6.30267L43.0534 32.777C43.0709 32.8052 43.0878 32.8338 43.104 32.8629L41.3563 33.8352C43.104 32.8629 43.1038 32.8626 43.104 32.8629L43.1051 32.865L43.1065 32.8675L43.1101 32.8739L43.1199 32.8918C43.1276 32.906 43.1377 32.9246 43.1497 32.9473C43.1738 32.9925 43.2062 33.0545 43.244 33.1299C43.319 33.2792 43.4196 33.489 43.5217 33.7317C43.6901 34.1321 44 34.9311 44 35.7391C44 37.4427 43.003 38.7775 41.8558 39.7209C40.6947 40.6757 39.1354 41.4464 37.385 42.0552C33.8654 43.2794 29.133 44 24 44C18.867 44 14.1346 43.2794 10.615 42.0552C8.86463 41.4464 7.30529 40.6757 6.14419 39.7209C4.99695 38.7775 3.99999 37.4427 3.99999 35.7391C3.99999 34.8725 4.29264 34.0922 4.49321 33.6393C4.60375 33.3898 4.71348 33.1804 4.79687 33.0311C4.83898 32.9556 4.87547 32.8935 4.9035 32.8471C4.91754 32.8238 4.92954 32.8043 4.93916 32.7889L4.94662 32.777L4.95178 32.7688ZM35.9868 29.004L24 9.77997L12.0131 29.004C12.4661 28.8609 12.9179 28.7342 13.3617 28.6282C16.4281 27.8961 20.0901 27.4783 24 27.4783C27.9099 27.4783 31.5719 27.8961 34.6383 28.6282C35.082 28.7342 35.5339 28.8609 35.9868 29.004Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h1 class="text-xl font-bold tracking-tight">TradeLab</h1>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-text-muted hover:text-text-main hover:bg-black/5 rounded-xl transition-colors font-medium" href="#">
+<span class="material-symbols-outlined text-[20px]">home</span>
+                Home
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-text-muted hover:text-text-main hover:bg-black/5 rounded-xl transition-colors font-medium" href="#">
+<span class="material-symbols-outlined text-[20px]">swap_horiz</span>
+                Trade
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-text-muted hover:text-text-main hover:bg-black/5 rounded-xl transition-colors font-medium" href="#">
+<span class="material-symbols-outlined text-[20px]">groups</span>
+                Group
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-text-main bg-white shadow-sm rounded-xl transition-colors font-semibold" href="#">
+<span class="material-symbols-outlined text-[20px]">leaderboard</span>
+                Rank
+            </a>
+</nav>
+<div class="p-4 border-t border-gray-100">
+<button class="flex items-center gap-3 px-4 py-3 w-full text-text-muted hover:text-text-main transition-colors font-medium">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+                Sign Out
+            </button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 md:ml-[240px] flex flex-col min-h-screen relative pb-24">
+<!-- Mobile Header -->
+<header class="md:hidden flex items-center justify-between p-4 bg-background-light border-b border-gray-100 sticky top-0 z-20">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="font-bold text-text-main text-lg">Rank</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-cover bg-center border border-gray-200" data-alt="Current user avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAbDp8-SkjemiD1n4pb12GXcEAZeG6kWu_p1OErRLUDZSmmB7uW7x4tD4jZIwE_mmVgVOtDrAEqvkZYLLaNF5rgDVGokXPnRMUHxWtT1saYxlBgOFXBcGfFlRdQJVH4KeCPJWvHMTCttj_DQa0yjQNVvAjtLj-iYkICX5wD_v0_rnnuxRFDvb4pX3j40gshF5XV8zB-4F1kzCm7LYcRob41bgqRZCvEiGoWpcyJCqJ_DsDFm6EJrbcFNp60WD6AlnE4gjx6zmyp0FU');"></div>
+</header>
+<div class="max-w-[800px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col flex-1">
+<!-- Page Header & Tabs -->
+<div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+<h2 class="text-3xl font-bold tracking-tight text-text-main hidden md:block">Leaderboard</h2>
+<div class="flex p-1 bg-surface rounded-xl shadow-sm border border-gray-100 w-full md:w-auto">
+<button class="flex-1 md:w-32 py-2 text-sm font-semibold rounded-lg bg-primary/10 text-primary transition-all">
+                        Friends
+                    </button>
+<button class="flex-1 md:w-32 py-2 text-sm font-medium rounded-lg text-text-muted hover:text-text-main hover:bg-gray-50 transition-all">
+                        Global
+                    </button>
+</div>
+</div>
+<!-- Podium -->
+<div class="flex justify-center items-end gap-4 sm:gap-8 mb-12 mt-8">
+<!-- 2nd Place -->
+<div class="flex flex-col items-center pb-4">
+<div class="relative mb-3">
+<div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-[4px] border-[#C0C0C0] shadow-lg bg-cover bg-center" data-alt="Avatar for 2nd place user" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDa093-Q1am4hYmuJmodDinKDWCgAfnvHUALCC2oZAN-aIyCpJtyf577WVNXjW8j0IRU1mi_4CmB-JKSjg2geaTB2zEt9PS8fvozAx-NDF-MFV-17-G2m6jYNrWjsoUx-ACMfFzZdlRUAUzmIjdlXLH18XvVx0X86R_AAYU0vBfZ7jJP_G5_S9E__xc9IM29VnI5KzTok6k4oJGPRGjgH8nbMqKfARHn506zu_ZWZyS-BszgeTLQMJZ05hWXJyAZpDTs4dLCdvG34c');"></div>
+<div class="absolute -bottom-2 -right-2 w-7 h-7 bg-[#C0C0C0] rounded-full flex items-center justify-center text-white text-xs font-bold border-2 border-surface">2</div>
+</div>
+<span class="font-semibold text-text-main text-sm sm:text-base">Arjun K.</span>
+<span class="text-primary font-bold text-sm">+8.4%</span>
+</div>
+<!-- 1st Place -->
+<div class="flex flex-col items-center pb-8">
+<div class="relative mb-3">
+<div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full border-[4px] border-[#FFD700] shadow-lg bg-cover bg-center" data-alt="Avatar for 1st place user" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAgS6jP2Ks-CSp-yRtV2d1YwywgO620H1Kz6cRI3xalEAVlTUcs1Y_BNSexClxqIak00N80b1syHTJpM_ev87fMk2jYQ5GvjYJwKpOEmLkT9CF1bPTiYdCroW5KwzOdZQGY35ZZh5WqKxtL3F8nAUViyWvGqn1YQOIVHtQ3G_8_iqIPc6G7D1TcjbRIezcdnx_jUgHJ-YZbiAJKipLGUZwnNxLevP-pVenTY4VEoG_1EqSs9TuJMYwC-jf7i_idXfz66ORirbeFYCg');"></div>
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 text-[#FFD700]">
+<span class="material-symbols-outlined text-[32px] drop-shadow-sm">workspace_premium</span>
+</div>
+<div class="absolute -bottom-2 -right-2 w-8 h-8 bg-[#FFD700] rounded-full flex items-center justify-center text-white text-sm font-bold border-2 border-surface">1</div>
+</div>
+<span class="font-bold text-text-main text-base sm:text-lg">Neha R.</span>
+<span class="text-primary font-bold text-base">+12.1%</span>
+</div>
+<!-- 3rd Place -->
+<div class="flex flex-col items-center pb-2">
+<div class="relative mb-3">
+<div class="w-14 h-14 sm:w-[72px] sm:h-[72px] rounded-full border-[4px] border-[#CD7F32] shadow-lg bg-cover bg-center" data-alt="Avatar for 3rd place user" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD2DcDGyhV8Ow1sU8wiu95TMZFZk3zednrhALTy60BWZpKJr86ghv0PVqi-WdBzhAkwIwHi7JmJ1DhXVXvOsOBkPG1OxK6SxBBnk2QNJ4ZtdHgJ082pkbxpCGVifHS9volleS_LzlE-JXy4Bu5uQTMgWNP8VJl63cR7QgW_fvwSGOqx61YLWUg9r6RJ46GzxJAFPZ_Vq6th4_ynodKjt2eE0MFvqAR0TartWNW0zogDIMD76Q3Wsizz-nRr58rQdd-2ImtZWWCD13E');"></div>
+<div class="absolute -bottom-2 -right-2 w-6 h-6 bg-[#CD7F32] rounded-full flex items-center justify-center text-white text-xs font-bold border-2 border-surface">3</div>
+</div>
+<span class="font-semibold text-text-main text-sm sm:text-base">Vikram S.</span>
+<span class="text-primary font-bold text-sm">+6.2%</span>
+</div>
+</div>
+<!-- List View -->
+<div class="bg-surface rounded-2xl shadow-card overflow-hidden">
+<ul class="divide-y divide-gray-50">
+<!-- Rank 4 -->
+<li class="flex items-center px-4 sm:px-6 py-4 hover:bg-gray-50 transition-all duration-200 hover:scale-[1.02] cursor-pointer group">
+<div class="w-8 text-text-muted font-bold text-sm">4</div>
+<div class="w-10 h-10 rounded-full bg-cover bg-center mr-4" data-alt="Avatar for rank 4 user" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuALN5fv2xQa4Juc_ArueqzAsw47_TpKJ01Iw0Tn9NCA7YCWXBgJRDU-PDtaX9mWOypDx6t9E3kzBcu2J-UKQ6U5YQHfIhOL6oE-FUAkVfHYw25i8EdSZed9KanvDhRQAwlMDJRCgyQwdRLYWNMTBU4A1r-fdLwzD9R0T5aj9SWGrQHh0G0EslToahi9cKWB1N3dm2YoO0tBYWtyCEsGBBPmRShIL35FQd7OPF2A8FpFuyfHKN2fX-nX2CHRn194QTJUT1cOON_Atqs');"></div>
+<div class="flex-1">
+<h3 class="font-semibold text-text-main group-hover:text-primary transition-colors">Priya M.</h3>
+</div>
+<div class="text-right">
+<span class="text-primary font-bold bg-primary/10 px-2 py-1 rounded-lg text-sm">+5.1%</span>
+</div>
+</li>
+<!-- Rank 5 -->
+<li class="flex items-center px-4 sm:px-6 py-4 hover:bg-gray-50 transition-all duration-200 hover:scale-[1.02] cursor-pointer group">
+<div class="w-8 text-text-muted font-bold text-sm">5</div>
+<div class="w-10 h-10 rounded-full bg-cover bg-center mr-4" data-alt="Avatar for rank 5 user" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBFwnsm27V9pbfkQdSH_jIEuEO109oqWnua6sFLMxHIlvOc5b0_uG_fIHfm8VWGKmwKy5su9JQNySZR28l_ep5EwCAIuVOE2rhlVS64ODD8yO2G5AIrHMLQJ1k_pqZlyz74BMcrsMccf_p9OMTMiTR9F5VGLUewOdK6ggizNEls6A87aeYZdWGx2Id4LLQbYOaHjqQwYhEh9RQxa-b4_k2hpU4RPOfC4X-R36hPpSjDeGpHLFxN4IOnv2ttXiFT_fdLZwDv310WVSg');"></div>
+<div class="flex-1">
+<h3 class="font-semibold text-text-main group-hover:text-primary transition-colors">Rohit K.</h3>
+</div>
+<div class="text-right">
+<span class="text-primary font-bold bg-primary/10 px-2 py-1 rounded-lg text-sm">+4.8%</span>
+</div>
+</li>
+<!-- Rank 6 -->
+<li class="flex items-center px-4 sm:px-6 py-4 hover:bg-gray-50 transition-all duration-200 hover:scale-[1.02] cursor-pointer group">
+<div class="w-8 text-text-muted font-bold text-sm">6</div>
+<div class="w-10 h-10 rounded-full bg-cover bg-center mr-4" data-alt="Avatar for rank 6 user" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDcS0AYmkOlhFQPM6OBRSNpWLQ_tUg1eJbl8n2bS0kCiKyguhpyWVXW6c6NBYxYB9hTw2Pks59ekrSsWcT0V3c90paf-w_iIrCWVzrk4K9-AK5RDb-_PVpd-82KsNDQWHxRpkYBPDB5Yvqgt9P39H5KJ2GsyyYtPOf35KlFc_lSqPPSpzqaPksGtJkX2ORppALcusHenjSsjWDcvQjoZeigUqrhdjbcSSfTs9HW25CgSnKR8gUySZDv1fxqDz31au2S-dVUriIFjDc');"></div>
+<div class="flex-1">
+<h3 class="font-semibold text-text-main group-hover:text-primary transition-colors">Anita D.</h3>
+</div>
+<div class="text-right">
+<span class="text-primary font-bold bg-primary/10 px-2 py-1 rounded-lg text-sm">+3.9%</span>
+</div>
+</li>
+<!-- Rank 7 -->
+<li class="flex items-center px-4 sm:px-6 py-4 hover:bg-gray-50 transition-all duration-200 hover:scale-[1.02] cursor-pointer group">
+<div class="w-8 text-text-muted font-bold text-sm">7</div>
+<div class="w-10 h-10 rounded-full bg-cover bg-center mr-4" data-alt="Avatar for rank 7 user" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDhln2gXrJEh_m7UTGh1Vn7IKE-WE8IXDSUaQM8umRyPpu7bG2ZehWYOJ2a-3zhKhGbvJFDDWg-dS5l4N0dabMnmsw8D9frTw-l7yjLcf9Nrd8dub9rsXzk99DZdsbuohHqi775CcRJBh5KHNm83Z4hCOdmb_BuPMR1POu9fsxLosLrP-J7sDtiajLiWKZo8s9uPpK839mUu2Hya4TheCHhnJNXyT4W-luicA36lx5RE8Hy99OmhSYHGRNqt8qKA6Fv1EVDaJi240c');"></div>
+<div class="flex-1">
+<h3 class="font-semibold text-text-main group-hover:text-primary transition-colors">Karan P.</h3>
+</div>
+<div class="text-right">
+<span class="text-primary font-bold bg-primary/10 px-2 py-1 rounded-lg text-sm">+2.5%</span>
+</div>
+</li>
+<!-- Rank 8 -->
+<li class="flex items-center px-4 sm:px-6 py-4 hover:bg-gray-50 transition-all duration-200 hover:scale-[1.02] cursor-pointer group">
+<div class="w-8 text-text-muted font-bold text-sm">8</div>
+<div class="w-10 h-10 rounded-full bg-cover bg-center mr-4" data-alt="Avatar for rank 8 user" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAy5OmRQZx2s8NyXvQ_kAUwHvz4BgXkd7pbVkagyQ_FKO1uYDByTkIjeYfWkw4UTREzN45NZGM8_PLLr4dUp9QnmNo6pzta30o7vDwe1f7WPrnQ2jf9qLZ87DMYVVm6O7Vap5zTUYvWwRojDVR9zHPGxixc-a-LYzbFiefEOLmbGdEdEN2R09PUHF8qb8anqNf-upOcMewY84MpfJQdd3w9EGra8fHapHZqF0wouqeLq8ED9VhmMZhoRVwzfUpEFrgekw85Z0gpyW4');"></div>
+<div class="flex-1">
+<h3 class="font-semibold text-text-main group-hover:text-primary transition-colors">Sanjay T.</h3>
+</div>
+<div class="text-right">
+<span class="text-text-muted font-medium px-2 py-1 text-sm">-0.4%</span>
+</div>
+</li>
+<!-- Rank 9 -->
+<li class="flex items-center px-4 sm:px-6 py-4 hover:bg-gray-50 transition-all duration-200 hover:scale-[1.02] cursor-pointer group">
+<div class="w-8 text-text-muted font-bold text-sm">9</div>
+<div class="w-10 h-10 rounded-full bg-cover bg-center mr-4" data-alt="Avatar for rank 9 user" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCEIRMh1foYHVPafb4TEqlSQSOqo4ZP7WCOi0wuid9b-CiTwuDXUCwZUZ2R0HV3v8GaMUnzlUtgGq42IRqh3am6b5Ieig3CIOCCu7Andltxc5aG8j0MNFsR2HCYMD8HA0KnSR5-WWhH0CfLIYO7T1nco3k5EekmRV-X4EQ7-6r6I3OYelTa3hLrIundOtzKgrnZJZ8vPvJOnTUyueZHdjYTz-vQ--3paa8YNPcNMkEXr6VspEKfgBXmRv5U_l2oj34hdGZSn9OR9hk');"></div>
+<div class="flex-1">
+<h3 class="font-semibold text-text-main group-hover:text-primary transition-colors">Meera W.</h3>
+</div>
+<div class="text-right">
+<span class="text-text-muted font-medium px-2 py-1 text-sm">-1.2%</span>
+</div>
+</li>
+</ul>
+<div class="p-4 text-center border-t border-gray-50">
+<button class="text-primary font-semibold text-sm hover:underline">Show more friends</button>
+</div>
+</div>
+</div>
+<!-- Sticky User Banner -->
+<div class="fixed bottom-0 left-0 md:left-[240px] right-0 bg-surface/90 backdrop-blur-md border-t border-gray-100 shadow-sticky z-30 p-4">
+<div class="max-w-[800px] mx-auto flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-cover bg-center border-2 border-primary" data-alt="Current user avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBPINwSBvxCaRwIkDNeskS55_cGAPc-Q9XD8GsFIpQUneiAwmwzIjVSxz9f4ei2jlTu68cWOEeAr33x_PD_4RAr3tKuEvc9bm1p8QG0z7Esrdvmj1oDTr72KBwMGV-CO_aRZhnpdcMEdms5vsWn1SRjYSbiV7IauwVsv2Pm5jfjZ1EqjenFMleOcmSrkuiii4Fmc5jBqWMOBxvE8sv1EEroqg8-R3-mKCQhOCBf6381EppmC9emkG0cgFuKDVTX5kc89bzElEyQuYo');"></div>
+<div>
+<div class="text-xs text-text-muted font-medium uppercase tracking-wider mb-0.5">Your Rank</div>
+<div class="flex items-baseline gap-2">
+<span class="text-xl font-bold text-text-main">#12</span>
+<span class="text-sm font-semibold text-primary bg-primary/10 px-1.5 py-0.5 rounded">+1.8%</span>
+</div>
+</div>
+</div>
+<div class="text-right hidden sm:block">
+<div class="text-sm text-text-muted font-medium">0.4% to catch up to #11</div>
+<div class="w-32 h-1.5 bg-gray-100 rounded-full mt-1.5 overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 75%"></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

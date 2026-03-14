@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TradeLab - Trade Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#10c16c",
+                        "background-light": "#F7F9FC",
+                        "background-dark": "#102219",
+                        "surface": "#FFFFFF",
+                        "text-main": "#12151A",
+                        "text-muted": "#8A94A6",
+                        "accent-blue": "#0066FF"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "md": "1rem",
+                        "lg": "1.5rem",
+                        "xl": "2rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px rgba(0, 102, 255, 0.03)',
+                        'soft-hover': '0 12px 40px rgba(0, 102, 255, 0.08)',
+                        'panel': '-12px 0 40px rgba(0, 102, 255, 0.05)'
+                    },
+                    transitionTimingFunction: {
+                        'spring': 'cubic-bezier(0.4, 0, 0.2, 1)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: theme('colors.background-light');
+            color: theme('colors.text-main');
+        }
+        
+        .slide-panel {
+            transform: translateX(100%);
+            transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Simulate panel open state for design purposes */
+        .panel-open {
+            transform: translateX(0);
+        }
+
+        .stock-card {
+            transition: all 200ms ease-out;
+        }
+        
+        .stock-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 102, 255, 0.08);
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden bg-background-light antialiased font-display">
+<!-- Sidebar Navigation -->
+<nav class="w-[240px] flex-shrink-0 bg-background-light flex flex-col justify-between py-6 px-4 border-r border-gray-100 z-10">
+<div class="flex flex-col gap-8">
+<div class="px-3">
+<h1 class="text-text-main text-xl font-bold tracking-tight">TradeLab</h1>
+<p class="text-text-muted text-sm mt-1">Good afternoon</p>
+</div>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-3 rounded-md text-text-muted hover:text-text-main hover:bg-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">home</span>
+<span class="text-sm font-medium">Home</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-md bg-surface text-text-main shadow-sm transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">trending_up</span>
+<span class="text-sm font-semibold">Trade</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-md text-text-muted hover:text-text-main hover:bg-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">group</span>
+<span class="text-sm font-medium">Group</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-3 rounded-md text-text-muted hover:text-text-main hover:bg-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">emoji_events</span>
+<span class="text-sm font-medium">Rank</span>
+</a>
+</div>
+</div>
+<div class="px-3">
+<button class="flex items-center gap-3 text-text-muted hover:text-text-main transition-colors py-2">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+<span class="text-sm font-medium">Sign Out</span>
+</button>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col relative h-full overflow-hidden">
+<!-- Search Header -->
+<header class="pt-8 px-8 pb-4 flex justify-center z-10 w-full max-w-[1200px] mx-auto">
+<div class="w-full max-w-[800px] relative">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-text-muted text-[24px]">search</span>
+</div>
+<input class="w-full h-[56px] pl-12 pr-4 bg-surface border-none rounded-lg shadow-soft text-text-main text-lg placeholder:text-text-muted focus:ring-2 focus:ring-primary/20 focus:outline-none transition-shadow" placeholder="Search NSE stocks..." type="text"/>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto px-8 pb-12 custom-scrollbar">
+<div class="max-w-[1200px] mx-auto pr-[420px]"> <!-- Padding right to accommodate open panel -->
+<div class="mb-6 flex justify-between items-end mt-4">
+<h2 class="text-[32px] font-bold text-text-main tracking-tight">Trending Stocks</h2>
+</div>
+<!-- Discovery Grid (3x3) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Stock Card 1 (Active/Selected) -->
+<div class="stock-card bg-surface p-5 rounded-md shadow-soft cursor-pointer border border-primary/20 relative overflow-hidden">
+<div class="absolute inset-0 bg-primary/5 pointer-events-none"></div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-lg font-bold text-text-main">RELIANCE</h3>
+<p class="text-sm text-text-muted font-medium">Reliance Ind.</p>
+</div>
+<div class="text-right">
+<p class="text-lg font-bold text-text-main">₹2,456.80</p>
+<p class="text-sm text-primary font-medium flex items-center justify-end gap-0.5">
+<span class="material-symbols-outlined text-[16px]">arrow_drop_up</span>
+                                    1.24%
+                                </p>
+</div>
+</div>
+<div class="h-12 w-full flex items-end">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 30">
+<path class="text-primary" d="M0,25 Q10,15 20,20 T40,10 T60,18 T80,5 T100,2" fill="none" stroke="currentColor" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+<!-- Stock Card 2 -->
+<div class="stock-card bg-surface p-5 rounded-md shadow-soft cursor-pointer border border-transparent">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-lg font-bold text-text-main">TATAMOTORS</h3>
+<p class="text-sm text-text-muted font-medium">Tata Motors</p>
+</div>
+<div class="text-right">
+<p class="text-lg font-bold text-text-main">₹624.50</p>
+<p class="text-sm text-primary font-medium flex items-center justify-end gap-0.5">
+<span class="material-symbols-outlined text-[16px]">arrow_drop_up</span>
+                                    2.10%
+                                </p>
+</div>
+</div>
+<div class="h-12 w-full flex items-end">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 30">
+<path class="text-primary" d="M0,20 Q15,25 30,15 T60,20 T80,10 T100,5" fill="none" stroke="currentColor" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+<!-- Stock Card 3 -->
+<div class="stock-card bg-surface p-5 rounded-md shadow-soft cursor-pointer border border-transparent">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-lg font-bold text-text-main">HDFCBANK</h3>
+<p class="text-sm text-text-muted font-medium">HDFC Bank</p>
+</div>
+<div class="text-right">
+<p class="text-lg font-bold text-text-main">₹1,532.10</p>
+<p class="text-sm text-[#FF3B30] font-medium flex items-center justify-end gap-0.5">
+<span class="material-symbols-outlined text-[16px]">arrow_drop_down</span>
+                                    0.45%
+                                </p>
+</div>
+</div>
+<div class="h-12 w-full flex items-end">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 30">
+<path class="text-[#FF3B30]" d="M0,5 Q20,10 40,5 T70,20 T100,25" fill="none" stroke="currentColor" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+<!-- Stock Card 4 -->
+<div class="stock-card bg-surface p-5 rounded-md shadow-soft cursor-pointer border border-transparent">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-lg font-bold text-text-main">INFY</h3>
+<p class="text-sm text-text-muted font-medium">Infosys</p>
+</div>
+<div class="text-right">
+<p class="text-lg font-bold text-text-main">₹1,420.00</p>
+<p class="text-sm text-primary font-medium flex items-center justify-end gap-0.5">
+<span class="material-symbols-outlined text-[16px]">arrow_drop_up</span>
+                                    0.80%
+                                </p>
+</div>
+</div>
+<div class="h-12 w-full flex items-end">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 30">
+<path class="text-primary" d="M0,22 Q20,18 40,20 T70,10 T100,8" fill="none" stroke="currentColor" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+<!-- Stock Card 5 -->
+<div class="stock-card bg-surface p-5 rounded-md shadow-soft cursor-pointer border border-transparent">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-lg font-bold text-text-main">TCS</h3>
+<p class="text-sm text-text-muted font-medium">Tata Consultancy</p>
+</div>
+<div class="text-right">
+<p class="text-lg font-bold text-text-main">₹3,450.25</p>
+<p class="text-sm text-primary font-medium flex items-center justify-end gap-0.5">
+<span class="material-symbols-outlined text-[16px]">arrow_drop_up</span>
+                                    1.15%
+                                </p>
+</div>
+</div>
+<div class="h-12 w-full flex items-end">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 30">
+<path class="text-primary" d="M0,28 Q15,20 30,22 T60,15 T80,5 T100,2" fill="none" stroke="currentColor" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+<!-- Stock Card 6 -->
+<div class="stock-card bg-surface p-5 rounded-md shadow-soft cursor-pointer border border-transparent">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-lg font-bold text-text-main">ICICIBANK</h3>
+<p class="text-sm text-text-muted font-medium">ICICI Bank</p>
+</div>
+<div class="text-right">
+<p class="text-lg font-bold text-text-main">₹945.60</p>
+<p class="text-sm text-[#FF3B30] font-medium flex items-center justify-end gap-0.5">
+<span class="material-symbols-outlined text-[16px]">arrow_drop_down</span>
+                                    0.20%
+                                </p>
+</div>
+</div>
+<div class="h-12 w-full flex items-end">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 30">
+<path class="text-[#FF3B30]" d="M0,10 Q25,15 50,12 T80,20 T100,22" fill="none" stroke="currentColor" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+<!-- Stock Card 7 -->
+<div class="stock-card bg-surface p-5 rounded-md shadow-soft cursor-pointer border border-transparent">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-lg font-bold text-text-main">ITC</h3>
+<p class="text-sm text-text-muted font-medium">ITC Ltd</p>
+</div>
+<div class="text-right">
+<p class="text-lg font-bold text-text-main">₹450.30</p>
+<p class="text-sm text-primary font-medium flex items-center justify-end gap-0.5">
+<span class="material-symbols-outlined text-[16px]">arrow_drop_up</span>
+                                    0.55%
+                                </p>
+</div>
+</div>
+<div class="h-12 w-full flex items-end">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 30">
+<path class="text-primary" d="M0,15 Q20,20 40,15 T70,10 T100,5" fill="none" stroke="currentColor" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+<!-- Stock Card 8 -->
+<div class="stock-card bg-surface p-5 rounded-md shadow-soft cursor-pointer border border-transparent">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-lg font-bold text-text-main">SBIN</h3>
+<p class="text-sm text-text-muted font-medium">State Bank of India</p>
+</div>
+<div class="text-right">
+<p class="text-lg font-bold text-text-main">₹580.90</p>
+<p class="text-sm text-[#FF3B30] font-medium flex items-center justify-end gap-0.5">
+<span class="material-symbols-outlined text-[16px]">arrow_drop_down</span>
+                                    1.05%
+                                </p>
+</div>
+</div>
+<div class="h-12 w-full flex items-end">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 30">
+<path class="text-[#FF3B30]" d="M0,5 Q20,2 40,10 T70,25 T100,28" fill="none" stroke="currentColor" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+<!-- Stock Card 9 -->
+<div class="stock-card bg-surface p-5 rounded-md shadow-soft cursor-pointer border border-transparent">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-lg font-bold text-text-main">BHARTIARTL</h3>
+<p class="text-sm text-text-muted font-medium">Bharti Airtel</p>
+</div>
+<div class="text-right">
+<p class="text-lg font-bold text-text-main">₹890.45</p>
+<p class="text-sm text-primary font-medium flex items-center justify-end gap-0.5">
+<span class="material-symbols-outlined text-[16px]">arrow_drop_up</span>
+                                    3.20%
+                                </p>
+</div>
+</div>
+<div class="h-12 w-full flex items-end">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 30">
+<path class="text-primary" d="M0,25 Q15,30 30,15 T60,5 T80,10 T100,2" fill="none" stroke="currentColor" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Slide-Out Order Panel -->
+<aside class="slide-panel panel-open absolute top-0 right-0 w-[400px] h-full bg-surface shadow-panel z-20 flex flex-col border-l border-gray-100">
+<!-- Panel Header -->
+<div class="px-8 py-6 flex justify-between items-center border-b border-gray-100">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">R</div>
+<div>
+<h2 class="text-xl font-bold text-text-main">RELIANCE</h2>
+<p class="text-sm text-text-muted">₹2,456.80</p>
+</div>
+</div>
+<button class="text-text-muted hover:text-text-main rounded-full p-1 hover:bg-background-light transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Panel Content -->
+<div class="flex-1 px-8 py-8 flex flex-col">
+<!-- Trade Type Toggle -->
+<div class="flex bg-background-light p-1 rounded-md mb-8">
+<button class="flex-1 py-2 rounded-md bg-surface text-text-main font-semibold shadow-sm text-sm">Buy</button>
+<button class="flex-1 py-2 rounded-md text-text-muted hover:text-text-main font-medium text-sm transition-colors">Sell</button>
+</div>
+<!-- Input Area -->
+<div class="flex-1 flex flex-col justify-center items-center mb-12">
+<label class="text-text-muted text-sm font-medium mb-4">Amount in ₹</label>
+<div class="flex items-center justify-center w-full">
+<span class="text-[48px] font-bold text-text-muted mr-1">₹</span>
+<input class="text-[48px] font-bold text-text-main bg-transparent border-none focus:ring-0 text-center w-auto max-w-full p-0 placeholder:text-text-muted/30" placeholder="0" type="text" value="1,000"/>
+</div>
+<div class="mt-6 flex gap-2">
+<button class="px-4 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-text-main hover:bg-background-light transition-colors">+ ₹500</button>
+<button class="px-4 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-text-main hover:bg-background-light transition-colors">+ ₹1,000</button>
+<button class="px-4 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-text-main hover:bg-background-light transition-colors">+ ₹5,000</button>
+</div>
+</div>
+<!-- Order Summary & CTA -->
+<div class="mt-auto">
+<div class="bg-background-light rounded-md p-4 mb-6">
+<div class="flex justify-between text-sm mb-2">
+<span class="text-text-muted">Estimated Shares</span>
+<span class="font-semibold text-text-main">0.4070</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-text-muted">Available Cash</span>
+<span class="font-semibold text-text-main">₹10,000.00</span>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white h-[56px] rounded-full font-bold text-[15px] shadow-lg shadow-primary/20 transition-all hover:shadow-primary/30 flex items-center justify-center gap-2">
+                        Review Order
+                        <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</aside>
+</main>
+</body></html>
