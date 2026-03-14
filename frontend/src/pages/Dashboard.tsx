@@ -33,6 +33,8 @@ export function Dashboard() {
   const pnlCount = portfolio ? portfolio.total_pnl : 0
   const pnlPct = portfolio ? portfolio.total_pnl_pct : 0
 
+  const [timeframe, setTimeframe] = useState('ALL')
+
   return (
     <div className="flex-1 px-6 md:px-12 pb-24 w-full max-w-6xl mx-auto flex flex-col gap-8 animate-fade-in">
       {/* Hero Section */}
@@ -65,7 +67,7 @@ export function Dashboard() {
             </defs>
             <path d="M0,240 L0,180 C100,180 150,140 250,160 C350,180 400,100 500,120 C600,140 700,60 800,80 L800,240 Z" fill="url(#chart-fill)"></path>
             <path d="M0,180 C100,180 150,140 250,160 C350,180 400,100 500,120 C600,140 700,60 800,80" fill="none" stroke="#10c16c" strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" className="drop-shadow-lg"></path>
-            <line stroke="#E2E8F0" strokeDasharray="6 6" strokeWidth="1" x1="0" x2="800" y1="180" y2="180"></line>
+            <line className="stroke-border" strokeDasharray="6 6" strokeWidth="1" x1="0" x2="800" y1="180" y2="180"></line>
           </svg>
         </div>
 
@@ -74,8 +76,11 @@ export function Dashboard() {
           {['1D', '1W', '1M', '3M', 'ALL'].map(tf => (
             <button 
               key={tf}
+              onClick={() => setTimeframe(tf)}
               className={`px-4 py-1.5 rounded-full text-sm font-bold transition-all ${
-                tf === 'ALL' ? 'bg-text-main text-white shadow-md' : 'text-text-muted hover:bg-black/5'
+                timeframe === tf 
+                  ? 'bg-text-main text-background-light shadow-md' 
+                  : 'text-text-muted hover:bg-surface-subtle'
               }`}
             >
               {tf}
