@@ -166,7 +166,7 @@ export function Group() {
                           <p className="text-lg font-extrabold text-text-main tracking-widest mt-1">{group.invite_code}</p>
                         </div>
                       </div>
-                      <button className="px-5 py-2.5 bg-white text-text-main font-bold text-xs rounded-xl shadow-sm hover:shadow-md transition-all active:scale-95">Copy</button>
+                      <button className="px-5 py-2.5 bg-background-light text-text-main font-bold text-xs rounded-xl shadow-sm hover:shadow-md transition-all active:scale-95">Copy</button>
                    </div>
                  </div>
 
@@ -180,7 +180,7 @@ export function Group() {
                     </div>
                     
                     {proposals.length === 0 ? (
-                      <div className="bg-surface rounded-3xl p-12 shadow-soft border-2 border-dashed border-border flex flex-col items-center text-center">
+                      <div className="bg-surface rounded-3xl p-12 shadow-soft border-2 border-dashed border-border-subtle flex flex-col items-center text-center">
                          <MessageSquare size={48} className="text-text-muted mb-4" />
                          <p className="text-text-muted font-bold">No active proposals yet.</p>
                          <p className="text-sm text-text-muted mt-1 opacity-70">Initiate a group vote by proposing a stock from the Trade tab.</p>
@@ -241,7 +241,7 @@ export function Group() {
                  </section>
               </div>
             ) : (
-              <section className="bg-surface rounded-3xl shadow-card p-8 border border-gray-100">
+              <section className="bg-surface rounded-3xl shadow-card p-8 border border-border-subtle">
                 <div className="flex items-center justify-between mb-8">
                   <h3 className="text-xl font-extrabold text-text-main">Market Activity Feed</h3>
                   <button className="text-sm font-bold text-primary hover:underline">Global View</button>
@@ -252,8 +252,8 @@ export function Group() {
                     { user: 'Rahul', action: 'joined the', target: 'Tech Bulls', value: 'pod', time: '4h ago', icon: MessageSquare, color: 'text-accent-blue' },
                     { user: 'Amit', action: 'sold', target: 'HDFCBANK', value: '10 units', time: 'Yesterday', icon: ArrowDownRight, color: 'text-loss' },
                   ].map((item, i) => (
-                    <div key={i} className="flex items-start gap-4 p-5 rounded-2xl hover:bg-gray-50/80 transition-all cursor-pointer group border-b border-gray-50 last:border-0">
-                       <div className="w-12 h-12 rounded-full bg-background-light flex items-center justify-center font-bold text-text-muted border border-gray-100 shrink-0 shadow-sm transition-transform group-hover:rotate-6">
+                    <div key={i} className="flex items-start gap-4 p-5 rounded-2xl hover:bg-surface-subtle transition-all cursor-pointer group border-b border-border-subtle last:border-0">
+                       <div className="w-12 h-12 rounded-full bg-background-light flex items-center justify-center font-bold text-text-muted border border-border-subtle shrink-0 shadow-sm transition-transform group-hover:rotate-6">
                           {item.user[0]}
                        </div>
                        <div className="flex flex-col gap-1 flex-1">
@@ -266,7 +266,7 @@ export function Group() {
                     </div>
                   ))}
                 </div>
-                <button className="w-full mt-8 py-4 rounded-2xl text-text-main font-bold text-sm hover:bg-gray-50 transition-all border border-gray-100/50 shadow-sm border-dashed">
+                <button className="w-full mt-8 py-4 rounded-2xl text-text-main font-bold text-sm hover:bg-surface-subtle transition-all border border-border-subtle shadow-sm border-dashed">
                   View Older Activity
                 </button>
               </section>
@@ -313,7 +313,7 @@ export function Group() {
               ) : (
                 <div 
                   onClick={() => setView('create')}
-                  className="bg-surface/50 border-2 border-dashed border-gray-200 p-10 rounded-[32px] flex flex-col items-center text-center gap-4 hover:bg-surface hover:border-primary/40 cursor-pointer transition-all group"
+                  className="bg-surface/50 border-2 border-dashed border-border-subtle p-10 rounded-[32px] flex flex-col items-center text-center gap-4 hover:bg-surface hover:border-primary/40 cursor-pointer transition-all group"
                 >
                   <div className="w-16 h-16 bg-background-light rounded-full flex items-center justify-center text-text-muted group-hover:text-primary transition-colors">
                     <Shield size={32} />
@@ -329,7 +329,7 @@ export function Group() {
               )}
 
               {/* Invitation Teaser */}
-              <div className="bg-surface p-8 rounded-[32px] shadow-soft border border-gray-50 flex flex-col items-center text-center gap-3">
+              <div className="bg-surface p-8 rounded-[32px] shadow-soft border border-border-subtle flex flex-col items-center text-center gap-3">
                  <div className="w-14 h-14 bg-accent-blue/5 rounded-full flex items-center justify-center text-accent-blue font-bold">
                     <Users size={28} />
                  </div>
