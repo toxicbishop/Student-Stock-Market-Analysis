@@ -1,0 +1,9 @@
+# Set default text encoding for SQL files
+*.sql text eol=lf
+
+# Ensure SQL files are always normalized
+*.sql diff
+*.sql merge
+
+# Optionally, treat SQL files as linguist-detectable
+*.sql linguist-language=SQL
