@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Link, useLocation, Navigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { UserProvider, useUser } from './UserContext'
 import { Sidebar } from './components/Sidebar'
@@ -7,8 +7,8 @@ import { Trade }       from './pages/Trade'
 import { Group }       from './pages/Group'
 import { Leaderboard } from './pages/Leaderboard'
 import Profile         from './pages/Profile'
-import { api } from './api'
-import { Menu, LogOut, Home, TrendingUp, Users, Trophy, User } from 'lucide-react'
+import { AuthPage }    from './pages/Auth'
+import { Menu, Home, TrendingUp, Users, Trophy, User } from 'lucide-react'
 
 function MobileNav() {
   const location = useLocation()
@@ -42,74 +42,6 @@ function MobileNav() {
   )
 }
 
-function Onboarding({ onDone }: { onDone: (name: string) => void }) {
-  const [name, setName]       = useState('')
-  const [college, setCollege] = useState('')
-  const [loading, setLoading] = useState(false)
-
-  async function start() {
-    if (!name.trim()) return
-    setLoading(true)
-    await api.demo.seed().catch(() => {})
-    setLoading(false)
-    onDone(name.trim())
-  }
-
-  return (
-    <div className="min-h-screen bg-background-light flex items-center justify-center px-6">
-      <div className="w-full max-w-sm space-y-8 animate-fade-in">
-        <div className="text-center space-y-3">
-          <div className="w-16 h-16 rounded-2xl bg-primary shadow-lg shadow-primary/20 flex items-center justify-center mx-auto text-white text-3xl font-bold">
-            T
-          </div>
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight text-text-main">TradeLab</h1>
-            <p className="text-text-muted text-sm mt-1">Smart investing for students.</p>
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <div className="space-y-3">
-            <label className="text-xs font-bold text-text-muted uppercase tracking-widest pl-1">Your Details</label>
-            <input
-              className="w-full h-[56px] px-4 bg-surface border-none rounded-xl shadow-soft focus:ring-2 focus:ring-primary/20 transition-all text-text-main placeholder:text-text-muted"
-              placeholder="Display Name"
-              value={name}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
-              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && start()}
-            />
-            <input
-              className="w-full h-[56px] px-4 bg-surface border-none rounded-xl shadow-soft focus:ring-2 focus:ring-primary/20 transition-all text-text-main placeholder:text-text-muted"
-              placeholder="College Name"
-              value={college}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCollege(e.target.value)}
-            />
-          </div>
-          
-          <button 
-            className="w-full h-[56px] bg-primary hover:bg-primary/90 text-white font-bold rounded-xl shadow-lg shadow-primary/30 transition-all hover:scale-[1.02] active:scale-[0.98]" 
-            onClick={start} 
-            disabled={loading || !name.trim()}
-          >
-            {loading ? 'Processing...' : 'Start Investing'}
-          </button>
-        </div>
-
-        <div className="grid grid-cols-2 gap-3">
-          <div className="p-4 bg-surface rounded-xl shadow-soft border border-border-subtle flex flex-col items-center text-center gap-1">
-            <span className="text-primary font-bold">₹10K</span>
-            <span className="text-[10px] text-text-muted font-bold uppercase tracking-wider leading-none">Capital</span>
-          </div>
-          <div className="p-4 bg-surface rounded-xl shadow-soft border border-gray-50 flex flex-col items-center text-center gap-1">
-            <span className="text-accent-blue font-bold">FREE</span>
-            <span className="text-[10px] text-text-muted font-bold uppercase tracking-wider leading-none">Learning</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 interface ShellProps {
   darkMode: boolean;
   toggleDarkMode: () => void;
@@ -137,6 +69,9 @@ function Shell({ darkMode, toggleDarkMode, onLogout }: ShellProps) {
             <h2 className="text-xl font-bold tracking-tight text-text-main">
               {location.pathname === '/' ? `Good afternoon, ${user?.name || 'Investor'}` : ''}
               {location.pathname === '/profile' ? 'Your Profile' : ''}
+              {location.pathname === '/trade' ? 'Market Desk' : ''}
+              {location.pathname === '/group' ? 'Social Trading' : ''}
+              {location.pathname === '/leaderboard' ? 'Wall of Fame' : ''}
             </h2>
           </div>
         </header>
@@ -148,6 +83,7 @@ function Shell({ darkMode, toggleDarkMode, onLogout }: ShellProps) {
             <Route path="/group"       element={<Group />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/profile"     element={<Profile />} />
+            <Route path="*"            element={<Navigate to="/" replace />} />
           </Routes>
         </div>
 
@@ -158,24 +94,11 @@ function Shell({ darkMode, toggleDarkMode, onLogout }: ShellProps) {
 }
 
 function AppInner() {
-  const { setUser } = useUser()
-  const [ready, setReady] = useState(!!localStorage.getItem('tl_user'))
+  const { user, logout } = useUser()
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem('tl_theme')
-    return saved === 'dark'
+    return saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)
   })
-
-  useEffect(() => {
-    const saved = localStorage.getItem('tl_user')
-    if (saved) {
-      try {
-        const { name } = JSON.parse(saved)
-        setUser({ id: 'demo-user-1', name, email: '', created_at: new Date().toISOString(), profile_photo: null, bio: null, college: null })
-      } catch (e) {
-        localStorage.removeItem('tl_user')
-      }
-    }
-  }, [])
 
   useEffect(() => {
     if (darkMode) {
@@ -187,28 +110,17 @@ function AppInner() {
     }
   }, [darkMode])
 
-  function handleOnboard(name: string) {
-    localStorage.setItem('tl_user', JSON.stringify({ name }))
-    setUser({ id: 'demo-user-1', name, email: '', created_at: new Date().toISOString(), profile_photo: null, bio: null, college: null })
-    setReady(true)
-  }
-
-  function handleLogout() {
-    localStorage.removeItem('tl_user')
-    localStorage.removeItem('tl_group_id')
-    setReady(false)
-  }
-
   const toggleDarkMode = () => setDarkMode((prev: boolean) => !prev);
 
-  if (!ready) return <Onboarding onDone={handleOnboard} />
+  // If no user is logged in, show AuthPage
+  if (!user) return <AuthPage />
 
   return (
     <BrowserRouter>
       <Shell 
         darkMode={darkMode} 
         toggleDarkMode={toggleDarkMode} 
-        onLogout={handleLogout} 
+        onLogout={logout} 
       />
     </BrowserRouter>
   )
