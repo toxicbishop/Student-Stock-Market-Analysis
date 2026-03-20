@@ -335,7 +335,7 @@ export function Group() {
                  </div>
                  <h4 className="text-lg font-extrabold text-text-main leading-tight">Elite Circle</h4>
                  <p className="text-sm text-text-muted font-medium mb-4">Invest with the top 1% of traders in your college network.</p>
-                 <button className="w-full py-3 bg-background-light border border-gray-100 rounded-2xl font-bold text-text-main hover:bg-white hover:shadow-soft transition-all">
+                 <button className="w-full py-3 bg-background-light border border-border rounded-2xl font-bold text-text-main hover:bg-surface hover:shadow-soft transition-all">
                     Send Invites
                  </button>
               </div>
