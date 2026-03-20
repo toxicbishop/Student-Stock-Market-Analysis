@@ -155,7 +155,7 @@ export function Leaderboard() {
 
       {/* Sticky User Summary Banner */}
       {!loading && (
-        <div className="fixed bottom-0 md:bottom-8 left-0 md:left-1/2 md:-translate-x-1/2 right-0 md:w-full md:max-w-xl bg-text-main/95 backdrop-blur-xl border-t md:border border-white/10 shadow-2xl z-60 p-5 md:rounded-3xl animate-slide-up">
+        <div className="fixed bottom-0 md:bottom-8 left-0 md:left-1/2 md:-translate-x-1/2 right-0 md:w-full md:max-w-xl bg-[#0f172a]/95 backdrop-blur-xl border-t md:border border-white/10 shadow-2xl z-60 p-5 md:rounded-3xl animate-slide-up">
            <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                  <div className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center text-white font-black text-xl shadow-lg shadow-primary/20">
