@@ -7,7 +7,7 @@ import clsx from 'clsx'
 type View = 'feed' | 'create' | 'join' | 'detail'
 
 export function Group() {
-  const { userId, userName, groupId, setGroupId } = useUser()
+  const { user, groupId, setGroupId } = useUser()
   const [view, setView]       = useState<View>('feed')
   const [group, setGroup]     = useState<GroupDetail | null>(null)
   const [proposals, setProps] = useState<ProposalOut[]>([])
@@ -40,7 +40,7 @@ export function Group() {
     if (!groupName.trim()) return
     setLoading(true)
     try {
-      const res = await api.groups.create(groupName, userId, contribution)
+      const res = await api.groups.create(groupName, user?.id || '', contribution)
       setGroupId(res.id)
       await loadGroup(res.id)
       setView('detail')
@@ -51,7 +51,7 @@ export function Group() {
     if (!inviteCode.trim()) return
     setLoading(true)
     try {
-      const res = await api.groups.join(userId, inviteCode.toUpperCase(), contribution) as any
+      const res = await api.groups.join(user?.id || '', inviteCode.toUpperCase(), contribution) as any
       setGroupId(res.group_id)
       await loadGroup(res.group_id)
       setView('detail')
@@ -301,13 +301,13 @@ export function Group() {
                         <p className="text-[10px] text-text-muted font-black uppercase tracking-[0.2em] mb-1">Club Value</p>
                         <p className="text-2xl font-black text-text-main font-mono">₹{group.virtual_corpus.toLocaleString()}</p>
                       </div>
-                      <div className="flex -space-x-3">
-                         {[1,2,3].map(i => (
-                           <div key={i} className="w-10 h-10 rounded-full border-4 border-surface bg-background-light flex items-center justify-center text-xs font-bold text-text-muted shadow-sm uppercase">
-                              {userName[i-1] || 'U'}
-                           </div>
-                         ))}
-                      </div>
+                        <div className="flex -space-x-3">
+                           {[1,2,3].map(i => (
+                             <div key={i} className="w-10 h-10 rounded-full border-4 border-surface bg-background-light flex items-center justify-center text-xs font-bold text-text-muted shadow-sm uppercase">
+                                {i === 1 ? (user?.name?.[0] || 'U') : 'U'}
+                             </div>
+                           ))}
+                        </div>
                    </div>
                  </div>
               ) : (
