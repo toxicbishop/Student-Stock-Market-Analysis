@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { api, UserOut } from '../api'
 import { useUser } from '../UserContext'
-import { LogIn, UserPlus, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react'
+import { LogIn, UserPlus, ArrowRight, ShieldCheck, Sparkles, Eye, EyeOff } from 'lucide-react'
 import clsx from 'clsx'
 
 export function AuthPage() {
@@ -15,6 +15,7 @@ export function AuthPage() {
   const [password, setPassword] = useState('')
   const [name, setName]         = useState('')
   const [college, setCollege]   = useState('')
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleAuth = async () => {
     setLoading(true)
@@ -125,15 +126,24 @@ export function AuthPage() {
               />
             </div>
 
-            <div className="space-y-2 animate-slide-up">
+            <div className="space-y-2 animate-slide-up relative">
               <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-1">Secure Password</label>
-              <input 
-                type="password"
-                className="w-full h-14 px-5 bg-background-light border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all font-bold text-text-main placeholder:text-text-muted/40"
-                placeholder="••••••••"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-              />
+              <div className="relative group/pass">
+                <input 
+                  type={showPassword ? "text" : "password"}
+                  className="w-full h-14 px-5 bg-background-light border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all font-bold text-text-main placeholder:text-text-muted/40 pr-14"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-text-muted/50 hover:text-primary transition-colors focus:outline-none"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
 
             {error && <p className="text-loss text-xs font-bold text-center py-2 bg-loss/5 rounded-xl border border-loss/10">{error}</p>}
