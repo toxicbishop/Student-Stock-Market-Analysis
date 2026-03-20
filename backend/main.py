@@ -132,6 +132,5 @@ async def seed_demo_users():
                 quantity=10, price=620.0, total_value=6200.0
             ))
         await db.commit()
-        await db.commit()
 
     return {"message": "Demo users seeded", "users": [u["name"] for u in demo_users]}
