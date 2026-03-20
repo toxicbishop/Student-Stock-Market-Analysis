@@ -101,13 +101,12 @@ async def seed_demo_users():
                 user.email = u["email"]
 
             # Clear existing portfolio data for a fresh seed
-            await db.execute(delete(Trade).where(Trade.portfolio_id.in_(
-                select(Portfolio.id).where(Portfolio.user_id == u["id"])
-            )))
-            await db.execute(delete(Holding).where(Holding.portfolio_id.in_(
-                select(Portfolio.id).where(Portfolio.user_id == u["id"])
-            )))
-            await db.execute(delete(Portfolio).where(Portfolio.user_id == u["id"]))
+            p_res = await db.execute(select(Portfolio.id).where(Portfolio.user_id == u["id"]))
+            p_id = p_res.scalar_one_or_none()
+            if p_id:
+                await db.execute(delete(Trade).where(Trade.portfolio_id == p_id))
+                await db.execute(delete(Holding).where(Holding.portfolio_id == p_id))
+                await db.execute(delete(Portfolio).where(Portfolio.id == p_id))
 
             # Create fresh demo portfolio
             portfolio = Portfolio(
