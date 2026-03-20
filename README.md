@@ -72,5 +72,5 @@ Pranav Arun<br>
 Supreeth N<br>
 
 <p align="center">
-  Developed with ❤️ at Electrohack 3.0, K.S. Institute of Technology.
+  Developed at Electrohack 3.0, K.S. Institute of Technology.
 </p>
