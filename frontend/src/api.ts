@@ -1,9 +1,18 @@
 const BASE = '/api'
 
 async function req<T>(path: string, opts?: RequestInit): Promise<T> {
+  const token = localStorage.getItem('token')
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+  }
+
   const res = await fetch(`${BASE}${path}`, {
-    headers: { 'Content-Type': 'application/json' },
     ...opts,
+    headers: {
+      ...headers,
+      ...(opts?.headers as Record<string, string> || {})
+    },
   })
   if (!res.ok) {
     const err = await res.json().catch(() => ({ detail: 'Request failed' }))
@@ -106,9 +115,48 @@ export interface GroupDetail {
   holdings: { ticker: string; quantity: number; avg_buy_price: number }[]
 }
 
+export interface UserOut {
+  id: string
+  name: string
+  email: string
+  profile_photo: string | null
+  bio: string | null
+  college: string | null
+  created_at: string
+}
+
+export interface Token {
+  access_token: string
+  token_type: string
+}
+
 // ── Stock ─────────────────────────────────────────────────────────────────────
 
 export const api = {
+  auth: {
+    register: (body: any) => req<UserOut>('/auth/register', { method: 'POST', body: JSON.stringify(body) }),
+    login: (body: any) => req<Token>('/auth/login', { method: 'POST', body: JSON.stringify(body) }),
+  },
+
+  users: {
+    me: () => req<UserOut>('/users/me'),
+    update: (body: any) => req<UserOut>('/users/me', { method: 'PATCH', body: JSON.stringify(body) }),
+    uploadPhoto: async (file: File) => {
+      const formData = new FormData()
+      formData.append('file', file)
+      const token = localStorage.getItem('token')
+      const res = await fetch(`${BASE}/users/me/upload-photo`, {
+        method: 'POST',
+        headers: {
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
+        body: formData
+      })
+      if (!res.ok) throw new Error('Upload failed')
+      return res.json() as Promise<UserOut>
+    }
+  },
+
   stocks: {
     quote: (ticker: string) =>
       req<StockQuote>(`/stocks/quote/${ticker}`),

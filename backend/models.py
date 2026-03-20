@@ -3,7 +3,6 @@ from sqlalchemy import (
     ForeignKey, DateTime, Enum, Text, func
 )
 from sqlalchemy.orm import relationship
-from sqlalchemy.dialects.postgresql import UUID
 from database import Base
 import uuid
 import enum
@@ -37,14 +36,18 @@ class TradeAction(str, enum.Enum):
 class User(Base):
     __tablename__ = "users"
 
-    id          = Column(String, primary_key=True, default=gen_uuid)
-    name        = Column(String, nullable=False)
-    email       = Column(String, unique=True, nullable=False)
-    created_at  = Column(DateTime(timezone=True), server_default=func.now())
+    id              = Column(String, primary_key=True, default=gen_uuid)
+    name            = Column(String, nullable=False)
+    email           = Column(String, unique=True, nullable=False)
+    hashed_password = Column(String, nullable=False)
+    profile_photo   = Column(String, nullable=True) # URL or FilePath
+    bio             = Column(Text, nullable=True)
+    college         = Column(String, nullable=True)
+    created_at      = Column(DateTime(timezone=True), server_default=func.now())
 
-    portfolio   = relationship("Portfolio", back_populates="user", uselist=False)
+    portfolio       = relationship("Portfolio", back_populates="user", uselist=False)
     group_memberships = relationship("GroupMember", back_populates="user")
-    votes       = relationship("Vote", back_populates="voter")
+    votes           = relationship("Vote", back_populates="voter")
 
 
 # ─── Individual Portfolio ──────────────────────────────────────────────────────

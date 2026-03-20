@@ -6,16 +6,18 @@ import { Dashboard }   from './pages/Dashboard'
 import { Trade }       from './pages/Trade'
 import { Group }       from './pages/Group'
 import { Leaderboard } from './pages/Leaderboard'
+import Profile         from './pages/Profile'
 import { api } from './api'
-import { Menu, LogOut, Home, TrendingUp, Users, Trophy } from 'lucide-react'
+import { Menu, LogOut, Home, TrendingUp, Users, Trophy, User } from 'lucide-react'
 
 function MobileNav() {
   const location = useLocation()
   const navItems = [
-    { label: 'Home',  path: '/',            icon: Home },
-    { label: 'Trade', path: '/trade',       icon: TrendingUp },
-    { label: 'Group', path: '/group',       icon: Users },
-    { label: 'Rank',  path: '/leaderboard', icon: Trophy },
+    { label: 'Home',    path: '/',            icon: Home },
+    { label: 'Trade',   path: '/trade',       icon: TrendingUp },
+    { label: 'Group',   path: '/group',       icon: Users },
+    { label: 'Rank',    path: '/leaderboard', icon: Trophy },
+    { label: 'Profile', path: '/profile',     icon: User },
   ]
 
   return (
@@ -115,7 +117,7 @@ interface ShellProps {
 }
 
 function Shell({ darkMode, toggleDarkMode, onLogout }: ShellProps) {
-  const { userName } = useUser()
+  const { user } = useUser()
   const location = useLocation()
 
   return (
@@ -133,7 +135,8 @@ function Shell({ darkMode, toggleDarkMode, onLogout }: ShellProps) {
               <Menu size={24} />
             </button>
             <h2 className="text-xl font-bold tracking-tight text-text-main">
-              {location.pathname === '/' ? `Good afternoon, ${userName}` : ''}
+              {location.pathname === '/' ? `Good afternoon, ${user?.name || 'Investor'}` : ''}
+              {location.pathname === '/profile' ? 'Your Profile' : ''}
             </h2>
           </div>
         </header>
@@ -144,6 +147,7 @@ function Shell({ darkMode, toggleDarkMode, onLogout }: ShellProps) {
             <Route path="/trade"       element={<Trade />} />
             <Route path="/group"       element={<Group />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/profile"     element={<Profile />} />
           </Routes>
         </div>
 

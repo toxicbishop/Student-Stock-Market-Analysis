@@ -4,21 +4,46 @@ from datetime import datetime
 from models import VoteChoice, ProposalStatus, TradeAction
 
 
-# ─── User ─────────────────────────────────────────────────────────────────────
+# ─── Auth + User ──────────────────────────────────────────────────────────────
 
 class UserCreate(BaseModel):
     name: str
     email: EmailStr
+    password: str
+
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class UserUpdate(BaseModel):
+    name: Optional[str] = None
+    profile_photo: Optional[str] = None
+    bio: Optional[str] = None
+    college: Optional[str] = None
 
 
 class UserOut(BaseModel):
     id: str
     name: str
     email: str
+    profile_photo: Optional[str] = None
+    bio: Optional[str] = None
+    college: Optional[str] = None
     created_at: datetime
 
     class Config:
         from_attributes = True
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    email: Optional[str] = None
 
 
 # ─── Stock ────────────────────────────────────────────────────────────────────

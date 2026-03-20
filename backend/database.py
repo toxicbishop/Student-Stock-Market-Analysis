@@ -5,7 +5,10 @@ from functools import lru_cache
 
 
 class Settings(BaseSettings):
-    DATABASE_URL: str = "postgresql+asyncpg://postgres:password@localhost:5432/tradelab"
+    DATABASE_URL: str = "sqlite+aiosqlite:///./tradelab.db"
+    SECRET_KEY: str = "7d8964d509af44e4a77bd83a04e57e93751a719c63c76020" # placeholder, use env var in prod
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 43200 # 30 days
     ANTHROPIC_API_KEY: str = ""
     CORS_ORIGINS: str = "http://localhost:5173,http://localhost:3000"
 
@@ -23,8 +26,6 @@ settings = get_settings()
 engine = create_async_engine(
     settings.DATABASE_URL,
     echo=False,
-    pool_size=10,
-    max_overflow=20,
 )
 
 AsyncSessionLocal = async_sessionmaker(
