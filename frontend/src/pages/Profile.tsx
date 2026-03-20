@@ -103,7 +103,7 @@ export default function Profile() {
                   <label className="text-sm text-white/50 ml-1">Full Name</label>
                   <input
                     value={name}
-                    onChange={e => setName(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500/50 transition-colors"
                     placeholder="Enter your name"
                   />
@@ -112,7 +112,7 @@ export default function Profile() {
                   <label className="text-sm text-white/50 ml-1">College/Institution</label>
                   <input
                     value={college}
-                    onChange={e => setCollege(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCollege(e.target.value)}
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500/50 transition-colors"
                     placeholder="e.g. IIT Madras"
                   />
@@ -121,7 +121,7 @@ export default function Profile() {
                   <label className="text-sm text-white/50 ml-1">Bio</label>
                   <textarea
                     value={bio}
-                    onChange={e => setBio(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setBio(e.target.value)}
                     className="w-full h-32 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500/50 transition-colors resize-none"
                     placeholder="Tell us about yourself..."
                   />

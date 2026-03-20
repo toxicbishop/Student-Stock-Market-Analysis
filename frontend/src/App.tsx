@@ -75,14 +75,14 @@ function Onboarding({ onDone }: { onDone: (name: string) => void }) {
               className="w-full h-[56px] px-4 bg-surface border-none rounded-xl shadow-soft focus:ring-2 focus:ring-primary/20 transition-all text-text-main placeholder:text-text-muted"
               placeholder="Display Name"
               value={name}
-              onChange={e => setName(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && start()}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && start()}
             />
             <input
               className="w-full h-[56px] px-4 bg-surface border-none rounded-xl shadow-soft focus:ring-2 focus:ring-primary/20 transition-all text-text-main placeholder:text-text-muted"
               placeholder="College Name"
               value={college}
-              onChange={e => setCollege(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCollege(e.target.value)}
             />
           </div>
           
@@ -170,7 +170,7 @@ function AppInner() {
     if (saved) {
       try {
         const { name } = JSON.parse(saved)
-        setUser('demo-user-1', name)
+        setUser({ id: 'demo-user-1', name, email: '', created_at: new Date().toISOString(), profile_photo: null, bio: null, college: null })
       } catch (e) {
         localStorage.removeItem('tl_user')
       }
@@ -189,7 +189,7 @@ function AppInner() {
 
   function handleOnboard(name: string) {
     localStorage.setItem('tl_user', JSON.stringify({ name }))
-    setUser('demo-user-1', name)
+    setUser({ id: 'demo-user-1', name, email: '', created_at: new Date().toISOString(), profile_photo: null, bio: null, college: null })
     setReady(true)
   }
 
@@ -199,7 +199,7 @@ function AppInner() {
     setReady(false)
   }
 
-  const toggleDarkMode = () => setDarkMode(prev => !prev);
+  const toggleDarkMode = () => setDarkMode((prev: boolean) => !prev);
 
   if (!ready) return <Onboarding onDone={handleOnboard} />
 
