@@ -1,19 +1,31 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react'
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react'
+import { UserOut, api } from './api'
 
 interface UserContextType {
-  userId: string
-  userName: string
+  user: UserOut | null
   groupId: string | null
   setGroupId: (id: string | null) => void
-  setUser: (id: string, name: string) => void
+  setUser: (user: UserOut | null) => void
+  logout: () => void
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined)
 
 export function UserProvider({ children }: { children: ReactNode }) {
-  const [userId, setUserId] = useState('demo-user-1')
-  const [userName, setUserName] = useState('Pranav')
+  const [user, setUserState] = useState<UserOut | null>(null)
   const [groupId, setGroupIdState] = useState<string | null>(localStorage.getItem('tl_group_id'))
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token && !user) {
+      api.users.me()
+        .then(setUserState)
+        .catch(() => {
+          localStorage.removeItem('token')
+          setUserState(null)
+        })
+    }
+  }, [])
 
   const setGroupId = (id: string | null) => {
     setGroupIdState(id)
@@ -21,13 +33,18 @@ export function UserProvider({ children }: { children: ReactNode }) {
     else localStorage.removeItem('tl_group_id')
   }
 
-  const setUser = (id: string, name: string) => {
-    setUserId(id)
-    setUserName(name)
+  const setUser = (newUser: UserOut | null) => {
+    setUserState(newUser)
+  }
+
+  const logout = () => {
+    localStorage.removeItem('token')
+    setUserState(null)
+    setGroupId(null)
   }
 
   return (
-    <UserContext.Provider value={{ userId, userName, groupId, setGroupId, setUser }}>
+    <UserContext.Provider value={{ user, groupId, setGroupId, setUser, logout }}>
       {children}
     </UserContext.Provider>
   )
