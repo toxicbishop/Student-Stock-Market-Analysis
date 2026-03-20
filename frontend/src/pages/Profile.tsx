@@ -49,7 +49,7 @@ export default function Profile() {
     <div className="max-w-4xl mx-auto p-6 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Profile Header */}
       <div className="relative group">
-        <div className="h-48 rounded-3xl bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-white/10 blur-xl absolute inset-0 -z-10" />
+        <div className="h-48 rounded-3xl bg-linear-to-r from-blue-600/20 to-purple-600/20 border border-white/10 blur-xl absolute inset-0 -z-10" />
         <div className="glass-panel p-8 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
           <div className="relative">
             <div className="w-32 h-32 rounded-2xl overflow-hidden border-2 border-white/20 bg-white/5 group-hover:border-blue-500/50 transition-colors shadow-2xl">
@@ -158,7 +158,7 @@ export default function Profile() {
 
         {/* Stats Column */}
         <div className="space-y-6">
-          <div className="glass-panel p-6 bg-gradient-to-br from-blue-600/10 to-transparent border border-blue-500/20">
+          <div className="glass-panel p-6 bg-linear-to-br from-blue-600/10 to-transparent border border-blue-500/20">
             <h3 className="text-lg font-semibold text-white mb-4">Trading Stats</h3>
             <div className="space-y-4">
               <div className="flex justify-between items-center pb-3 border-b border-white/5">
