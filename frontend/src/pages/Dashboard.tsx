@@ -5,18 +5,20 @@ import { useUser } from '../UserContext'
 import { Wallet, PieChart, TrendingUp, BarChart2, ArrowRight } from 'lucide-react'
 
 export function Dashboard() {
-  const { userId } = useUser()
+  const { user } = useUser()
   const navigate = useNavigate()
   const [portfolio, setPortfolio] = useState<PortfolioOut | null>(null)
   const [loading, setLoading]     = useState(true)
   const [error, setError]         = useState<string | null>(null)
+  const [timeframe, setTimeframe] = useState('ALL')
 
   useEffect(() => {
-    api.portfolio.get(userId)
+    if (!user?.id) return
+    api.portfolio.get(user.id)
       .then(setPortfolio)
       .catch(() => setError('Could not load portfolio.'))
       .finally(() => setLoading(false))
-  }, [userId])
+  }, [user?.id])
 
   if (loading) return (
     <div className="flex-1 px-6 md:px-12 pb-12 w-full max-w-6xl mx-auto flex flex-col gap-8 animate-pulse">
@@ -33,7 +35,7 @@ export function Dashboard() {
   const pnlCount = portfolio ? portfolio.total_pnl : 0
   const pnlPct = portfolio ? portfolio.total_pnl_pct : 0
 
-  const [timeframe, setTimeframe] = useState('ALL')
+// Handlers moved above or integrated
 
   return (
     <div className="flex-1 px-6 md:px-12 pb-24 w-full max-w-6xl mx-auto flex flex-col gap-8 animate-fade-in">

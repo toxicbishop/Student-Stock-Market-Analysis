@@ -10,7 +10,7 @@ import clsx from 'clsx'
 const TRENDING_TICKERS = ['RELIANCE', 'TATAMOTORS', 'HDFCBANK', 'INFY', 'TCS', 'ICICIBANK', 'ITC', 'SBIN', 'BHARTIARTL']
 
 export function Trade() {
-  const { userId } = useUser()
+  const { user } = useUser()
   const [params]   = useSearchParams()
 
   const [query,    setQuery]   = useState(params.get('ticker') ?? '')
@@ -75,9 +75,9 @@ export function Trade() {
     setError(null)
     try {
       if (action === 'BUY') {
-        await api.portfolio.buy(userId, quote.ticker, qty)
+        await api.portfolio.buy(user?.id || '', quote.ticker, qty)
       } else {
-        await api.portfolio.sell(userId, quote.ticker, qty)
+        await api.portfolio.sell(user?.id || '', quote.ticker, qty)
       }
       const ap = await api.ai.autopsy({
         ticker: quote.ticker, action, entry_price: quote.price,
