@@ -83,8 +83,10 @@ async def seed_demo_users():
         {"id": "demo-user-3", "name": "Supreeth",   "email": "supreeth@tradelab.app", "password": "f4wOCTsc9O"},
     ]
 
+    from sqlalchemy import delete
     async with AsyncSessionLocal() as db:
         for u in demo_users:
+            # Upsert user
             user = (await db.execute(select(User).where(User.id == u["id"]))).scalar_one_or_none()
             if not user:
                 user = User(
@@ -94,26 +96,42 @@ async def seed_demo_users():
                     hashed_password=get_password_hash(u["password"])
                 )
                 db.add(user)
-            
-            # Ensure portfolio exists
-            portfolio = (await db.execute(select(Portfolio).where(Portfolio.user_id == u["id"]))).scalar_one_or_none()
-            if not portfolio:
-                portfolio = Portfolio(
-                    id           = str(uuid.uuid4()),
-                    user_id      = u["id"],
-                    virtual_cash = 81550.0 
-                )
-                db.add(portfolio)
+            else:
+                user.name = u["name"]
+                user.email = u["email"]
 
-                # Add dummy data
-                db.add(Holding(portfolio_id=portfolio.id, ticker="RELIANCE", quantity=5, avg_buy_price=2450.0))
-                db.add(Holding(portfolio_id=portfolio.id, ticker="TATAMOTORS", quantity=10, avg_buy_price=620.0))
-                db.add(Holding(portfolio_id=portfolio.id, ticker="INFY", quantity=3, avg_buy_price=1450.0))
-                
-                db.add(Trade(
-                    portfolio_id=portfolio.id, ticker="RELIANCE", action=TradeAction.BUY,
-                    quantity=5, price=2450.0, total_value=12250.0
-                ))
+            # Clear existing portfolio data for a fresh seed
+            await db.execute(delete(Trade).where(Trade.portfolio_id.in_(
+                select(Portfolio.id).where(Portfolio.user_id == u["id"])
+            )))
+            await db.execute(delete(Holding).where(Holding.portfolio_id.in_(
+                select(Portfolio.id).where(Portfolio.user_id == u["id"])
+            )))
+            await db.execute(delete(Portfolio).where(Portfolio.user_id == u["id"]))
+
+            # Create fresh demo portfolio
+            portfolio = Portfolio(
+                id           = str(uuid.uuid4()),
+                user_id      = u["id"],
+                virtual_cash = 81550.0 
+            )
+            db.add(portfolio)
+            await db.flush() # Get portfolio.id
+
+            # Add fresh dummy data
+            db.add(Holding(portfolio_id=portfolio.id, ticker="RELIANCE", quantity=5, avg_buy_price=2450.0))
+            db.add(Holding(portfolio_id=portfolio.id, ticker="TATAMOTORS", quantity=10, avg_buy_price=620.0))
+            db.add(Holding(portfolio_id=portfolio.id, ticker="INFY", quantity=3, avg_buy_price=1450.0))
+            
+            db.add(Trade(
+                portfolio_id=portfolio.id, ticker="RELIANCE", action=TradeAction.BUY,
+                quantity=5, price=2450.0, total_value=12250.0
+            ))
+            db.add(Trade(
+                portfolio_id=portfolio.id, ticker="TATAMOTORS", action=TradeAction.BUY,
+                quantity=10, price=620.0, total_value=6200.0
+            ))
+        await db.commit()
         await db.commit()
 
     return {"message": "Demo users seeded", "users": [u["name"] for u in demo_users]}
