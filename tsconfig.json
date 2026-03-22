@@ -17,6 +17,9 @@
     "jsx": "react-jsx",
     "incremental": true,
     "baseUrl": ".",
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
     "paths": {
       "@/*": [
         "./src/*"
