@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-brand-primary: #0984E3; /* Electric Blue */
+    --color-brand-secondary: #1E272E; /* Night Black */
+    --color-accent: #00CEC9; /* Cyan Neon */
+    
+    --color-bg-main: #050505; /* Deep Black */
+    --color-surface: #1E272E; /* Night Black */
+    --color-surface-hover: #2d3436;
+    --color-main: #F5F6FA; /* Cloud White */
+    --color-muted: #A4B0BE;
+    --color-border: rgba(245, 246, 250, 0.1);
+    
+    --color-alert-dark: #1E272E;
+    --color-alert-accent: #00CEC9;
+    --color-alert-danger: #ff7675;
+    --color-alert-light: #F5F6FA;
+    
+    --radius-card: 0.75rem;
+    --radius-button: 0.5rem;
+    
+    --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .light {
+    --color-bg-main: #F5F6FA;
+    --color-surface: #ffffff;
+    --color-surface-hover: #dfe6e9;
+    --color-main: #1E272E;
+    --color-muted: #636e72;
+    --color-border: rgba(30, 39, 46, 0.1);
+    --color-brand-secondary: #F5F6FA;
+    --color-alert-dark: #F5F6FA;
+    --color-alert-light: #1E272E;
+  }
+}
+
+@layer utilities {
+  .card-base {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    transition: transform 0.2s var(--ease-standard), background-color 0.2s var(--ease-standard), border-color 0.2s var(--ease-standard);
+  }
+  
+  .card-hover:hover {
+    background-color: var(--color-surface-hover);
+    transform: translateY(-2px);
+  }
+
+  .btn-primary {
+    background-color: var(--color-brand-primary);
+    color: #ffffff; /* White text on blue */
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-button);
+    font-weight: 600;
+    transition: opacity 0.2s var(--ease-standard), transform 0.1s var(--ease-standard), background-color 0.2s;
+  }
+
+  .btn-primary:hover {
+    background-color: #0873c4; /* Slightly darker blue */
+  }
+
+  .btn-primary:active {
+    transform: scale(0.98);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+body {
+  background-color: var(--color-bg-main);
+  color: var(--color-main);
+  font-family: 'Inter', system-ui, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s var(--ease-standard), color 0.3s var(--ease-standard);
+}
+
+h1, h2, h3, h4 {
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--color-main);
+}

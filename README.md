@@ -19,52 +19,45 @@ India has a population of 1.5 billion, yet fewer than 8 crore demat accounts exi
 TradeLab is a learning-first ecosystem designed to turn market fear into financial confidence.
 
 - **Risk-Free Paper Trading:** Trade with virtual currency in real-market conditions without losing real money.
-- **AI-Powered Insights:** Real-time feedback explaining the "why" behind trade successes or failures.
-- **Structured Learning Path:** A simplified UI that focuses on education over raw data-overload.
+- **AI-Powered Insights:** Real-time feedback explaining the "why" behind trade successes or failures (via Google Gemini).
+- **Modern Dashboard:** A simplified, premium "Color Dashboard UI" that focuses on education over raw data-overload.
 - **Campus Leaderboards:** Competitive learning to encourage students to grow together.
 
 ## Tech Stack
 
-- **Frontend:** React.js (with Tailwind CSS)
-- **Backend:** Python (Flask/FastAPI)
-- **Database:** PostgreSQL (Relational data for transaction integrity)
-- **APIs:** Market Data APIs & AI Analysis Integration
+- **Modern Frontend (v2):** React.js (TypeScript, Tailwind CSS, Firebase, Motion)
+- **Legacy Frontend (v1):** React.js (Original Python-integrated version)
+- **Backend:** Python (FastAPI/PostgreSQL) or Node.js (Proxy Server)
+- **Database:** Firebase Firestore (Real-time) or PostgreSQL (Relational)
+- **AI:** Google Gemini Integration
 
-## Database Schema
-
-We utilized **PostgreSQL** to ensure ACID compliance for all virtual financial transactions.
-
-| Table          | Purpose             | Key Columns                                               |
-| :------------- | :------------------ | :-------------------------------------------------------- |
-| **Users**      | Profile & Auth      | `username`, `email`, `password_hash`, `virtual_balance`   |
-| **Stocks**     | Market Data Cache   | `symbol`, `company_name`, `sector`                        |
-| **Trades**     | Transaction History | `trade_type` (Buy/Sell), `quantity`, `price_at_execution` |
-| **Portfolios** | User Holdings       | `quantity_held`, `avg_buy_price`, `user_id`               |
+---
 
 ## Installation & Setup
 
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/toxicbishop/Student-Stock-Market-Analysis.git](https://github.com/toxicbishop/Student-Stock-Market-Analysis.git)
-   ```
-2. **Backend Setup (Python):**
+### 1. Modern Dashboard (v2) - Recommended
+To run the latest dashboard with the improved UI and AI features:
 
 ```bash
-   cd server
-pip install -r requirements.txt
-python app.py
-```
-
-3. Frontend Setup (React):
-
-```bash
-cd client
+cd frontend
 npm install
 npm run dev
 ```
 
-4. Environment Variables:
-   Create a .env file in the root directory with your DATABASE_URL and your specific Market API keys.
+### 2. Backend (Python/FastAPI)
+If using the relational data features or legacy integration:
+
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
+
+### 3. Environment Variables:
+Create a `.env` file in the `frontend` directory:
+- `GEMINI_API_KEY`: Your Google AI Studio API key.
+
+---
 
 The Team<br>
 Mithil<br>
@@ -74,3 +67,4 @@ Supreeth N<br>
 <p align="center">
   Developed at Electrohack 3.0, K.S. Institute of Technology.
 </p>
+
