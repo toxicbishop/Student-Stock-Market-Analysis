@@ -1,0 +1,15 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Rounded Square Background -->
+  <rect width="64" height="64" rx="16" fill="#0A0A0A" />
+  
+  <!-- Stylized Chart / TL Pattern -->
+  <path d="M16 48L24 36L32 42L48 18" stroke="#38A169" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+  
+  <!-- "L" formation at the base -->
+  <path d="M16 16H20V48H48" stroke="#38A169" stroke-width="4" stroke-opacity="0.3" stroke-linecap="round" />
+  
+  <!-- Upward Glow Point -->
+  <circle cx="48" cy="18" r="4" fill="#38A169">
+    <animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite" />
+  </circle>
+</svg>
