@@ -12,7 +12,7 @@ export async function analyzeTrade(trade: Partial<Trade>, stock: Stock) {
       Current Price: ₹${stock.price}
       Action: ${trade.action}
       Quantity: ${trade.quantity}
-      Total Value: ₹${trade.totalValue}
+      Total Value: ₹${trade.total_value}
       
       Provide a brief, encouraging analysis (max 3 sentences) explaining why this might be a good or risky move for a beginner. 
       Also, identify any "mistake flags" (e.g., FOMO, lack of diversification, over-leveraging) if applicable.
