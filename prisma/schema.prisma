@@ -1,0 +1,169 @@
+// Prisma schema for TradeLab
+// Derived from Python models.py
+
+datasource db {
+  provider = "sqlite"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum VoteChoice {
+  yes
+  no
+  abstain
+  disagree_but_allow
+}
+
+enum ProposalStatus {
+  open
+  executed
+  rejected
+  expired
+}
+
+enum TradeAction {
+  BUY
+  SELL
+}
+
+model User {
+  id              String      @id @default(uuid())
+  name            String
+  email           String      @unique
+  hashed_password String
+  profile_photo   String?
+  bio             String?
+  college         String?
+  created_at      DateTime    @default(now())
+
+  portfolio       Portfolio?
+  group_memberships GroupMember[]
+  votes           Vote[]
+
+  @@map("users")
+}
+
+model Portfolio {
+  id            String      @id @default(uuid())
+  user_id       String      @unique
+  virtual_cash  Float       @default(10000.0)
+  created_at    DateTime    @default(now())
+
+  user          User        @relation(fields: [user_id], references: [id])
+  holdings      Holding[]
+  trades        Trade[]
+
+  @@map("portfolios")
+}
+
+model Holding {
+  id            String      @id @default(uuid())
+  portfolio_id  String
+  ticker        String
+  quantity      Float
+  avg_buy_price Float
+  last_updated  DateTime    @updatedAt
+
+  portfolio     Portfolio   @relation(fields: [portfolio_id], references: [id])
+
+  @@map("holdings")
+}
+
+model Trade {
+  id            String      @id @default(uuid())
+  portfolio_id  String
+  ticker        String
+  action        TradeAction
+  quantity      Float
+  price         Float
+  total_value   Float
+
+  rsi_at_trade  Float?
+  volume_trend  String?
+  ai_analysis   String?
+  mistake_flags String?
+
+  executed_at   DateTime    @default(now())
+
+  portfolio     Portfolio   @relation(fields: [portfolio_id], references: [id])
+
+  @@map("trades")
+}
+
+model Group {
+  id            String      @id @default(uuid())
+  name          String
+  invite_code   String      @unique
+  vote_mode     String      @default("majority")
+  virtual_corpus Float      @default(30000.0)
+  created_by    String
+  created_at    DateTime    @default(now())
+
+  members       GroupMember[]
+  proposals     Proposal[]
+  holdings      GroupHolding[]
+
+  @@map("groups")
+}
+
+model GroupMember {
+  id              String      @id @default(uuid())
+  group_id        String
+  user_id         String
+  units_held      Float       @default(0.0)
+  contribution    Float       @default(0.0)
+  is_active       Boolean     @default(true)
+  joined_at       DateTime    @default(now())
+
+  group           Group       @relation(fields: [group_id], references: [id])
+  user            User        @relation(fields: [user_id], references: [id])
+
+  @@map("group_members")
+}
+
+model GroupHolding {
+  id            String      @id @default(uuid())
+  group_id      String
+  ticker        String
+  quantity      Float
+  avg_buy_price Float
+  last_updated  DateTime    @updatedAt
+
+  group         Group       @relation(fields: [group_id], references: [id])
+
+  @@map("group_holdings")
+}
+
+model Proposal {
+  id              String         @id @default(uuid())
+  group_id        String
+  proposed_by     String
+  ticker          String
+  action          TradeAction
+  quantity        Float
+  price_at_proposal Float
+  rationale       String?
+  status          ProposalStatus @default(open)
+  expires_at      DateTime
+  created_at      DateTime       @default(now())
+
+  group           Group          @relation(fields: [group_id], references: [id])
+  votes           Vote[]
+
+  @@map("proposals")
+}
+
+model Vote {
+  id          String      @id @default(uuid())
+  proposal_id String
+  voter_id    String
+  vote        VoteChoice
+  voted_at    DateTime    @default(now())
+
+  proposal    Proposal    @relation(fields: [proposal_id], references: [id])
+  voter       User        @relation(fields: [voter_id], references: [id])
+
+  @@map("votes")
+}
