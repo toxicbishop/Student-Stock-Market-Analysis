@@ -17,8 +17,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const portfolio = await prisma.portfolio.findUnique({ where: { user_id: userId } });
     if (!portfolio) return res.status(404).json({ error: 'Portfolio not found' });
 
-    const quote = await yahooFinance.quote(ticker_ns);
-    const hist = await yahooFinance.historical(ticker_ns, {
+    const quote: any = await yahooFinance.quote(ticker_ns);
+    const hist: any[] = await yahooFinance.historical(ticker_ns, {
         period1: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
         interval: '1d',
     });
