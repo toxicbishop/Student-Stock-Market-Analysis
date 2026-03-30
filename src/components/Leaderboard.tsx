@@ -1,5 +1,5 @@
 import React from 'react';
-import { Trophy, BarChart3 } from 'lucide-react';
+import { BarChart3 } from 'lucide-react';
 import { cn, formatCompactNumber } from '../utils';
 import { 
   Chart as ChartJS, 
