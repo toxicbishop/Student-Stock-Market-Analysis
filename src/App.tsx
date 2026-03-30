@@ -21,7 +21,7 @@ import TradeHistory from './components/TradeHistory';
 import LearningCenter from './components/LearningCenter';
 import PriceAlerts from './components/PriceAlerts';
 import Settings from './components/Settings';
-import { TrendingUp, Search, Bell, User as UserIcon, LogIn, Users, Sun, Moon } from 'lucide-react';
+import { TrendingUp, Search, Bell, LogIn, Users, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { formatCurrency } from './utils';
 
