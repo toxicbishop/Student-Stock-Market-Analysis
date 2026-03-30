@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
-import { 
-  doc, 
-  getDoc, 
-  setDoc, 
-  collection, 
-  onSnapshot, 
-  query, 
-  orderBy, 
-  addDoc, 
+import {
+  doc,
+  collection,
+  onSnapshot,
+  addDoc,
   serverTimestamp,
   updateDoc,
-  increment,
   deleteDoc,
   getDocs
 } from 'firebase/firestore';
@@ -26,8 +21,7 @@ import TradeHistory from './components/TradeHistory';
 import LearningCenter from './components/LearningCenter';
 import PriceAlerts from './components/PriceAlerts';
 import Settings from './components/Settings';
-import { analyzeTrade } from './services/aiService';
-import { TrendingUp, Search, Bell, User as UserIcon, LogIn, Users, BookOpen, Sun, Moon } from 'lucide-react';
+import { TrendingUp, Search, Bell, User as UserIcon, LogIn, Users, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { formatCurrency } from './utils';
 
