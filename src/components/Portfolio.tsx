@@ -1,7 +1,7 @@
 import React from 'react';
 import { Holding } from '../types';
 import { formatCurrency } from '../utils';
-import { TrendingUp, TrendingDown, Briefcase, PieChart as PieIcon, BarChart3 } from 'lucide-react';
+import { TrendingUp, Briefcase, PieChart as PieIcon, BarChart3 } from 'lucide-react';
 import { 
   Chart as ChartJS, 
   ArcElement, 

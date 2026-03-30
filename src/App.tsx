@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { 
-  doc, 
-  getDoc, 
-  setDoc, 
-  collection, 
-  onSnapshot, 
-  query, 
-  orderBy, 
-  addDoc, 
+  doc,
+  collection,
+  onSnapshot,
+  addDoc,
   serverTimestamp,
   updateDoc,
-  increment,
   deleteDoc,
   getDocs
 } from 'firebase/firestore';
@@ -26,8 +21,7 @@ import TradeHistory from './components/TradeHistory';
 import LearningCenter from './components/LearningCenter';
 import PriceAlerts from './components/PriceAlerts';
 import Settings from './components/Settings';
-import { analyzeTrade } from './services/aiService';
-import { TrendingUp, Search, Bell, User as UserIcon, LogIn, Users, BookOpen, Sun, Moon } from 'lucide-react';
+import { TrendingUp, Search, Bell, User as UserIcon, LogIn, Users, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { formatCurrency } from './utils';
 
@@ -63,6 +57,14 @@ const App: React.FC = () => {
   }, [theme]);
 
   const toggleTheme = () => setTheme(prev => prev === 'light' ? 'dark' : 'light');
+
+  // Fetch stocks from the REST API
+  useEffect(() => {
+    fetch('/api/stocks')
+      .then(r => r.json())
+      .then(data => setStocks(Array.isArray(data) ? data : []))
+      .catch(e => console.error('Failed to load stocks:', e));
+  }, []);
 
   useEffect(() => {
     const handleAlert = (e: any) => {
@@ -130,20 +132,31 @@ const App: React.FC = () => {
     }
   };
 
-  // Auth Listener
+  // Auth Listener — also subscribes to price alerts when user signs in
   useEffect(() => {
+    let alertsUnsub: (() => void) | null = null;
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
       if (firebaseUser) {
         await fetchPortfolioData(firebaseUser.uid);
+        // Subscribe to Firestore price alerts
+        alertsUnsub = onSnapshot(
+          collection(db, 'users', firebaseUser.uid, 'priceAlerts'),
+          (snap) => setAlerts(snap.docs.map(d => ({ id: d.id, ...d.data() } as PriceAlert)))
+        );
       } else {
         setProfile(null);
         setHoldings([]);
         setTrades([]);
+        setAlerts([]);
+        alertsUnsub?.();
       }
       setLoading(false);
     });
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+      alertsUnsub?.();
+    };
   }, []);
 
   const handleAddAlert = async (ticker: string, targetPrice: number, condition: 'ABOVE' | 'BELOW') => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import Markdown from 'react-markdown';
-import { Shield, Lock, Globe, RefreshCw, Key, Server, Terminal, Database, Eye, Search, GraduationCap, Zap } from 'lucide-react';
+import { Shield, Lock, Globe, RefreshCw, Key, Server, Terminal, Eye, GraduationCap, Zap } from 'lucide-react';
 
 const LearningCenter: React.FC = () => {
   const securityContent = `
