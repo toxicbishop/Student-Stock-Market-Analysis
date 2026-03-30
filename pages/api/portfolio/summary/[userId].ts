@@ -16,12 +16,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (!portfolio) {
       // Create portfolio on the fly if it doesn't exist (helpful when using Firebase auth)
-      const newPortfolio = await prisma.portfolio.create({
+      await prisma.portfolio.create({
         data: {
           user_id: userId,
           virtual_cash: 10000.0,
         },
-        include: { holdings: true },
       });
       return res.status(200).json({
         user_id: userId,
