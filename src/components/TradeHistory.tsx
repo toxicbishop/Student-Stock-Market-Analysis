@@ -50,7 +50,7 @@ const TradeHistory: React.FC<TradeHistoryProps> = ({ trades }) => {
                     <div className="flex-1">
                       <p className="text-[10px] font-bold text-brand-primary uppercase tracking-[0.1em] mb-1.5">AI Analysis</p>
                       <p className="text-xs lg:text-sm text-muted leading-relaxed italic">
-                        "{trade.ai_analysis}"
+                        &quot;{trade.ai_analysis}&quot;
                       </p>
                     </div>
                   </div>

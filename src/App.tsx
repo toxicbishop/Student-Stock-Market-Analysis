@@ -590,7 +590,7 @@ const App: React.FC = () => {
                       <div className="py-20 text-center card-base">
                         <Search className="w-12 h-12 text-muted mx-auto mb-4 opacity-20" />
                         <h3 className="text-lg font-bold text-main">No results found</h3>
-                        <p className="text-muted text-sm mt-1">No stocks match "{searchQuery}"</p>
+                        <p className="text-muted text-sm mt-1">No stocks match &quot;{searchQuery}&quot;</p>
                         <button 
                           onClick={() => setSearchQuery('')}
                           className="mt-6 text-brand-primary font-bold text-sm hover:underline"
