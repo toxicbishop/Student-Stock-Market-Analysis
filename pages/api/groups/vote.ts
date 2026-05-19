@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import type { ProposalStatus, Vote } from '@prisma/client';
 import { prisma } from '../../../src/lib/db';
 import yahooFinance from 'yahoo-finance2';
 
@@ -27,11 +28,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Strategy: Update status and potentially execute
     const allVotes = await prisma.vote.findMany({ where: { proposal_id } });
-    const yesCount = allVotes.filter(v => ['yes', 'disagree_but_allow'].includes(v.vote)).length;
-    const noCount = allVotes.filter(v => v.vote === 'no').length;
+    const yesCount = allVotes.filter((v: Vote) => ['yes', 'disagree_but_allow'].includes(v.vote)).length;
+    const noCount = allVotes.filter((v: Vote) => v.vote === 'no').length;
     const totalMembers = proposal.group.members.length;
 
-    let newStatus: any = proposal.status;
+    let newStatus: ProposalStatus = proposal.status;
     const mode = proposal.group.vote_mode;
 
     if (mode === 'majority') {

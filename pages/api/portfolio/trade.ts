@@ -3,6 +3,8 @@ import { prisma } from '../../../src/lib/db';
 import yahooFinance from 'yahoo-finance2';
 import { TradeAnalyzer } from '../../../src/lib/analyzer';
 
+type TransactionClient = Pick<typeof prisma, 'portfolio' | 'holding' | 'trade'>;
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method Not Allowed' });
 
@@ -32,14 +34,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
 
       await prisma.$transaction(async (tx) => {
+        const db = tx as unknown as TransactionClient;
+
         // Update cash
-        await tx.portfolio.update({
+        await db.portfolio.update({
           where: { id: portfolio.id },
           data: { virtual_cash: { decrement: totalValue } }
         });
 
         // Update holding
-        const existingHolding = await tx.holding.findFirst({
+        const existingHolding = await db.holding.findFirst({
           where: { portfolio_id: portfolio.id, ticker: ticker.toUpperCase() }
         });
 
@@ -48,12 +52,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           const newTotal = quantity * price;
           const newQuantity = existingHolding.quantity + quantity;
           const newAvgPrice = (oldTotal + newTotal) / newQuantity;
-          await tx.holding.update({
+          await db.holding.update({
             where: { id: existingHolding.id },
             data: { quantity: newQuantity, avg_buy_price: newAvgPrice }
           });
         } else {
-          await tx.holding.create({
+          await db.holding.create({
             data: { portfolio_id: portfolio.id, ticker: ticker.toUpperCase(), quantity, avg_buy_price: price }
           });
         }
@@ -64,7 +68,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const autopsy = analyzer.analyzeLoss();
 
         // Record trade
-        await tx.trade.create({
+        await db.trade.create({
           data: {
             portfolio_id: portfolio.id,
             ticker: ticker.toUpperCase(),
@@ -88,15 +92,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
 
       await prisma.$transaction(async (tx) => {
-        await tx.portfolio.update({
+        const db = tx as unknown as TransactionClient;
+
+        await db.portfolio.update({
           where: { id: portfolio.id },
           data: { virtual_cash: { increment: totalValue } }
         });
 
         if (holding.quantity === quantity) {
-          await tx.holding.delete({ where: { id: holding.id } });
+          await db.holding.delete({ where: { id: holding.id } });
         } else {
-          await tx.holding.update({
+          await db.holding.update({
             where: { id: holding.id },
             data: { quantity: { decrement: quantity } }
           });
@@ -106,7 +112,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const analyzer = new TradeAnalyzer(holding.avg_buy_price, price, rsi, 'unknown');
         const autopsy = analyzer.analyzeLoss();
 
-        await tx.trade.create({
+        await db.trade.create({
           data: {
             portfolio_id: portfolio.id,
             ticker: ticker.toUpperCase(),
