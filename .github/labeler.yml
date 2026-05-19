@@ -1,0 +1,23 @@
+frontend:
+  - changed-files:
+      - any-glob-to-any-file: "src/**"
+pages:
+  - changed-files:
+      - any-glob-to-any-file: "pages/**"
+database:
+  - changed-files:
+      - any-glob-to-any-file: "prisma/**"
+docker:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "Dockerfile"
+          - "docker-compose.yml"
+          - "nginx.conf"
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "docs/**"
+          - "*.md"
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file: "**/package*.json"
