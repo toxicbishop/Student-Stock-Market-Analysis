@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import type { Trade } from '@prisma/client';
 import { prisma } from '../../../../src/lib/db';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -17,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       take: 50,
     });
 
-    res.status(200).json(trades.map(t => ({
+    res.status(200).json(trades.map((t: Trade) => ({
       ...t,
       mistakeFlags: JSON.parse(t.mistake_flags || '[]')
     })));
