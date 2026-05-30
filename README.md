@@ -40,8 +40,8 @@ To run the latest dashboard with the improved UI and AI features:
 
 ```bash
 cd frontend
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
 ### 2. Backend (Python/FastAPI)
