@@ -5,3 +5,6 @@ allowBuilds:
   protobufjs: true
   sharp: true
   unrs-resolver: true
+
+overrides:
+  postcss: "^8.5.15"
