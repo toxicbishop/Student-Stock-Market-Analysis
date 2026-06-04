@@ -1,5 +1,11 @@
 # TradeLab 📈
 
+[![Build Status](https://github.com/toxicbishop/Student-Stock-Market-Analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/toxicbishop/Student-Stock-Market-Analysis/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/toxicbishop/Student-Stock-Market-Analysis/actions/workflows/codeql.yml/badge.svg)](https://github.com/toxicbishop/Student-Stock-Market-Analysis/actions/workflows/codeql.yml)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
+![License: GPL 3.0](https://img.shields.io/badge/License-GPL%203.0-blue.svg)
+
 ### AI-Guided Paper Trading & Financial Learning Platform
 
 **TradeLab** was developed for **ELECTROHACK 3.0**, a National Level Hackathon at K.S. Institute of Technology. Our mission is to bridge the massive gap in financial literacy among Indian students (ages 18–24) by providing a risk-free environment to learn, practice, and master the stock market.
