@@ -58,9 +58,12 @@
     "tailwindcss": "^3.4.3",
     "typescript": "^5"
   },
-  "pnpm": {
-    "overrides": {
-      "postcss": "^8.5.15"
-    }
+  "overrides": {
+    "postcss": "^8.5.15",
+    "@grpc/grpc-js": "^1.9.16"
+  },
+  "resolutions": {
+    "postcss": "^8.5.15",
+    "@grpc/grpc-js": "^1.9.16"
   }
 }
