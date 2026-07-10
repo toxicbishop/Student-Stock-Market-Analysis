@@ -5,9 +5,9 @@
   "private": false,
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "vite --port 3175",
+    "build": "vite build",
+    "start": "sirv dist --port 3175 --single",
     "lint": "eslint ."
   },
   "dependencies": {
