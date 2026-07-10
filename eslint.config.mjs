@@ -20,6 +20,14 @@ export default [
     },
   },
   {
-    ignores: ["dist/", "node_modules/", "server/"],
+    // Ignore build tool configs (CommonJS) and generated/output dirs
+    ignores: [
+      "dist/",
+      "node_modules/",
+      "server/",
+      "postcss.config.js",
+      "tailwind.config.js",
+      "*.config.cjs",
+    ],
   },
 ];
