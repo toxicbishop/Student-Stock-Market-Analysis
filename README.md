@@ -3,7 +3,11 @@
 [![Build Status](https://github.com/toxicbishop/Student-Stock-Market-Analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/toxicbishop/Student-Stock-Market-Analysis/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/toxicbishop/Student-Stock-Market-Analysis/actions/workflows/codeql.yml/badge.svg)](https://github.com/toxicbishop/Student-Stock-Market-Analysis/actions/workflows/codeql.yml)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)
-![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
+![Python 3.12.x](https://img.shields.io/badge/Python%203.12.x-3776AB?style=flat-square&logo=python&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=next.js&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=flat-square&logo=prisma&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=flat-square&logo=firebase&logoColor=black)
+![Platform](https://img.shields.io/badge/platform-Web-lightgrey.svg)
 ![License: GPL 3.0](https://img.shields.io/badge/License-GPL%203.0-blue.svg)
 
 ### AI-Guided Paper Trading & Financial Learning Platform

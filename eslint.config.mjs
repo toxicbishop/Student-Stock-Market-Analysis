@@ -7,19 +7,9 @@ export default [
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    // Browser globals for all source files
     languageOptions: {
       globals: {
         ...globals.browser,
-      },
-    },
-  },
-  {
-    // Node.js globals for CommonJS config files
-    files: ["*.config.js", "*.config.cjs", "postcss.config.js", "tailwind.config.js"],
-    languageOptions: {
-      globals: {
-        ...globals.node,
       },
     },
   },
