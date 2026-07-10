@@ -10,6 +10,7 @@ import {
   deleteDoc,
   getDocs
 } from 'firebase/firestore';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { auth, db, signInWithGoogle, logout, handleFirestoreError, OperationType, RecaptchaVerifier, signInWithPhoneNumber } from './firebase';
 import { Stock, UserProfile, Holding, Trade, PriceAlert } from './types';
 import Sidebar from './components/Sidebar';
@@ -33,7 +34,7 @@ const App: React.FC = () => {
   const [holdings, setHoldings] = useState<Holding[]>([]);
   const [trades, setTrades] = useState<Trade[]>([]);
   const [alerts, setAlerts] = useState<PriceAlert[]>([]);
-  const [activeTab, setActiveTab] = useState<string>('home');
+  const location = useLocation();
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
   const [showAlerts, setShowAlerts] = useState<boolean>(false);
   const [notification, setNotification] = useState<{ ticker: string, price: number, condition: string } | null>(null);
@@ -442,8 +443,6 @@ const App: React.FC = () => {
   return (
     <div className="flex flex-col sm:flex-row h-screen bg-bg-main overflow-hidden text-main">
       <Sidebar 
-        activeTab={activeTab} 
-        onTabChange={setActiveTab} 
         onSignOut={logout} 
       />
 
@@ -536,140 +535,136 @@ const App: React.FC = () => {
 
         <div className="p-4 lg:p-8 max-w-7xl mx-auto">
           <AnimatePresence mode="wait">
-            {activeTab === 'home' && (
-              <motion.div
-                key="home"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={standardTransition}
-                className="space-y-12"
-              >
-                <Portfolio holdings={holdings} virtualBalance={profile?.virtual_cash || 0} />
-                <TradeHistory trades={trades} />
-              </motion.div>
-            )}
+            <Routes location={location} key={location.pathname}>
+              <Route path="/" element={
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={standardTransition}
+                  className="space-y-12"
+                >
+                  <Portfolio holdings={holdings} virtualBalance={profile?.virtual_cash || 0} />
+                  <TradeHistory trades={trades} />
+                </motion.div>
+              } />
 
-            {activeTab === 'learn' && (
-              <motion.div
-                key="learn"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={standardTransition}
-              >
-                <LearningCenter />
-              </motion.div>
-            )}
+              <Route path="/learn" element={
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={standardTransition}
+                >
+                  <LearningCenter />
+                </motion.div>
+              } />
 
-            {activeTab === 'trade' && (
-              <motion.div
-                key="trade"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={standardTransition}
-              >
-                <div className="mb-8">
-                  <h2 className="text-2xl font-bold">Market Overview</h2>
-                  <p className="text-sm text-slate-400 mt-1">Select a stock to begin trading.</p>
-                </div>
-                
-                {stocks.length === 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {[1, 2, 3, 4, 5, 6].map((i) => (
-                      <div key={i} className="card-base h-48 animate-pulse bg-slate-800/50" />
-                    ))}
+              <Route path="/trade" element={
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={standardTransition}
+                >
+                  <div className="mb-8">
+                    <h2 className="text-2xl font-bold">Market Overview</h2>
+                    <p className="text-sm text-slate-400 mt-1">Select a stock to begin trading.</p>
                   </div>
-                ) : (
-                  <>
-                    {stocks.filter(s => 
-                      s.ticker.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                      s.name.toLowerCase().includes(searchQuery.toLowerCase())
-                    ).length === 0 ? (
-                      <div className="py-20 text-center card-base">
-                        <Search className="w-12 h-12 text-muted mx-auto mb-4 opacity-20" />
-                        <h3 className="text-lg font-bold text-main">No results found</h3>
-                        <p className="text-muted text-sm mt-1">No stocks match &quot;{searchQuery}&quot;</p>
-                        <button 
-                          onClick={() => setSearchQuery('')}
-                          className="mt-6 text-brand-primary font-bold text-sm hover:underline"
-                        >
-                          Clear search
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {stocks
-                          .filter(s => 
-                            s.ticker.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                            s.name.toLowerCase().includes(searchQuery.toLowerCase())
-                          )
-                          .map((stock, index) => (
-                            <motion.div
-                              key={stock.ticker}
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ ...standardTransition, delay: index * 0.05 }}
-                            >
-                              <StockCard stock={stock} onClick={setSelectedStock} />
-                            </motion.div>
-                          ))}
-                      </div>
-                    )}
-                  </>
-                )}
-              </motion.div>
-            )}
+                  
+                  {stocks.length === 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {[1, 2, 3, 4, 5, 6].map((i) => (
+                        <div key={i} className="card-base h-48 animate-pulse bg-slate-800/50" />
+                      ))}
+                    </div>
+                  ) : (
+                    <>
+                      {stocks.filter(s => 
+                        s.ticker.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                        s.name.toLowerCase().includes(searchQuery.toLowerCase())
+                      ).length === 0 ? (
+                        <div className="py-20 text-center card-base">
+                          <Search className="w-12 h-12 text-muted mx-auto mb-4 opacity-20" />
+                          <h3 className="text-lg font-bold text-main">No results found</h3>
+                          <p className="text-muted text-sm mt-1">No stocks match &quot;{searchQuery}&quot;</p>
+                          <button 
+                            onClick={() => setSearchQuery('')}
+                            className="mt-6 text-brand-primary font-bold text-sm hover:underline"
+                          >
+                            Clear search
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                          {stocks
+                            .filter(s => 
+                              s.ticker.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                              s.name.toLowerCase().includes(searchQuery.toLowerCase())
+                            )
+                            .map((stock, index) => (
+                              <motion.div
+                                key={stock.ticker}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ ...standardTransition, delay: index * 0.05 }}
+                              >
+                                <StockCard stock={stock} onClick={setSelectedStock} />
+                              </motion.div>
+                            ))}
+                        </div>
+                      )}
+                    </>
+                  )}
+                </motion.div>
+              } />
 
-            {activeTab === 'rank' && (
-              <motion.div
-                key="rank"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={standardTransition}
-              >
-                <Leaderboard />
-              </motion.div>
-            )}
+              <Route path="/rank" element={
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={standardTransition}
+                >
+                  <Leaderboard />
+                </motion.div>
+              } />
 
-            {activeTab === 'group' && (
-              <motion.div
-                key="group"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={standardTransition}
-                className="flex flex-col items-center justify-center py-24 text-center"
-              >
-                <div className="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center mb-6">
-                  <Users className="w-8 h-8 text-slate-600" />
-                </div>
-                <h3 className="text-xl font-bold mb-2">Campus Groups</h3>
-                <p className="text-slate-400 max-w-sm mb-8 text-sm leading-relaxed">
-                  Collaborative trading groups for educational institutions. This feature is currently in development.
-                </p>
-                <button className="btn-primary">
-                  Notify Me
-                </button>
-              </motion.div>
-            )}
-            {activeTab === 'settings' && (
-              <motion.div
-                key="settings"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={standardTransition}
-              >
-                <Settings 
-                  profile={profile} 
-                  onUpdateProfile={handleUpdateProfile} 
-                  onResetPortfolio={handleResetPortfolio} 
-                />
-              </motion.div>
-            )}
+              <Route path="/group" element={
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={standardTransition}
+                  className="flex flex-col items-center justify-center py-24 text-center"
+                >
+                  <div className="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center mb-6">
+                    <Users className="w-8 h-8 text-slate-600" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">Campus Groups</h3>
+                  <p className="text-slate-400 max-w-sm mb-8 text-sm leading-relaxed">
+                    Collaborative trading groups for educational institutions. This feature is currently in development.
+                  </p>
+                  <button className="btn-primary">
+                    Notify Me
+                  </button>
+                </motion.div>
+              } />
+              <Route path="/settings" element={
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={standardTransition}
+                >
+                  <Settings 
+                    profile={profile} 
+                    onUpdateProfile={handleUpdateProfile} 
+                    onResetPortfolio={handleResetPortfolio} 
+                  />
+                </motion.div>
+              } />
+            </Routes>
           </AnimatePresence>
         </div>
 

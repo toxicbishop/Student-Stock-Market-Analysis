@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "3175:3175"
     environment:
       - NODE_ENV=production
     depends_on:
@@ -16,7 +16,7 @@ services:
       context: ./server
       dockerfile: Dockerfile
     ports:
-      - "8000:8000"
+      - "8080:8080"
 
   proxy:
     image: nginx:alpine

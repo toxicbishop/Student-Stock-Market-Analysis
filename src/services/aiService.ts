@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Trade, Stock } from "../types";
 
-const genAI = new GoogleGenerativeAI((process.env.NEXT_PUBLIC_GEMINI_API_KEY || process.env.GEMINI_API_KEY || "dummy_key") as string);
+const genAI = new GoogleGenerativeAI((import.meta.env.NEXT_PUBLIC_GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY || "dummy_key") as string);
 
 export async function analyzeTrade(trade: Partial<Trade>, stock: Stock) {
   try {
