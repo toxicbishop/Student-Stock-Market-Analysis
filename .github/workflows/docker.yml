@@ -1,36 +1,76 @@
-name: Docker Build
+name: Docker
 
 on:
   push:
     branches: [main, master]
-    paths:
-      - "Dockerfile"
-      - "docker-compose.yml"
-      - "nginx.conf"
-      - "package.json"
-      - "pnpm-lock.yaml"
-  pull_request:
-    branches: [main, master]
-    paths:
-      - "Dockerfile"
-      - "docker-compose.yml"
-      - "nginx.conf"
+    tags:
+      - "v*.*.*"
 
 permissions:
   contents: read
+  packages: write
 
 jobs:
-  build:
-    name: Validate Docker Build
+  build-and-push:
+    name: Build & Push Docker Images
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v4
+
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4.1.0
-      - name: Build image
-        uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
+        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v4.2.0
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # --- Frontend (Vite React) ---
+      - name: Extract metadata for frontend
+        id: meta-frontend
+        uses: docker/metadata-action@902fa8ec7d6ecbea37aa9a72e4b51c835b37ad0c # v5
+        with:
+          images: ghcr.io/${{ github.repository }}/frontend
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,prefix=sha-
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@14487ce63c7a62a4a324b0bfb37086795e31c6c1 # v7.3.0
         with:
           context: .
-          push: false
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.meta-frontend.outputs.tags }}
+          labels: ${{ steps.meta-frontend.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # --- Backend (FastAPI) ---
+      - name: Extract metadata for backend
+        id: meta-backend
+        uses: docker/metadata-action@902fa8ec7d6ecbea37aa9a72e4b51c835b37ad0c # v5
+        with:
+          images: ghcr.io/${{ github.repository }}/backend
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,prefix=sha-
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@14487ce63c7a62a4a324b0bfb37086795e31c6c1 # v7.3.0
+        with:
+          context: ./server
+          file: ./server/Dockerfile
+          push: true
+          tags: ${{ steps.meta-backend.outputs.tags }}
+          labels: ${{ steps.meta-backend.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

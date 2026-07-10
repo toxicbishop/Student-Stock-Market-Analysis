@@ -15,9 +15,10 @@ export default [
     },
   },
   {
-    // Node.js globals for CommonJS config files
+    // Node.js globals + CommonJS sourceType for config files
     files: ["*.config.js", "*.config.cjs", "postcss.config.js", "tailwind.config.js"],
     languageOptions: {
+      sourceType: "commonjs",
       globals: {
         ...globals.node,
       },
