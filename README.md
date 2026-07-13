@@ -41,6 +41,12 @@ TradeLab is a learning-first ecosystem designed to turn market fear into financi
 - **Database:** Firebase Firestore (Real-time) or PostgreSQL (Relational)
 - **AI:** Google Gemini Integration
 
+## Architecture
+
+A full-stack overview of how the frontend, FastAPI backend, SQLite database, Firebase Auth, and Gemini AI fit together.
+
+![TradeLab Architecture](public/Student%20Stock%20Market%20Analysis%20(TradeLab)%20%E2%80%94%20Architecture.png)
+
 ---
 
 ## Installation & Setup
