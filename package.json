@@ -58,16 +58,18 @@
     "prisma": "^7.8.0",
     "sirv-cli": "^3.0.1",
     "tailwindcss": "^4.3.2",
-    "typescript": "^7",
+    "typescript": "^5",
     "typescript-eslint": "^8.64.0",
     "vite": "^8.1.4"
   },
   "overrides": {
     "postcss": "^8.5.19",
-    "@grpc/grpc-js": "^1.9.16"
+    "@grpc/grpc-js": "^1.9.16",
+    "@hono/node-server": "^1.19.13"
   },
   "resolutions": {
     "postcss": "^8.5.19",
-    "@grpc/grpc-js": "^1.9.16"
+    "@grpc/grpc-js": "^1.9.16",
+    "@hono/node-server": "^1.19.13"
   }
 }
