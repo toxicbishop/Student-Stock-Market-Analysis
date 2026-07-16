@@ -35,7 +35,7 @@ jobs:
       # --- Frontend (Vite React) ---
       - name: Extract metadata for frontend
         id: meta-frontend
-        uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804 # v5.7.0
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
         with:
           images: ghcr.io/${{ github.repository }}/frontend
           tags: |
@@ -59,7 +59,7 @@ jobs:
       # --- Backend (FastAPI) ---
       - name: Extract metadata for backend
         id: meta-backend
-        uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804 # v5.7.0
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
         with:
           images: ghcr.io/${{ github.repository }}/backend
           tags: |
