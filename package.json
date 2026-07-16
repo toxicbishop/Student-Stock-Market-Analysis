@@ -64,10 +64,12 @@
   },
   "overrides": {
     "postcss": "^8.5.15",
-    "@grpc/grpc-js": "^1.9.16"
+    "@grpc/grpc-js": "^1.9.16",
+    "@hono/node-server": "^1.19.13"
   },
   "resolutions": {
     "postcss": "^8.5.15",
-    "@grpc/grpc-js": "^1.9.16"
+    "@grpc/grpc-js": "^1.9.16",
+    "@hono/node-server": "^1.19.13"
   }
 }
