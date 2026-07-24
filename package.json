@@ -12,21 +12,21 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
-    "@prisma/client": "^7.8.0",
+    "@prisma/client": "^7.9.0",
     "bcryptjs": "^3.0.3",
     "chart.js": "^4.5.1",
     "clsx": "^2.1.1",
     "firebase": "^12.16.0",
     "jsonwebtoken": "^9.0.3",
-    "lucide-react": "^1.24.0",
+    "lucide-react": "^1.26.0",
     "motion": "^12.42.2",
-    "react": "^19.2.6",
+    "react": "^19.2.8",
     "react-chartjs-2": "^5.3.1",
-    "react-dom": "^19.2.6",
-    "react-is": "^19.2.6",
+    "react-dom": "^19.2.8",
+    "react-is": "^19.2.8",
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.18.1",
-    "recharts": "^3.9.2",
+    "recharts": "^3.10.0",
     "tailwind-merge": "^3.6.0",
     "yahoo-finance2": "^4.0.0",
     "zod": "^4.4.3"
@@ -55,22 +55,26 @@
     "autoprefixer": "^10.5.3",
     "eslint": "^10.7.0",
     "globals": "^17.7.0",
-    "postcss": "^8.5.19",
-    "prisma": "^7.8.0",
+    "postcss": "^8.5.22",
+    "prisma": "^7.9.0",
     "sirv-cli": "^3.0.1",
-    "tailwindcss": "^4.3.2",
+    "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.64.0",
-    "vite": "^8.1.4"
+    "typescript-eslint": "^8.65.0",
+    "vite": "^8.1.5"
   },
   "overrides": {
-    "postcss": "^8.5.19",
+    "postcss": "^8.5.22",
     "@grpc/grpc-js": "^1.9.16",
-    "@hono/node-server": "^1.19.13"
+    "@hono/node-server": "^2.0.5",
+    "fast-uri": "^3.1.4",
+    "find-my-way": "^9.6.1"
   },
   "resolutions": {
-    "postcss": "^8.5.19",
+    "postcss": "^8.5.22",
     "@grpc/grpc-js": "^1.9.16",
-    "@hono/node-server": "^1.19.13"
+    "@hono/node-server": "^2.0.5",
+    "fast-uri": "^3.1.4",
+    "find-my-way": "^9.6.1"
   }
 }
