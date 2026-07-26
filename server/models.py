@@ -4,7 +4,10 @@ from datetime import datetime
 import uuid
 import enum
 
-from .database import Base
+try:
+    from .database import Base
+except ImportError:
+    from database import Base
 
 def generate_uuid():
     return str(uuid.uuid4())

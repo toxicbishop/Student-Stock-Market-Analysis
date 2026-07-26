@@ -12,7 +12,12 @@ from datetime import datetime, timedelta
 import google.generativeai as genai
 from dotenv import load_dotenv
 
-from . import models, schemas, database, analyzer
+try:
+    # Supports `uvicorn server.main:app` when launched from the repository root.
+    from . import models, schemas, database, analyzer
+except ImportError:
+    # Supports `uvicorn main:app --reload` when launched inside server/.
+    import models, schemas, database, analyzer
 
 load_dotenv(os.path.join(database.BASE_DIR, ".env"))
 

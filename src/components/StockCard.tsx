@@ -1,5 +1,6 @@
 import React from 'react';
-import { TrendingUp, TrendingDown, Bell } from 'lucide-react';
+import { TrendingUp, TrendingDown, Bell, ArrowUpRight } from 'lucide-react';
+import { motion } from 'motion/react';
 import { LineChart, Line, ResponsiveContainer } from 'recharts';
 import { Stock } from '../types';
 import { cn, formatCurrency } from '../utils';
@@ -15,8 +16,9 @@ const StockCard: React.FC<StockCardProps> = ({ stock, onClick, onAlertClick }) =
   const chartData = stock.trend.map((val) => ({ value: val }));
 
   return (
-    <div 
-      className="card-base card-hover p-6 cursor-pointer group relative"
+    <motion.div
+      whileHover={{ y: -3 }} whileTap={{ scale: 0.99 }}
+      className="app-panel p-5 cursor-pointer group relative overflow-hidden transition-colors hover:bg-surface-raised"
       onClick={() => onClick(stock)}
     >
       <button 
@@ -24,15 +26,16 @@ const StockCard: React.FC<StockCardProps> = ({ stock, onClick, onAlertClick }) =
           e.stopPropagation();
           onAlertClick?.(stock);
         }}
-        className="absolute top-4 right-4 p-2 bg-surface-hover hover:bg-alert-accent/20 rounded-lg transition-all opacity-0 group-hover:opacity-100 z-10"
+        aria-label={`Create alert for ${stock.ticker}`}
+        className="absolute top-4 right-4 p-2 bg-surface-hover hover:bg-brand-primary/15 rounded-lg transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 z-10"
       >
-        <Bell className="w-3.5 h-3.5 text-muted group-hover:text-alert-accent" />
+        <Bell className="w-3.5 h-3.5 text-muted group-hover:text-brand-primary" />
       </button>
 
-      <div className="flex justify-between items-start mb-6 pr-8">
+      <div className="flex justify-between items-start mb-5 pr-8">
         <div>
-          <h3 className="text-base font-bold text-main">{stock.ticker}</h3>
-          <p className="text-[11px] text-muted font-medium uppercase tracking-wider mt-0.5">{stock.name}</p>
+          <div className="flex items-center gap-2"><h3 className="text-base font-bold text-main">{stock.ticker}</h3><ArrowUpRight className="w-3.5 h-3.5 text-muted opacity-0 group-hover:opacity-100 transition-opacity" /></div>
+          <p className="text-[11px] text-muted font-medium mt-0.5 truncate max-w-[160px]">{stock.name}</p>
         </div>
         <div className="text-right">
           <p className="text-base font-semibold text-main">{formatCurrency(stock.price)}</p>
@@ -46,13 +49,13 @@ const StockCard: React.FC<StockCardProps> = ({ stock, onClick, onAlertClick }) =
         </div>
       </div>
 
-      <div className="h-12 w-full opacity-40 group-hover:opacity-100 transition-opacity duration-300">
+      <div className="h-14 w-full opacity-55 group-hover:opacity-100 transition-opacity duration-300 border-t border-border pt-3">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={chartData}>
             <Line 
               type="monotone" 
               dataKey="value" 
-              stroke={isPositive ? "#10b981" : "#ff7675"} 
+              stroke={isPositive ? "#34d399" : "#fb7185"}
               strokeWidth={1.5} 
               dot={false} 
               isAnimationActive={false}
@@ -60,7 +63,7 @@ const StockCard: React.FC<StockCardProps> = ({ stock, onClick, onAlertClick }) =
           </LineChart>
         </ResponsiveContainer>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

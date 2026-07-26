@@ -39,7 +39,7 @@ const TradePanel: React.FC<TradePanelProps> = ({ stock, user, onClose, onTrade }
           animate={{ x: 0 }}
           exit={{ x: '100%' }}
           transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-          className="fixed right-0 top-0 w-full sm:w-[450px] h-screen bg-bg-main border-l border-border p-6 sm:p-10 flex flex-col shadow-2xl overflow-y-auto"
+          className="fixed right-0 top-0 w-full sm:w-[450px] min-h-[100dvh] bg-bg-main border-l border-border p-6 sm:p-8 flex flex-col shadow-2xl overflow-y-auto"
         >
           <div className="flex justify-between items-center mb-10 sm:mb-12">
             <div className="flex items-center gap-4">
@@ -56,12 +56,12 @@ const TradePanel: React.FC<TradePanelProps> = ({ stock, user, onClose, onTrade }
             </button>
           </div>
 
-          <div className="flex p-1 bg-surface-hover rounded-xl mb-8 sm:mb-10">
+          <div className="flex p-1 bg-surface-raised rounded-lg mb-8 sm:mb-10 border border-border">
             <button
               onClick={() => setAction('BUY')}
               className={cn(
                 "flex-1 py-2.5 sm:py-3 rounded-lg text-sm font-bold transition-all",
-                action === 'BUY' ? "bg-alert-accent text-alert-dark shadow-sm" : "text-muted hover:text-main"
+                action === 'BUY' ? "bg-brand-primary text-[#06111f] shadow-sm" : "text-muted hover:text-main"
               )}
             >
               Buy
@@ -70,7 +70,7 @@ const TradePanel: React.FC<TradePanelProps> = ({ stock, user, onClose, onTrade }
               onClick={() => setAction('SELL')}
               className={cn(
                 "flex-1 py-2.5 sm:py-3 rounded-lg text-sm font-bold transition-all",
-                action === 'SELL' ? "bg-alert-accent text-alert-dark shadow-sm" : "text-muted hover:text-main"
+                action === 'SELL' ? "bg-rose-500 text-white shadow-sm" : "text-muted hover:text-main"
               )}
             >
               Sell

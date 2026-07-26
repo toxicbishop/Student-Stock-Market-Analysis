@@ -39,14 +39,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ holdings, virtualBalance }) => {
     datasets: [
       {
         data: [virtualBalance, ...holdings.map(h => h.quantity * h.avg_buy_price)],
-        backgroundColor: [
-          'rgba(9, 132, 227, 0.6)',
-          'rgba(0, 206, 201, 0.6)',
-          'rgba(108, 92, 231, 0.6)',
-          'rgba(253, 121, 168, 0.6)',
-          'rgba(255, 118, 117, 0.6)',
-          'rgba(250, 177, 160, 0.6)',
-        ],
+        backgroundColor: ['#3b9dff', '#5cb2ff', '#7bc4ff', '#9ad3ff', '#b9e2ff', '#d9f1ff'],
         borderColor: [
           'rgba(9, 132, 227, 1)',
           'rgba(0, 206, 201, 1)',
@@ -66,8 +59,8 @@ const Portfolio: React.FC<PortfolioProps> = ({ holdings, virtualBalance }) => {
       {
         label: 'Market Value (₹)',
         data: holdings.map(h => h.quantity * h.avg_buy_price),
-        backgroundColor: 'rgba(0, 206, 201, 0.5)',
-        borderColor: 'rgba(0, 206, 201, 1)',
+        backgroundColor: '#3b9dff99',
+        borderColor: '#3b9dff',
         borderWidth: 1,
         borderRadius: 4,
       },
@@ -81,17 +74,14 @@ const Portfolio: React.FC<PortfolioProps> = ({ holdings, virtualBalance }) => {
       legend: {
         position: 'bottom' as const,
         labels: {
-          color: '#A4B0BE',
+          color: '#8f9bad',
           font: { size: 10, weight: 'bold' as any },
           padding: 20,
           usePointStyle: true,
         },
       },
       tooltip: {
-        backgroundColor: '#1E272E',
-        titleColor: '#F5F6FA',
-        bodyColor: '#A4B0BE',
-        borderColor: 'rgba(245, 246, 250, 0.1)',
+        backgroundColor: '#101722', titleColor: '#f4f7fb', bodyColor: '#8f9bad', borderColor: 'rgba(151,169,192,.16)',
         borderWidth: 1,
         padding: 12,
         cornerRadius: 8,
@@ -99,12 +89,11 @@ const Portfolio: React.FC<PortfolioProps> = ({ holdings, virtualBalance }) => {
     },
     scales: {
       y: {
-        grid: { color: 'rgba(245, 246, 250, 0.05)' },
-        ticks: { color: '#A4B0BE', font: { size: 10 } },
+        grid: { color: 'rgba(151,169,192,.08)' }, ticks: { color: '#8f9bad', font: { size: 10 } },
       },
       x: {
         grid: { display: false },
-        ticks: { color: '#A4B0BE', font: { size: 10 } },
+        ticks: { color: '#8f9bad', font: { size: 10 } },
       },
     },
   };
@@ -115,30 +104,34 @@ const Portfolio: React.FC<PortfolioProps> = ({ holdings, virtualBalance }) => {
   };
 
   return (
-    <div className="space-y-10">
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div className="card-base p-8 border-brand-primary/20 bg-brand-primary/5">
-          <p className="text-[10px] text-muted uppercase tracking-[0.1em] font-bold mb-2">Portfolio Value</p>
-          <h3 className="text-3xl font-bold text-main">{formatCurrency(portfolioValue)}</h3>
-          <div className="flex items-center gap-1.5 text-emerald-500 text-[11px] font-bold mt-3">
+    <div className="space-y-8">
+      <section className="app-panel overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.7fr_.8fr_.8fr] divide-y lg:divide-y-0 lg:divide-x divide-border">
+          <div className="p-6 sm:p-8 bg-[linear-gradient(120deg,rgba(59,157,255,.13),transparent_55%)]">
+            <p className="metric-label mb-3">Virtual portfolio value</p>
+            <h3 className="text-3xl sm:text-4xl font-bold text-main tabular-nums">{formatCurrency(portfolioValue)}</h3>
+            <div className="flex items-center gap-1.5 text-emerald-400 text-xs font-bold mt-4">
             <TrendingUp className="w-3.5 h-3.5" />
-            <span>+4.2% Total Return</span>
+              <span>+4.2% total return</span><span className="text-muted font-medium ml-1">this session</span>
+            </div>
+          </div>
+          <div className="p-6 sm:p-8 flex flex-col justify-center">
+            <p className="metric-label mb-2">Available cash</p>
+            <h3 className="text-2xl font-bold text-main tabular-nums">{formatCurrency(virtualBalance)}</h3>
+            <p className="text-xs text-muted mt-2">Ready for your next position</p>
+          </div>
+          <div className="p-6 sm:p-8 flex flex-col justify-center">
+            <p className="metric-label mb-2">Active holdings</p>
+            <h3 className="text-2xl font-bold text-main">{holdings.length} {holdings.length === 1 ? 'stock' : 'stocks'}</h3>
+            <p className="text-xs text-muted mt-2">Diversify with intent</p>
           </div>
         </div>
-        <div className="card-base p-8">
-          <p className="text-[10px] text-muted uppercase tracking-[0.1em] font-bold mb-2">Available Cash</p>
-          <h3 className="text-3xl font-bold text-main">{formatCurrency(virtualBalance)}</h3>
-        </div>
-        <div className="card-base p-8">
-          <p className="text-[10px] text-muted uppercase tracking-[0.1em] font-bold mb-2">Active Holdings</p>
-          <h3 className="text-3xl font-bold text-main">{holdings.length} Stocks</h3>
-        </div>
-      </div>
+      </section>
 
       {holdings.length > 0 && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="card-base p-6 lg:p-8">
-            <div className="flex items-center gap-3 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[.85fr_1.15fr] gap-6">
+          <div className="app-panel p-6 lg:p-8">
+            <div className="flex items-center gap-3 mb-6">
               <PieIcon className="w-4.5 h-4.5 text-brand-primary" />
               <h2 className="text-base font-bold text-main">Asset Allocation</h2>
             </div>
@@ -146,8 +139,8 @@ const Portfolio: React.FC<PortfolioProps> = ({ holdings, virtualBalance }) => {
               <Pie data={pieData} options={pieOptions} />
             </div>
           </div>
-          <div className="card-base p-6 lg:p-8">
-            <div className="flex items-center gap-3 mb-8">
+          <div className="app-panel p-6 lg:p-8">
+            <div className="flex items-center gap-3 mb-6">
               <BarChart3 className="w-4.5 h-4.5 text-brand-primary" />
               <h2 className="text-base font-bold text-main">Holdings Value</h2>
             </div>
@@ -158,10 +151,13 @@ const Portfolio: React.FC<PortfolioProps> = ({ holdings, virtualBalance }) => {
         </div>
       )}
 
-      <div className="card-base overflow-hidden">
-        <div className="px-8 py-5 border-b border-border flex items-center gap-3 bg-surface-hover">
+      <div className="app-panel overflow-hidden">
+        <div className="px-5 sm:px-7 py-5 border-b border-border flex items-center justify-between gap-3 bg-surface-raised">
+          <div className="flex items-center gap-3">
           <Briefcase className="w-4.5 h-4.5 text-brand-primary" />
           <h2 className="text-base font-bold text-main">Current Holdings</h2>
+          </div>
+          <span className="text-xs text-muted">Live learning portfolio</span>
         </div>
         
         {holdings.length === 0 ? (
@@ -175,21 +171,13 @@ const Portfolio: React.FC<PortfolioProps> = ({ holdings, virtualBalance }) => {
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="text-[10px] text-muted uppercase tracking-widest border-b border-border">
-                    <th className="px-8 py-4 font-bold">Ticker</th>
-                    <th className="px-8 py-4 font-bold">Quantity</th>
-                    <th className="px-8 py-4 font-bold">Avg Price</th>
-                    <th className="px-8 py-4 font-bold">Market Value</th>
-                    <th className="px-8 py-4 font-bold">P&L</th>
+                    <th className="px-6 py-4 font-bold">Ticker</th><th className="px-6 py-4 font-bold">Quantity</th><th className="px-6 py-4 font-bold">Avg Price</th><th className="px-6 py-4 font-bold">Market Value</th><th className="px-6 py-4 font-bold">P&amp;L</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
                   {holdings.map((holding) => (
                     <tr key={holding.id} className="hover:bg-surface-hover transition-colors duration-200">
-                      <td className="px-8 py-5 text-sm font-bold text-main">{holding.ticker}</td>
-                      <td className="px-8 py-5 text-sm font-medium text-muted">{holding.quantity.toFixed(4)}</td>
-                      <td className="px-8 py-5 text-sm font-medium text-muted">{formatCurrency(holding.avg_buy_price)}</td>
-                      <td className="px-8 py-5 text-sm font-bold text-main">{formatCurrency(holding.quantity * holding.avg_buy_price)}</td>
-                      <td className="px-8 py-5">
+                      <td className="px-6 py-4 text-sm font-bold text-main">{holding.ticker}</td><td className="px-6 py-4 text-sm font-medium text-muted">{holding.quantity.toFixed(4)}</td><td className="px-6 py-4 text-sm font-medium text-muted">{formatCurrency(holding.avg_buy_price)}</td><td className="px-6 py-4 text-sm font-bold text-main">{formatCurrency(holding.quantity * holding.avg_buy_price)}</td><td className="px-6 py-4">
                         <span className="text-[11px] font-bold text-emerald-500 flex items-center gap-1">
                           <TrendingUp className="w-3 h-3" />
                           +2.4%

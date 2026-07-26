@@ -1,27 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
-  theme: {
-    extend: {
-      colors: {
-        'bg-main': '#0a0a0a',
-        'surface': '#141414',
-        'surface-hover': '#1e1e1e',
-        'surface-subtle': '#1a1a1a',
-        'border': '#262626',
-        'main': '#ffffff',
-        'muted': '#a3a3a3',
-        'brand-primary': '#38a169',
-        'alert-accent': '#e53e3e',
-        'alert-dark': '#fed7d7'
-      },
-      fontFamily: {
-        display: ['Inter', 'sans-serif']
-      }
-    },
-  },
-  plugins: [],
+  content: ["./src/**/*.{js,ts,jsx,tsx}"],
+  theme: { extend: {
+    colors: {
+      'bg-main': 'var(--color-bg-main)', surface: 'var(--color-surface)', 'surface-hover': 'var(--color-surface-hover)', 'surface-raised': 'var(--color-surface-raised)', border: 'var(--color-border)', main: 'var(--color-main)', muted: 'var(--color-muted)', 'brand-primary': 'var(--color-brand-primary)', 'alert-accent': 'var(--color-alert-accent)', 'alert-dark': 'var(--color-alert-dark)', 'alert-light': 'var(--color-alert-light)', 'alert-danger': 'var(--color-alert-danger)'
+    }
+  } }, plugins: []
 }

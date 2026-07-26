@@ -312,7 +312,7 @@ const App: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="h-screen w-full flex items-center justify-center bg-bg-main">
+      <div className="min-h-[100dvh] w-full flex items-center justify-center bg-bg-main">
         <div className="flex flex-col items-center gap-6">
           <div className="w-10 h-10 border-2 border-brand-primary border-t-transparent rounded-full animate-spin" />
           <p className="text-muted text-sm font-medium tracking-wide">Syncing market data...</p>
@@ -323,7 +323,7 @@ const App: React.FC = () => {
 
   if (!user) {
     return (
-      <div className="h-screen w-full flex items-center justify-center bg-bg-main p-6">
+      <div className="min-h-[100dvh] w-full flex items-center justify-center bg-bg-main p-6">
         <div className="card-base p-8 sm:p-10 max-w-md w-full text-center shadow-2xl">
           <div className="w-16 h-16 bg-brand-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-8">
             <TrendingUp className="text-brand-primary w-8 h-8" />
@@ -441,7 +441,7 @@ const App: React.FC = () => {
   const standardTransition: any = { duration: 0.3, ease: "easeOut" };
 
   return (
-    <div className="flex flex-col sm:flex-row h-screen bg-bg-main overflow-hidden text-main">
+    <div className="flex flex-col sm:flex-row min-h-[100dvh] bg-bg-main overflow-hidden text-main">
       <Sidebar 
         onSignOut={logout} 
       />
@@ -569,13 +569,13 @@ const App: React.FC = () => {
                 >
                   <div className="mb-8">
                     <h2 className="text-2xl font-bold">Market Overview</h2>
-                    <p className="text-sm text-slate-400 mt-1">Select a stock to begin trading.</p>
+                    <p className="text-sm text-muted mt-1">Search the Indian market and practise with virtual money.</p>
                   </div>
                   
                   {stocks.length === 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {[1, 2, 3, 4, 5, 6].map((i) => (
-                        <div key={i} className="card-base h-48 animate-pulse bg-slate-800/50" />
+                        <div key={i} className="app-panel h-44 animate-pulse bg-surface-raised" />
                       ))}
                     </div>
                   ) : (
@@ -638,11 +638,11 @@ const App: React.FC = () => {
                   transition={standardTransition}
                   className="flex flex-col items-center justify-center py-24 text-center"
                 >
-                  <div className="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center mb-6">
-                    <Users className="w-8 h-8 text-slate-600" />
+                  <div className="w-16 h-16 bg-brand-primary/10 rounded-xl flex items-center justify-center mb-6 border border-brand-primary/15">
+                    <Users className="w-8 h-8 text-brand-primary" />
                   </div>
                   <h3 className="text-xl font-bold mb-2">Campus Groups</h3>
-                  <p className="text-slate-400 max-w-sm mb-8 text-sm leading-relaxed">
+                  <p className="text-muted max-w-sm mb-8 text-sm leading-relaxed">
                     Collaborative trading groups for educational institutions. This feature is currently in development.
                   </p>
                   <button className="btn-primary">
@@ -691,7 +691,7 @@ const App: React.FC = () => {
               initial={{ opacity: 0, y: -50 }}
               animate={{ opacity: 1, y: 20 }}
               exit={{ opacity: 0, y: -50 }}
-              className="fixed top-0 left-1/2 -translate-x-1/2 z-[100] bg-alert-accent text-alert-dark px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 border border-white/20"
+              className="fixed top-0 left-1/2 -translate-x-1/2 z-[100] bg-brand-primary text-[#06111f] px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 border border-white/20"
             >
               <Bell className="w-5 h-5 animate-bounce" />
               <div>

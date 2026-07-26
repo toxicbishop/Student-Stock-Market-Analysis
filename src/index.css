@@ -1,91 +1,58 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../tailwind.config.js";
 
 @layer base {
   :root {
-    --color-brand-primary: #0984E3; /* Electric Blue */
-    --color-brand-secondary: #1E272E; /* Night Black */
-    --color-accent: #00CEC9; /* Cyan Neon */
-    
-    --color-bg-main: #050505; /* Deep Black */
-    --color-surface: #1E272E; /* Night Black */
-    --color-surface-hover: #2d3436;
-    --color-main: #F5F6FA; /* Cloud White */
-    --color-muted: #A4B0BE;
-    --color-border: rgba(245, 246, 250, 0.1);
-    
-    --color-alert-dark: #1E272E;
-    --color-alert-accent: #00CEC9;
-    --color-alert-danger: #ff7675;
-    --color-alert-light: #F5F6FA;
-    
-    --radius-card: 0.75rem;
-    --radius-button: 0.5rem;
-    
-    --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+    --color-brand-primary: #3b9dff;
+    --color-brand-secondary: #0b111b;
+    --color-accent: #3b9dff;
+    --color-bg-main: #090d14;
+    --color-surface: #101722;
+    --color-surface-raised: #151e2b;
+    --color-surface-hover: #1a2534;
+    --color-main: #f4f7fb;
+    --color-muted: #8f9bad;
+    --color-border: rgba(151, 169, 192, .16);
+    --color-alert-dark: #09111d;
+    --color-alert-accent: #3b9dff;
+    --color-alert-danger: #fb7185;
+    --color-alert-light: #f4f7fb;
+    --radius-card: .75rem;
+    --radius-button: .5rem;
+    --ease-standard: cubic-bezier(.2, .8, .2, 1);
   }
 
   .light {
-    --color-bg-main: #F5F6FA;
+    --color-bg-main: #f6f8fc;
     --color-surface: #ffffff;
-    --color-surface-hover: #dfe6e9;
-    --color-main: #1E272E;
-    --color-muted: #636e72;
-    --color-border: rgba(30, 39, 46, 0.1);
-    --color-brand-secondary: #F5F6FA;
-    --color-alert-dark: #F5F6FA;
-    --color-alert-light: #1E272E;
+    --color-surface-raised: #f1f5fa;
+    --color-surface-hover: #eaf0f8;
+    --color-main: #142033;
+    --color-muted: #657389;
+    --color-border: rgba(55, 72, 98, .14);
+    --color-brand-secondary: #f6f8fc;
+    --color-alert-dark: #ffffff;
+    --color-alert-light: #142033;
   }
+
+  * { border-color: var(--color-border); }
+  body { margin: 0; background: var(--color-bg-main); color: var(--color-main); font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  button, input, select, textarea { font: inherit; }
+  button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--color-brand-primary); outline-offset: 2px; }
+  h1, h2, h3, h4 { color: var(--color-main); font-weight: 700; letter-spacing: -.025em; }
 }
 
 @layer utilities {
-  .card-base {
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-card);
-    transition: transform 0.2s var(--ease-standard), background-color 0.2s var(--ease-standard), border-color 0.2s var(--ease-standard);
-  }
-  
-  .card-hover:hover {
-    background-color: var(--color-surface-hover);
-    transform: translateY(-2px);
-  }
-
-  .btn-primary {
-    background-color: var(--color-brand-primary);
-    color: #ffffff; /* White text on blue */
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--radius-button);
-    font-weight: 600;
-    transition: opacity 0.2s var(--ease-standard), transform 0.1s var(--ease-standard), background-color 0.2s;
-  }
-
-  .btn-primary:hover {
-    background-color: #0873c4; /* Slightly darker blue */
-  }
-
-  .btn-primary:active {
-    transform: scale(0.98);
-  }
-
-  .btn-primary:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
+  .card-base { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-card); }
+  .card-hover { transition: border-color .2s var(--ease-standard), background .2s var(--ease-standard), transform .2s var(--ease-standard); }
+  .card-hover:hover { background: var(--color-surface-raised); border-color: color-mix(in srgb, var(--color-brand-primary) 35%, var(--color-border)); transform: translateY(-2px); }
+  .app-panel { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-card); }
+  .input-base { background: var(--color-surface-raised); border: 1px solid var(--color-border); border-radius: var(--radius-button); color: var(--color-main); }
+  .btn-primary { background: var(--color-brand-primary); color: #06111f; padding: .75rem 1.25rem; border-radius: var(--radius-button); font-weight: 750; transition: transform .15s var(--ease-standard), background .2s var(--ease-standard); }
+  .btn-primary:hover { background: #65b4ff; }
+  .btn-primary:active { transform: scale(.98); }
+  .btn-primary:disabled { cursor: not-allowed; opacity: .55; }
+  .metric-label { color: var(--color-muted); font-size: .6875rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 }
 
-body {
-  background-color: var(--color-bg-main);
-  color: var(--color-main);
-  font-family: 'Inter', system-ui, sans-serif;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  transition: background-color 0.3s var(--ease-standard), color 0.3s var(--ease-standard);
-}
-
-h1, h2, h3, h4 {
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  color: var(--color-main);
-}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; } }

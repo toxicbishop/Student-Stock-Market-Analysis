@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Bell, Trash2, Plus, X, ArrowUp, ArrowDown } from 'lucide-react';
 import { PriceAlert, Stock } from '../types';
 import { cn, formatCurrency } from '../utils';
+import { motion } from 'motion/react';
 
 interface PriceAlertsProps {
   alerts: PriceAlert[];
@@ -26,11 +27,11 @@ const PriceAlerts: React.FC<PriceAlertsProps> = ({ alerts, stocks, onAddAlert, o
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="w-full max-w-md bg-alert-dark border border-border rounded-2xl shadow-2xl overflow-hidden">
-        <div className="p-6 border-b border-border flex justify-between items-center bg-alert-dark/50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Price alerts">
+      <motion.div initial={{ opacity: 0, scale: .97, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: .97, y: 10 }} className="w-full max-w-md bg-alert-dark border border-border rounded-xl shadow-2xl overflow-hidden">
+        <div className="p-5 border-b border-border flex justify-between items-center bg-surface-raised">
           <div className="flex items-center gap-3">
-            <Bell className="w-5 h-5 text-alert-accent" />
+            <Bell className="w-5 h-5 text-brand-primary" />
             <h2 className="text-xl font-bold text-alert-light">Price Alerts</h2>
           </div>
           <button onClick={onClose} className="p-2 hover:bg-surface-hover rounded-lg transition-colors">
@@ -46,7 +47,7 @@ const PriceAlerts: React.FC<PriceAlertsProps> = ({ alerts, stocks, onAddAlert, o
           )}
 
           {alerts.map((alert) => (
-            <div key={alert.id} className="p-4 bg-surface border border-border rounded-xl flex justify-between items-center group">
+            <div key={alert.id} className="p-4 bg-surface-raised border border-border rounded-lg flex justify-between items-center group">
               <div className="flex items-center gap-4">
                 <div className={cn(
                   "w-10 h-10 rounded-lg flex items-center justify-center font-bold",
@@ -71,14 +72,14 @@ const PriceAlerts: React.FC<PriceAlertsProps> = ({ alerts, stocks, onAddAlert, o
           ))}
 
           {showAdd && (
-            <div className="p-5 bg-surface border border-alert-accent/20 rounded-xl space-y-4 animate-in fade-in slide-in-from-top-2">
+            <div className="p-5 bg-surface-raised border border-brand-primary/20 rounded-lg space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-bold text-muted uppercase tracking-wider">Stock</label>
                   <select 
                     value={ticker}
                     onChange={(e) => setTicker(e.target.value)}
-                    className="w-full bg-surface-hover border border-border rounded-lg py-2 px-3 text-sm text-alert-light focus:outline-none focus:ring-1 focus:ring-alert-accent"
+                    className="w-full bg-surface border border-border rounded-lg py-2 px-3 text-sm text-alert-light focus:outline-none focus:ring-1 focus:ring-brand-primary"
                   >
                     {stocks.map(s => <option key={s.ticker} value={s.ticker}>{s.ticker}</option>)}
                   </select>
@@ -88,7 +89,7 @@ const PriceAlerts: React.FC<PriceAlertsProps> = ({ alerts, stocks, onAddAlert, o
                   <select 
                     value={condition}
                     onChange={(e) => setCondition(e.target.value as 'ABOVE' | 'BELOW')}
-                    className="w-full bg-surface-hover border border-border rounded-lg py-2 px-3 text-sm text-alert-light focus:outline-none focus:ring-1 focus:ring-alert-accent"
+                    className="w-full bg-surface border border-border rounded-lg py-2 px-3 text-sm text-alert-light focus:outline-none focus:ring-1 focus:ring-brand-primary"
                   >
                     <option value="ABOVE">Above</option>
                     <option value="BELOW">Below</option>
@@ -102,7 +103,7 @@ const PriceAlerts: React.FC<PriceAlertsProps> = ({ alerts, stocks, onAddAlert, o
                   value={targetPrice}
                   onChange={(e) => setTargetPrice(e.target.value)}
                   placeholder="Enter price..."
-                  className="w-full bg-surface-hover border border-border rounded-lg py-2 px-3 text-sm text-alert-light focus:outline-none focus:ring-1 focus:ring-alert-accent"
+                  className="w-full bg-surface border border-border rounded-lg py-2 px-3 text-sm text-alert-light focus:outline-none focus:ring-1 focus:ring-brand-primary"
                 />
               </div>
               <div className="flex gap-2 pt-2">
@@ -114,7 +115,7 @@ const PriceAlerts: React.FC<PriceAlertsProps> = ({ alerts, stocks, onAddAlert, o
                 </button>
                 <button 
                   onClick={handleAdd}
-                  className="flex-1 py-2 rounded-lg text-xs font-bold bg-alert-accent text-alert-dark hover:opacity-90 transition-colors"
+                  className="flex-1 py-2 rounded-lg text-xs font-bold bg-brand-primary text-[#06111f] hover:opacity-90 transition-colors"
                 >
                   Set Alert
                 </button>
@@ -123,18 +124,18 @@ const PriceAlerts: React.FC<PriceAlertsProps> = ({ alerts, stocks, onAddAlert, o
           )}
         </div>
 
-        <div className="p-6 bg-alert-dark/30 border-t border-border">
+        <div className="p-5 bg-surface-raised border-t border-border">
           {!showAdd && (
             <button 
               onClick={() => setShowAdd(true)}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-alert-accent/10 text-alert-accent border border-alert-accent/20 hover:bg-alert-accent/20 transition-all font-bold text-sm"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-brand-primary/10 text-brand-primary border border-brand-primary/20 hover:bg-brand-primary/15 transition-all font-bold text-sm"
             >
               <Plus className="w-4 h-4" />
               Add New Alert
             </button>
           )}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
