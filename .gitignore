@@ -54,3 +54,14 @@ Thumbs.db
 # Project-specific ignores
 frontend-v1-react/
 /generated/prisma
+
+#Agent specific ignores
+.agents/
+.aider-desk/
+.claude
+.augment
+.autohand/
+.bob/
+data/
+skills/
+skills-lock.json

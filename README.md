@@ -49,6 +49,14 @@ A full-stack overview of how the frontend, FastAPI backend, SQLite database, Fir
 
 ---
 
+## Dashboard
+
+The TradeLab dashboard gives students a focused view of their virtual portfolio, holdings, market activity, and learning progress.
+
+![TradeLab Dashboard](public/TradeLab-dashboard.png)
+
+---
+
 ## Installation & Setup
 
 ### 1. Modern Dashboard (v2) - Recommended
@@ -63,9 +71,8 @@ pnpm run dev
 If using the relational data features or legacy integration:
 
 ```bash
-cd server
-pip install -r requirements.txt
-uvicorn main:app --reload
+pip install -r server/requirements.txt
+uvicorn server.main:app --reload
 ```
 
 ### 3. Environment Variables:
