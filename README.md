@@ -55,7 +55,6 @@ A full-stack overview of how the frontend, FastAPI backend, SQLite database, Fir
 To run the latest dashboard with the improved UI and AI features:
 
 ```bash
-cd frontend
 pnpm install
 pnpm run dev
 ```
@@ -64,7 +63,7 @@ pnpm run dev
 If using the relational data features or legacy integration:
 
 ```bash
-cd backend
+cd server
 pip install -r requirements.txt
 uvicorn main:app --reload
 ```
