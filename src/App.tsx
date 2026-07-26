@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { ConfirmationResult, onAuthStateChanged, User } from 'firebase/auth';
 import { 
   doc,
   collection,
@@ -25,6 +25,10 @@ import Settings from './components/Settings';
 import { TrendingUp, Search, Bell, LogIn, Users, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { formatCurrency } from './utils';
+
+type PriceAlertEventDetail = { ticker: string; price: number; condition: string };
+const errorMessage = (error: unknown, fallback: string) => error instanceof Error ? error.message : fallback;
+const errorCode = (error: unknown) => typeof error === 'object' && error !== null && 'code' in error ? String(error.code) : '';
 
 const App: React.FC = () => {
   console.log("TradeLab App Component executing!");
@@ -68,12 +72,14 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const handleAlert = (e: any) => {
-      setNotification(e.detail);
+    const handleAlert = (event: Event) => {
+      const detail = (event as CustomEvent<PriceAlertEventDetail>).detail;
+      if (!detail) return;
+      setNotification(detail);
       setTimeout(() => setNotification(null), 5000);
     };
-    window.addEventListener('price-alert', handleAlert as any);
-    return () => window.removeEventListener('price-alert', handleAlert as any);
+    window.addEventListener('price-alert', handleAlert);
+    return () => window.removeEventListener('price-alert', handleAlert);
   }, []);
 
   const fetchPortfolioData = async (uid: string) => {
@@ -128,7 +134,7 @@ const App: React.FC = () => {
       await fetchPortfolioData(user.uid);
       setSelectedStock(null);
       
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Trade failed:", error);
     }
   };
@@ -194,7 +200,7 @@ const App: React.FC = () => {
       });
       if (!res.ok) throw new Error("Failed to update profile");
       await fetchPortfolioData(user.uid);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Profile update failed:", error);
       throw error;
     }
@@ -235,7 +241,7 @@ const App: React.FC = () => {
   const [authMethod, setAuthMethod] = useState<'google' | 'phone'>('google');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
-  const [confirmationResult, setConfirmationResult] = useState<any>(null);
+  const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
   const [authError, setAuthError] = useState<string | null>(null);
 
   const setupRecaptcha = (buttonId: string) => {
@@ -265,13 +271,11 @@ const App: React.FC = () => {
       const formattedPhone = phoneNumber.startsWith('+') ? phoneNumber : `+91${phoneNumber}`;
       const result = await signInWithPhoneNumber(auth, formattedPhone, appVerifier);
       setConfirmationResult(result);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Phone sign-in error:", error);
-      setAuthError(error.message || "Failed to send verification code");
+      setAuthError(errorMessage(error, "Failed to send verification code"));
       // Reset captcha
-      if ((window as any).recaptchaWidgetId !== undefined) {
-        window.location.reload(); 
-      }
+      window.location.reload();
     } finally {
       setIsSigningIn(false);
     }
@@ -284,7 +288,7 @@ const App: React.FC = () => {
     try {
       setIsSigningIn(true);
       await confirmationResult.confirm(verificationCode);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("OTP verification error:", error);
       setAuthError("Invalid verification code. Please try again.");
     } finally {
@@ -298,8 +302,9 @@ const App: React.FC = () => {
     try {
       setIsSigningIn(true);
       await signInWithGoogle();
-    } catch (error: any) {
-      if (error.code === 'auth/cancelled-popup-request' || error.code === 'auth/popup-closed-by-user') {
+    } catch (error: unknown) {
+      const code = errorCode(error);
+      if (code === 'auth/cancelled-popup-request' || code === 'auth/popup-closed-by-user') {
         console.warn("Sign-in popup closed before completion.");
       } else {
         console.error("Sign-in error:", error);
@@ -312,7 +317,7 @@ const App: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-[100dvh] w-full flex items-center justify-center bg-bg-main">
+      <div className="min-h-dvh w-full flex items-center justify-center bg-bg-main">
         <div className="flex flex-col items-center gap-6">
           <div className="w-10 h-10 border-2 border-brand-primary border-t-transparent rounded-full animate-spin" />
           <p className="text-muted text-sm font-medium tracking-wide">Syncing market data...</p>
@@ -323,7 +328,7 @@ const App: React.FC = () => {
 
   if (!user) {
     return (
-      <div className="min-h-[100dvh] w-full flex items-center justify-center bg-bg-main p-6">
+      <div className="min-h-dvh w-full flex items-center justify-center bg-bg-main p-6">
         <div className="card-base p-8 sm:p-10 max-w-md w-full text-center shadow-2xl">
           <div className="w-16 h-16 bg-brand-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-8">
             <TrendingUp className="text-brand-primary w-8 h-8" />
@@ -438,10 +443,10 @@ const App: React.FC = () => {
     );
   }
 
-  const standardTransition: any = { duration: 0.3, ease: "easeOut" };
+  const standardTransition = { duration: 0.3, ease: "easeOut" as const };
 
   return (
-    <div className="flex flex-col sm:flex-row min-h-[100dvh] bg-bg-main overflow-hidden text-main">
+    <div className="flex flex-col sm:flex-row min-h-dvh bg-bg-main overflow-hidden text-main">
       <Sidebar 
         onSignOut={logout} 
       />
@@ -533,7 +538,7 @@ const App: React.FC = () => {
           )}
         </header>
 
-        <div className="p-4 lg:p-8 max-w-7xl mx-auto">
+        <div className="max-w-none mx-auto">
           <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
               <Route path="/" element={
@@ -542,7 +547,7 @@ const App: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={standardTransition}
-                  className="space-y-12"
+                  className="lab-page space-y-6"
                 >
                   <Portfolio holdings={holdings} virtualBalance={profile?.virtual_cash || 0} />
                   <TradeHistory trades={trades} />
@@ -691,7 +696,7 @@ const App: React.FC = () => {
               initial={{ opacity: 0, y: -50 }}
               animate={{ opacity: 1, y: 20 }}
               exit={{ opacity: 0, y: -50 }}
-              className="fixed top-0 left-1/2 -translate-x-1/2 z-[100] bg-brand-primary text-[#06111f] px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 border border-white/20"
+              className="fixed top-0 left-1/2 -translate-x-1/2 z-100 bg-brand-primary text-[#06111f] px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 border border-white/20"
             >
               <Bell className="w-5 h-5 animate-bounce" />
               <div>

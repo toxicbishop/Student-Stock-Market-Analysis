@@ -1,3 +1,5 @@
+export type TimestampValue = Date | number | string | { toDate: () => Date } | null;
+
 export interface Stock {
   ticker: string;
   name: string;
@@ -14,7 +16,7 @@ export interface UserProfile {
   bio?: string;
   college?: string;
   virtual_cash: number;
-  createdAt: any;
+  createdAt: TimestampValue;
 }
 
 export interface Holding {
@@ -22,7 +24,7 @@ export interface Holding {
   ticker: string;
   quantity: number;
   avg_buy_price: number;
-  last_updated: any;
+  last_updated: TimestampValue;
 }
 
 export interface Trade {
@@ -34,7 +36,7 @@ export interface Trade {
   total_value: number;
   ai_analysis?: string;
   mistake_flags?: string;
-  executed_at: any;
+  executed_at: TimestampValue;
 }
 
 export interface Group {
@@ -43,7 +45,7 @@ export interface Group {
   inviteCode: string;
   virtualCorpus: number;
   createdBy: string;
-  createdAt: any;
+  createdAt: TimestampValue;
 }
 
 export interface PriceAlert {
@@ -52,5 +54,5 @@ export interface PriceAlert {
   targetPrice: number;
   condition: 'ABOVE' | 'BELOW';
   isActive: boolean;
-  createdAt: any;
+  createdAt: TimestampValue;
 }

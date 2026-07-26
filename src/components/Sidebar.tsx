@@ -22,7 +22,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onSignOut }) => {
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden sm:flex w-[76px] lg:w-60 h-screen flex-col border-r border-border bg-surface shrink-0 transition-all duration-300">
+      <aside className="hidden sm:flex w-19 lg:w-60 h-screen flex-col border-r border-border bg-surface shrink-0 transition-all duration-300">
         <div className="p-5 lg:p-6">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-brand-primary/15 rounded-lg flex items-center justify-center shrink-0 border border-brand-primary/20">
@@ -83,7 +83,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onSignOut }) => {
       </aside>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="sm:hidden fixed bottom-0 left-0 right-0 h-[68px] bg-surface/95 backdrop-blur-lg border-t border-border flex items-center justify-around px-2 z-50 pb-[env(safe-area-inset-bottom)]">
+      <nav className="sm:hidden fixed bottom-0 left-0 right-0 h-17 bg-surface/95 backdrop-blur-lg border-t border-border flex items-center justify-around px-2 z-50 pb-[env(safe-area-inset-bottom)]">
         {menuItems.map((item) => (
           <Link
             key={item.path}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Trade } from '../types';
 import { formatCurrency } from '../utils';
-import { History, AlertCircle, Sparkles } from 'lucide-react';
+import { History, AlertCircle, Sparkles, FileText } from 'lucide-react';
 
 interface TradeHistoryProps {
   trades: Trade[];
@@ -9,15 +9,16 @@ interface TradeHistoryProps {
 
 const TradeHistory: React.FC<TradeHistoryProps> = ({ trades }) => {
   return (
-    <div className="card-base overflow-hidden">
-      <div className="px-8 py-5 border-b border-border flex items-center gap-3 bg-surface-hover">
+    <div className="lab-surface overflow-hidden">
+      <div className="px-6 py-5 border-b border-border flex items-center gap-3 bg-surface-raised">
         <History className="w-4.5 h-4.5 text-brand-primary" />
         <h2 className="text-base font-bold text-main">Trade History</h2>
       </div>
 
       {trades.length === 0 ? (
-        <div className="py-24 text-center">
-          <p className="text-muted text-sm font-medium">No trades executed yet.</p>
+        <div className="px-6 py-10 flex items-center gap-4">
+          <div className="w-10 h-10 rounded-lg bg-surface-raised border border-border flex items-center justify-center"><FileText className="w-5 h-5 text-muted" /></div>
+          <div><p className="text-sm font-semibold text-main">Your trade journal will appear here.</p><p className="text-xs text-muted mt-1">After each trade, capture the decision, result, and lesson.</p></div>
         </div>
       ) : (
         <div className="divide-y divide-border">

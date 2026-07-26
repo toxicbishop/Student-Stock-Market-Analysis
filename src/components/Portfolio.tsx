@@ -1,7 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Holding } from '../types';
 import { formatCurrency } from '../utils';
-import { TrendingUp, Briefcase, PieChart as PieIcon, BarChart3 } from 'lucide-react';
+import { TrendingUp, Briefcase, PieChart as PieIcon, BarChart3, ArrowRight, BookOpen, Target } from 'lucide-react';
 import { 
   Chart as ChartJS, 
   ArcElement, 
@@ -75,7 +76,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ holdings, virtualBalance }) => {
         position: 'bottom' as const,
         labels: {
           color: '#8f9bad',
-          font: { size: 10, weight: 'bold' as any },
+          font: { size: 10, weight: 'bold' },
           padding: 20,
           usePointStyle: true,
         },
@@ -104,14 +105,14 @@ const Portfolio: React.FC<PortfolioProps> = ({ holdings, virtualBalance }) => {
   };
 
   return (
-    <div className="lab-page space-y-6">
+    <div className="space-y-6">
       <header className="lab-page-header">
         <div><p className="text-brand-primary text-sm font-semibold">Portfolio</p><h1 className="lab-page-title mt-2">Your practice portfolio</h1><p className="lab-page-subtitle">Build judgement with every virtual trade.</p></div>
         <p className="text-xs text-muted hidden sm:block">Market data may be delayed</p>
       </header>
       <section className="app-panel overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-[1.7fr_.8fr_.8fr] divide-y lg:divide-y-0 lg:divide-x divide-border">
-          <div className="p-6 sm:p-8 bg-[linear-gradient(120deg,rgba(59,157,255,.13),transparent_55%)]">
+          <div className="p-6 sm:p-8 bg-[linear-gradient(120deg,rgba(59,157,255,.18),transparent_58%)] relative overflow-hidden">
             <p className="metric-label mb-3">Virtual portfolio value</p>
             <h3 className="text-3xl sm:text-4xl font-bold text-main tabular-nums">{formatCurrency(portfolioValue)}</h3>
             <div className="flex items-center gap-1.5 text-emerald-400 text-xs font-bold mt-4">
@@ -139,7 +140,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ holdings, virtualBalance }) => {
               <PieIcon className="w-4.5 h-4.5 text-brand-primary" />
               <h2 className="text-base font-bold text-main">Asset Allocation</h2>
             </div>
-            <div className="h-[300px] relative">
+            <div className="h-75 relative">
               <Pie data={pieData} options={pieOptions} />
             </div>
           </div>
@@ -148,7 +149,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ holdings, virtualBalance }) => {
               <BarChart3 className="w-4.5 h-4.5 text-brand-primary" />
               <h2 className="text-base font-bold text-main">Holdings Value</h2>
             </div>
-            <div className="h-[300px] relative">
+            <div className="h-75 relative">
               <Bar data={barData} options={chartOptions} />
             </div>
           </div>
@@ -165,8 +166,18 @@ const Portfolio: React.FC<PortfolioProps> = ({ holdings, virtualBalance }) => {
         </div>
         
         {holdings.length === 0 ? (
-          <div className="py-24 text-center">
-            <p className="text-muted text-sm font-medium">No active holdings. Start trading to build your portfolio.</p>
+          <div className="grid grid-cols-1 md:grid-cols-[1.15fr_.85fr] min-h-65">
+            <div className="p-6 sm:p-8 flex flex-col justify-center">
+              <div className="w-10 h-10 rounded-lg bg-brand-primary/10 text-brand-primary flex items-center justify-center mb-5"><Target className="w-5 h-5" /></div>
+              <h3 className="text-xl font-bold">Make your first practice trade.</h3>
+              <p className="text-sm text-muted leading-relaxed max-w-md mt-2">Choose a company, decide how much virtual money to use, then review what happened. Your first position starts the portfolio.</p>
+              <div className="flex flex-wrap gap-3 mt-6"><Link to="/trade" className="btn-primary inline-flex items-center gap-2">Explore the market <ArrowRight className="w-4 h-4" /></Link><Link to="/learn" className="px-4 py-3 rounded-lg text-sm font-semibold text-brand-primary hover:bg-brand-primary/10 transition-colors inline-flex items-center gap-2"><BookOpen className="w-4 h-4" /> Learn the basics</Link></div>
+            </div>
+            <div className="p-6 sm:p-8 bg-surface-raised border-t md:border-t-0 md:border-l border-border flex flex-col justify-center">
+              <p className="metric-label">Your first goal</p>
+              <p className="text-lg font-semibold mt-3">Build a 3-stock practice portfolio.</p>
+              <p className="text-sm text-muted mt-2 leading-relaxed">Spread your virtual money across different sectors before deciding which positions deserve more research.</p>
+            </div>
           </div>
         ) : (
           <>

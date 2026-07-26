@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { User, Bell, Shield, Wallet, Trash2, Save, CheckCircle2, AlertCircle } from 'lucide-react';
 import { motion } from 'motion/react';
 import { cn } from '../utils';
+import { UserProfile } from '../types';
 
 interface SettingsProps {
-  profile: any;
-  onUpdateProfile: (data: any) => Promise<void>;
+  profile: UserProfile | null;
+  onUpdateProfile: (data: { name: string; bio: string }) => Promise<void>;
   onResetPortfolio: () => Promise<void>;
 }
 
@@ -32,7 +33,7 @@ const Settings: React.FC<SettingsProps> = ({ profile, onUpdateProfile, onResetPo
       await onUpdateProfile({ name, bio });
       setSaveStatus('success');
       setTimeout(() => setSaveStatus('idle'), 3000);
-    } catch (error) {
+    } catch {
       setSaveStatus('error');
     } finally {
       setIsSaving(false);
@@ -48,7 +49,7 @@ const Settings: React.FC<SettingsProps> = ({ profile, onUpdateProfile, onResetPo
     }
   };
 
-  const sections = [
+  const sections: { id: typeof activeSection; label: string; icon: typeof User }[] = [
     { id: 'profile', label: 'Profile', icon: User },
     { id: 'notifications', label: 'Notifications', icon: Bell },
     { id: 'security', label: 'Security', icon: Shield },
@@ -68,7 +69,7 @@ const Settings: React.FC<SettingsProps> = ({ profile, onUpdateProfile, onResetPo
           {sections.map((section) => (
             <button
               key={section.id}
-              onClick={() => setActiveSection(section.id as any)}
+              onClick={() => setActiveSection(section.id)}
               className={cn(
                 "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm font-semibold",
                 activeSection === section.id
