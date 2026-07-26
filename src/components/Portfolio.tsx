@@ -104,7 +104,11 @@ const Portfolio: React.FC<PortfolioProps> = ({ holdings, virtualBalance }) => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="lab-page space-y-6">
+      <header className="lab-page-header">
+        <div><p className="text-brand-primary text-sm font-semibold">Portfolio</p><h1 className="lab-page-title mt-2">Your practice portfolio</h1><p className="lab-page-subtitle">Build judgement with every virtual trade.</p></div>
+        <p className="text-xs text-muted hidden sm:block">Market data may be delayed</p>
+      </header>
       <section className="app-panel overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-[1.7fr_.8fr_.8fr] divide-y lg:divide-y-0 lg:divide-x divide-border">
           <div className="p-6 sm:p-8 bg-[linear-gradient(120deg,rgba(59,157,255,.13),transparent_55%)]">
