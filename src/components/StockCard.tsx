@@ -35,7 +35,7 @@ const StockCard: React.FC<StockCardProps> = ({ stock, onClick, onAlertClick }) =
       <div className="flex justify-between items-start mb-5 pr-8">
         <div>
           <div className="flex items-center gap-2"><h3 className="text-base font-bold text-main">{stock.ticker}</h3><ArrowUpRight className="w-3.5 h-3.5 text-muted opacity-0 group-hover:opacity-100 transition-opacity" /></div>
-          <p className="text-[11px] text-muted font-medium mt-0.5 truncate max-w-[160px]">{stock.name}</p>
+          <p className="text-[11px] text-muted font-medium mt-0.5 truncate max-w-40">{stock.name}</p>
         </div>
         <div className="text-right">
           <p className="text-base font-semibold text-main">{formatCurrency(stock.price)}</p>
