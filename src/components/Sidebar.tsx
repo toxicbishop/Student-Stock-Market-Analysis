@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router';
 import { Home, TrendingUp, Users, Trophy, Settings, LogOut, BookOpen } from 'lucide-react';
 import { cn } from '../utils';
 

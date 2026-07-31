@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Holding } from '../types';
 import { formatCurrency } from '../utils';
 import { TrendingUp, Briefcase, PieChart as PieIcon, BarChart3, ArrowRight, BookOpen, Target } from 'lucide-react';

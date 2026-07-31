@@ -10,7 +10,7 @@ import {
   deleteDoc,
   getDocs
 } from 'firebase/firestore';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router';
 import { auth, db, signInWithGoogle, logout, handleFirestoreError, OperationType, RecaptchaVerifier, signInWithPhoneNumber } from './firebase';
 import { Stock, UserProfile, Holding, Trade, PriceAlert } from './types';
 import Sidebar from './components/Sidebar';
