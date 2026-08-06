@@ -67,14 +67,16 @@
     "postcss": "^8.5.24",
     "@grpc/grpc-js": "^1.9.16",
     "@hono/node-server": "^2.0.5",
-    "fast-uri": "^3.1.4",
+    "hono": "^4.12.34",
+    "fast-uri": "^3.1.5",
     "find-my-way": "^9.6.1"
   },
   "resolutions": {
     "postcss": "^8.5.24",
     "@grpc/grpc-js": "^1.9.16",
     "@hono/node-server": "^2.0.5",
-    "fast-uri": "^3.1.4",
+    "hono": "^4.12.34",
+    "fast-uri": "^3.1.5",
     "find-my-way": "^9.6.1"
   }
 }
