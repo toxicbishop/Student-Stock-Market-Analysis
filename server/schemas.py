@@ -69,7 +69,7 @@ class VoteRequest(BaseModel):
     voter_id: str
     vote: str
 
-# Autopsy
+# Autopsy & AI Analysis
 class AutopsyRequest(BaseModel):
     ticker: str
     action: str
@@ -78,3 +78,16 @@ class AutopsyRequest(BaseModel):
     quantity: float
     rsi: float
     volume_trend: str
+
+class TradeAnalysisRequest(BaseModel):
+    ticker: str
+    name: Optional[str] = None
+    price: float
+    action: str
+    quantity: float
+    total_value: float
+
+class TradeAnalysisResponse(BaseModel):
+    analysis: str
+    flags: str
+

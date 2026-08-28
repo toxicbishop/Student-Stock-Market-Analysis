@@ -25,7 +25,10 @@ app = FastAPI()
 
 models.Base.metadata.create_all(bind=database.engine)
 
-genai.configure(api_key=os.environ.get("NEXT_PUBLIC_GEMINI_API_KEY", ""))
+api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("NEXT_PUBLIC_GEMINI_API_KEY", "")
+if api_key:
+    genai.configure(api_key=api_key)
+
 
 @app.get("/stocks", response_model=List[schemas.StockListResponse])
 def get_stocks():
@@ -479,3 +482,50 @@ def generate_autopsy(req: schemas.AutopsyRequest):
         "ai_explanation": ai_explanation,
         "score": score
     }
+
+@app.post("/ai/analyze-trade", response_model=schemas.TradeAnalysisResponse)
+def analyze_trade(req: schemas.TradeAnalysisRequest):
+    stock_name = req.name or req.ticker
+    gemini_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("NEXT_PUBLIC_GEMINI_API_KEY", "")
+    
+    if gemini_key:
+        try:
+            model = genai.GenerativeModel('gemini-1.5-flash')
+            prompt = f"""Analyze this paper trade for a student learning the stock market:
+Stock: {req.ticker} ({stock_name})
+Current Price: ₹{req.price}
+Action: {req.action}
+Quantity: {req.quantity}
+Total Value: ₹{req.total_value}
+
+Provide a brief, encouraging analysis (max 3 sentences) explaining why this might be a good or risky move for a beginner.
+Also, identify any "mistake flags" (e.g., FOMO, lack of diversification, over-leveraging) if applicable.
+
+Return response in valid JSON format:
+{{
+  "analysis": "Your 2-3 sentence analysis here.",
+  "flags": "Comma separated flags or 'None'"
+}}"""
+            response = model.generate_content(prompt)
+            raw_text = response.text.strip()
+            # Clean markdown fences if any
+            clean_text = raw_text.replace("```json", "").replace("```", "").strip()
+            data = json.loads(clean_text)
+            return schemas.TradeAnalysisResponse(
+                analysis=data.get("analysis", "Trade executed successfully. Keep learning!"),
+                flags=data.get("flags", "None")
+            )
+        except Exception as e:
+            print(f"Gemini trade analysis failed: {e}")
+            
+    # Rule-based fallback
+    flag = "None"
+    if req.total_value > 50000:
+        flag = "High Capital Allocation"
+        analysis = f"Placing ₹{req.total_value:,.2f} on a single trade is aggressive for a student portfolio. Consider diversifying across sectors."
+    elif req.action.upper() == "BUY":
+        analysis = f"Entered {req.ticker} at ₹{req.price:.2f}. Maintain risk discipline and set a clear exit plan."
+    else:
+        analysis = f"Sold {req.ticker} at ₹{req.price:.2f}. Review your profit/loss against your initial trade plan."
+
+    return schemas.TradeAnalysisResponse(analysis=analysis, flags=flag)

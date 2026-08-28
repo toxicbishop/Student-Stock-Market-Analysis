@@ -54,3 +54,4 @@ Thumbs.db
 # Project-specific ignores
 frontend-v1-react/
 /generated/prisma
+*.log
