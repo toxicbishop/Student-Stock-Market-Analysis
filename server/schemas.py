@@ -1,6 +1,7 @@
-from pydantic import BaseModel
-from typing import List, Optional, Any
+from pydantic import BaseModel, field_validator, model_validator
+from typing import List, Optional, Any, Literal
 from datetime import datetime
+import math
 
 # Users
 class UserSyncRequest(BaseModel):
@@ -35,10 +36,30 @@ class StockListResponse(BaseModel):
 
 # Portfolio
 class TradeRequest(BaseModel):
-    userId: str
+    # NOTE: userId is intentionally absent — the authenticated user_id is
+    # derived server-side from the verified Firebase token.
     ticker: str
     quantity: float
-    action: str
+    action: Literal["BUY", "SELL"]
+
+    @field_validator("ticker")
+    @classmethod
+    def validate_ticker(cls, v: str) -> str:
+        v = v.strip().upper()
+        if not v:
+            raise ValueError("ticker must not be empty")
+        if len(v) > 20:
+            raise ValueError("ticker must be 20 characters or fewer")
+        return v
+
+    @field_validator("quantity")
+    @classmethod
+    def validate_quantity(cls, v: float) -> float:
+        if not math.isfinite(v):
+            raise ValueError("quantity must be a finite number")
+        if v <= 0:
+            raise ValueError("quantity must be greater than 0")
+        return v
 
 class HoldingSchema(BaseModel):
     ticker: str
@@ -56,6 +77,11 @@ class PortfolioSummaryResponse(BaseModel):
     total_current_value: float
     total_pnl: float
     total_pnl_pct: float
+
+class PortfolioResetResponse(BaseModel):
+    user_id: str
+    virtual_cash: float
+    message: str
 
 # Groups
 class GroupCreateRequest(BaseModel):
@@ -90,4 +116,3 @@ class TradeAnalysisRequest(BaseModel):
 class TradeAnalysisResponse(BaseModel):
     analysis: str
     flags: str
-

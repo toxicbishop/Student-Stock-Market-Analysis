@@ -15,9 +15,11 @@ from dotenv import load_dotenv
 try:
     # Supports `uvicorn server.main:app` when launched from the repository root.
     from . import models, schemas, database, analyzer
+    from .auth import get_current_user
 except ImportError:
     # Supports `uvicorn main:app --reload` when launched inside server/.
     import models, schemas, database, analyzer
+    from auth import get_current_user
 
 load_dotenv(os.path.join(database.BASE_DIR, ".env"))
 
@@ -29,6 +31,10 @@ api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("NEXT_PUBLIC_GEMINI
 if api_key:
     genai.configure(api_key=api_key)
 
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Stocks  (public — no auth required)
+# ─────────────────────────────────────────────────────────────────────────────
 
 @app.get("/stocks", response_model=List[schemas.StockListResponse])
 def get_stocks():
@@ -129,8 +135,20 @@ def get_quote(ticker: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Portfolio  (auth-protected)
+# ─────────────────────────────────────────────────────────────────────────────
+
 @app.get("/portfolio/{user_id}", response_model=schemas.PortfolioSummaryResponse)
-def get_portfolio_summary(user_id: str, db: Session = Depends(database.get_db)):
+def get_portfolio_summary(
+    user_id: str,
+    db: Session = Depends(database.get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    if current_user["uid"] != user_id:
+        raise HTTPException(status_code=403, detail="Access denied: you can only view your own portfolio.")
+
     portfolio = db.query(models.Portfolio).filter(models.Portfolio.user_id == user_id).first()
     
     if not portfolio:
@@ -193,7 +211,14 @@ def get_portfolio_summary(user_id: str, db: Session = Depends(database.get_db)):
     }
 
 @app.get("/portfolio/history/{user_id}")
-def get_portfolio_history(user_id: str, db: Session = Depends(database.get_db)):
+def get_portfolio_history(
+    user_id: str,
+    db: Session = Depends(database.get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    if current_user["uid"] != user_id:
+        raise HTTPException(status_code=403, detail="Access denied: you can only view your own trade history.")
+
     portfolio = db.query(models.Portfolio).filter(models.Portfolio.user_id == user_id).first()
     if not portfolio:
         raise HTTPException(status_code=404, detail="Portfolio not found")
@@ -219,12 +244,19 @@ def get_portfolio_history(user_id: str, db: Session = Depends(database.get_db)):
     return results
 
 @app.post("/portfolio/trade")
-def execute_trade(trade: schemas.TradeRequest, db: Session = Depends(database.get_db)):
-    portfolio = db.query(models.Portfolio).filter(models.Portfolio.user_id == trade.userId).first()
+def execute_trade(
+    trade: schemas.TradeRequest,
+    db: Session = Depends(database.get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    # user_id is derived exclusively from the verified token — never from the request body.
+    user_id = current_user["uid"]
+
+    portfolio = db.query(models.Portfolio).filter(models.Portfolio.user_id == user_id).first()
     if not portfolio:
         raise HTTPException(status_code=404, detail="Portfolio not found")
         
-    ticker_ns = f"{trade.ticker.upper()}.NS" if not trade.ticker.upper().endswith(".NS") else trade.ticker.upper()
+    ticker_ns = f"{trade.ticker}.NS" if not trade.ticker.endswith(".NS") else trade.ticker
     
     try:
         stock = yf.Ticker(ticker_ns)
@@ -243,14 +275,14 @@ def execute_trade(trade: schemas.TradeRequest, db: Session = Depends(database.ge
             
             portfolio.virtual_cash -= total_value
             
-            holding = db.query(models.Holding).filter(models.Holding.portfolio_id == portfolio.id, models.Holding.ticker == trade.ticker.upper()).first()
+            holding = db.query(models.Holding).filter(models.Holding.portfolio_id == portfolio.id, models.Holding.ticker == trade.ticker).first()
             if holding:
                 old_total = holding.quantity * holding.avg_buy_price
                 new_total = trade.quantity * price
                 holding.quantity += trade.quantity
                 holding.avg_buy_price = (old_total + new_total) / holding.quantity
             else:
-                holding = models.Holding(portfolio_id=portfolio.id, ticker=trade.ticker.upper(), quantity=trade.quantity, avg_buy_price=price)
+                holding = models.Holding(portfolio_id=portfolio.id, ticker=trade.ticker, quantity=trade.quantity, avg_buy_price=price)
                 db.add(holding)
                 
             trade_analyzer = analyzer.TradeAnalyzer(price, price, rsi, "unknown")
@@ -258,7 +290,7 @@ def execute_trade(trade: schemas.TradeRequest, db: Session = Depends(database.ge
             
             new_trade = models.Trade(
                 portfolio_id=portfolio.id,
-                ticker=trade.ticker.upper(),
+                ticker=trade.ticker,
                 action="BUY",
                 quantity=trade.quantity,
                 price=price,
@@ -271,7 +303,7 @@ def execute_trade(trade: schemas.TradeRequest, db: Session = Depends(database.ge
             db.commit()
             
         elif trade.action == "SELL":
-            holding = db.query(models.Holding).filter(models.Holding.portfolio_id == portfolio.id, models.Holding.ticker == trade.ticker.upper()).first()
+            holding = db.query(models.Holding).filter(models.Holding.portfolio_id == portfolio.id, models.Holding.ticker == trade.ticker).first()
             if not holding or holding.quantity < trade.quantity:
                 raise HTTPException(status_code=400, detail=f"You don't hold enough {trade.ticker} shares.")
                 
@@ -287,7 +319,7 @@ def execute_trade(trade: schemas.TradeRequest, db: Session = Depends(database.ge
             
             new_trade = models.Trade(
                 portfolio_id=portfolio.id,
-                ticker=trade.ticker.upper(),
+                ticker=trade.ticker,
                 action="SELL",
                 quantity=trade.quantity,
                 price=price,
@@ -305,15 +337,64 @@ def execute_trade(trade: schemas.TradeRequest, db: Session = Depends(database.ge
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.post("/portfolio/reset", response_model=schemas.PortfolioResetResponse)
+def reset_portfolio(
+    db: Session = Depends(database.get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    """
+    Resets the authenticated user's portfolio: virtual cash is restored to
+    the default (₹10,000) and all holdings and trades are deleted.
+    """
+    user_id = current_user["uid"]
+
+    portfolio = db.query(models.Portfolio).filter(models.Portfolio.user_id == user_id).first()
+    if not portfolio:
+        raise HTTPException(status_code=404, detail="Portfolio not found. Trade first to create one.")
+
+    # Delete all holdings
+    db.query(models.Holding).filter(models.Holding.portfolio_id == portfolio.id).delete()
+    # Delete all trades
+    db.query(models.Trade).filter(models.Trade.portfolio_id == portfolio.id).delete()
+    # Reset cash to default starting balance
+    portfolio.virtual_cash = 10000.0
+
+    db.commit()
+    db.refresh(portfolio)
+
+    return schemas.PortfolioResetResponse(
+        user_id=user_id,
+        virtual_cash=portfolio.virtual_cash,
+        message="Portfolio has been reset successfully.",
+    )
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Users  (auth-protected)
+# ─────────────────────────────────────────────────────────────────────────────
+
 @app.get("/users/{user_id}")
-def get_user(user_id: str, db: Session = Depends(database.get_db)):
+def get_user(
+    user_id: str,
+    db: Session = Depends(database.get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    if current_user["uid"] != user_id:
+        raise HTTPException(status_code=403, detail="Access denied.")
     user = db.query(models.User).filter(models.User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
 @app.post("/users/{user_id}")
-def sync_user(user_id: str, req: schemas.UserSyncRequest, db: Session = Depends(database.get_db)):
+def sync_user(
+    user_id: str,
+    req: schemas.UserSyncRequest,
+    db: Session = Depends(database.get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    if current_user["uid"] != user_id:
+        raise HTTPException(status_code=403, detail="Access denied.")
     user = db.query(models.User).filter(models.User.id == user_id).first()
     if user:
         user.name = req.name
@@ -325,7 +406,14 @@ def sync_user(user_id: str, req: schemas.UserSyncRequest, db: Session = Depends(
     return user
 
 @app.patch("/users/{user_id}")
-def update_user(user_id: str, req: schemas.UserUpdateRequest, db: Session = Depends(database.get_db)):
+def update_user(
+    user_id: str,
+    req: schemas.UserUpdateRequest,
+    db: Session = Depends(database.get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    if current_user["uid"] != user_id:
+        raise HTTPException(status_code=403, detail="Access denied.")
     user = db.query(models.User).filter(models.User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -338,6 +426,11 @@ def update_user(user_id: str, req: schemas.UserUpdateRequest, db: Session = Depe
     db.commit()
     db.refresh(user)
     return user
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Groups  (auth-protected where user context matters)
+# ─────────────────────────────────────────────────────────────────────────────
 
 @app.get("/groups")
 def get_groups(user_id: str, db: Session = Depends(database.get_db)):
@@ -385,7 +478,14 @@ def create_group(req: schemas.GroupCreateRequest, db: Session = Depends(database
     return group
 
 @app.post("/groups/vote")
-def cast_vote(req: schemas.VoteRequest, db: Session = Depends(database.get_db)):
+def cast_vote(
+    req: schemas.VoteRequest,
+    db: Session = Depends(database.get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    if current_user["uid"] != req.voter_id:
+        raise HTTPException(status_code=403, detail="Access denied: you may only cast your own vote.")
+
     proposal = db.query(models.Proposal).filter(models.Proposal.id == req.proposal_id).first()
     if not proposal:
         raise HTTPException(status_code=404, detail="Proposal not found")
@@ -450,6 +550,11 @@ def cast_vote(req: schemas.VoteRequest, db: Session = Depends(database.get_db)):
     db.commit()
     
     return {"status": new_status}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AI Analysis  (public — no auth required)
+# ─────────────────────────────────────────────────────────────────────────────
 
 @app.post("/ai/autopsy")
 def generate_autopsy(req: schemas.AutopsyRequest):
