@@ -13,30 +13,47 @@ export interface UserProfile {
   name: string;
   email: string;
   photoURL?: string;
+  /** Mirrors UserUpdateRequest optional fields */
   bio?: string;
   college?: string;
+  profile_photo?: string;
   virtual_cash: number;
   createdAt: TimestampValue;
 }
 
+/**
+ * Mirrors backend HoldingSchema — includes live market valuation fields
+ * returned by GET /portfolio/{user_id}.
+ */
 export interface Holding {
-  id: string;
   ticker: string;
   quantity: number;
   avg_buy_price: number;
-  last_updated: TimestampValue;
+  /** Live market price fetched server-side from Yahoo Finance */
+  current_price: number;
+  /** Unrealised P&L in ₹ */
+  pnl: number;
+  /** Unrealised P&L as a percentage */
+  pnl_pct: number;
 }
 
+/**
+ * Mirrors the trade history shape returned by GET /portfolio/history/{user_id}.
+ */
 export interface Trade {
   id: string;
+  portfolio_id: string;
   ticker: string;
   action: 'BUY' | 'SELL';
   quantity: number;
   price: number;
   total_value: number;
-  ai_analysis?: string;
-  mistake_flags?: string;
-  executed_at: TimestampValue;
+  rsi_at_trade?: number | null;
+  volume_trend?: string | null;
+  ai_analysis?: string | null;
+  mistake_flags?: string | null;
+  mistakeFlags?: object[];
+  executed_at: string;
 }
 
 export interface Group {

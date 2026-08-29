@@ -61,6 +61,7 @@ const App: React.FC = () => {
     profile,
     holdings,
     trades,
+    summary,
     handleTrade,
     handleUpdateProfile,
     handleResetPortfolio,
@@ -211,7 +212,13 @@ const App: React.FC = () => {
                     transition={standardTransition}
                     className="lab-page space-y-6"
                   >
-                    <Portfolio holdings={holdings} virtualBalance={profile?.virtual_cash || 0} />
+                    <Portfolio
+                      holdings={holdings}
+                      virtualBalance={profile?.virtual_cash || 0}
+                      totalPnl={summary.total_pnl}
+                      totalPnlPct={summary.total_pnl_pct}
+                      totalCurrentValue={summary.total_current_value}
+                    />
                     <TradeHistory trades={trades} />
                   </motion.div>
                 }

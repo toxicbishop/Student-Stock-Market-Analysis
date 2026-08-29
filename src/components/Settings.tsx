@@ -227,7 +227,7 @@ const Settings: React.FC<SettingsProps> = ({ profile, onUpdateProfile, onResetPo
                   <div className="flex-1">
                     <p className="text-sm font-bold text-red-400">Reset Portfolio</p>
                     <p className="text-xs text-red-400/70 mt-1 leading-relaxed">
-                      This will permanently delete all your trade history, reset your balance to $100,000, and remove your current positions. This action cannot be undone.
+                      This will permanently delete all your trade history, reset your balance to ₹10,000, and remove your current positions. This action cannot be undone.
                     </p>
                     
                     {!showResetConfirm ? (

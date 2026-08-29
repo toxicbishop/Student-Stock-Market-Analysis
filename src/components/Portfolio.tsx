@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import { Holding } from '../types';
 import { formatCurrency } from '../utils';
-import { TrendingUp, Briefcase, PieChart as PieIcon, BarChart3, ArrowRight, BookOpen, Target } from 'lucide-react';
+import { TrendingUp, TrendingDown, Briefcase, PieChart as PieIcon, BarChart3, ArrowRight, BookOpen, Target } from 'lucide-react';
 import { 
   Chart as ChartJS, 
   ArcElement, 
@@ -28,18 +28,28 @@ ChartJS.register(
 interface PortfolioProps {
   holdings: Holding[];
   virtualBalance: number;
+  /** Live P&L and valuation totals from PortfolioSummaryResponse */
+  totalPnl: number;
+  totalPnlPct: number;
+  totalCurrentValue: number;
 }
 
-const Portfolio: React.FC<PortfolioProps> = ({ holdings, virtualBalance }) => {
-  const totalValue = holdings.reduce((acc, h) => acc + (h.quantity * h.avg_buy_price), 0);
-  const portfolioValue = totalValue + virtualBalance;
+const Portfolio: React.FC<PortfolioProps> = ({
+  holdings,
+  virtualBalance,
+  totalPnl,
+  totalPnlPct,
+  totalCurrentValue,
+}) => {
+  const portfolioValue = totalCurrentValue + virtualBalance;
+  const isPositive = totalPnlPct >= 0;
 
-  // Chart Data
+  // Chart Data — use live current_price for accurate market-value weighting
   const pieData = {
     labels: ['Available Cash', ...holdings.map(h => h.ticker)],
     datasets: [
       {
-        data: [virtualBalance, ...holdings.map(h => h.quantity * h.avg_buy_price)],
+        data: [virtualBalance, ...holdings.map(h => h.quantity * h.current_price)],
         backgroundColor: ['#3b9dff', '#5cb2ff', '#7bc4ff', '#9ad3ff', '#b9e2ff', '#d9f1ff'],
         borderColor: [
           'rgba(9, 132, 227, 1)',
@@ -59,7 +69,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ holdings, virtualBalance }) => {
     datasets: [
       {
         label: 'Market Value (₹)',
-        data: holdings.map(h => h.quantity * h.avg_buy_price),
+        data: holdings.map(h => h.quantity * h.current_price),
         backgroundColor: '#3b9dff99',
         borderColor: '#3b9dff',
         borderWidth: 1,
@@ -76,7 +86,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ holdings, virtualBalance }) => {
         position: 'bottom' as const,
         labels: {
           color: '#8f9bad',
-          font: { size: 10, weight: 'bold' },
+          font: { size: 10, weight: 'bold' as const },
           padding: 20,
           usePointStyle: true,
         },
@@ -115,9 +125,10 @@ const Portfolio: React.FC<PortfolioProps> = ({ holdings, virtualBalance }) => {
           <div className="p-6 sm:p-8 bg-[linear-gradient(120deg,rgba(59,157,255,.18),transparent_58%)] relative overflow-hidden">
             <p className="metric-label mb-3">Virtual portfolio value</p>
             <h3 className="text-3xl sm:text-4xl font-bold text-main tabular-nums">{formatCurrency(portfolioValue)}</h3>
-            <div className="flex items-center gap-1.5 text-emerald-400 text-xs font-bold mt-4">
-            <TrendingUp className="w-3.5 h-3.5" />
-              <span>+4.2% total return</span><span className="text-muted font-medium ml-1">this session</span>
+            <div className={`flex items-center gap-1.5 text-xs font-bold mt-4 ${isPositive ? 'text-emerald-400' : 'text-red-400'}`}>
+              {isPositive ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
+              <span>{isPositive ? '+' : ''}{totalPnlPct.toFixed(2)}% total return</span>
+              <span className="text-muted font-medium ml-1">on invested capital</span>
             </div>
           </div>
           <div className="p-6 sm:p-8 flex flex-col justify-center">
@@ -191,11 +202,18 @@ const Portfolio: React.FC<PortfolioProps> = ({ holdings, virtualBalance }) => {
                 </thead>
                 <tbody className="divide-y divide-border">
                   {holdings.map((holding) => (
-                    <tr key={holding.id} className="hover:bg-surface-hover transition-colors duration-200">
-                      <td className="px-6 py-4 text-sm font-bold text-main">{holding.ticker}</td><td className="px-6 py-4 text-sm font-medium text-muted">{holding.quantity.toFixed(4)}</td><td className="px-6 py-4 text-sm font-medium text-muted">{formatCurrency(holding.avg_buy_price)}</td><td className="px-6 py-4 text-sm font-bold text-main">{formatCurrency(holding.quantity * holding.avg_buy_price)}</td><td className="px-6 py-4">
-                        <span className="text-[11px] font-bold text-emerald-500 flex items-center gap-1">
-                          <TrendingUp className="w-3 h-3" />
-                          +2.4%
+                    <tr key={holding.ticker} className="hover:bg-surface-hover transition-colors duration-200">
+                      <td className="px-6 py-4 text-sm font-bold text-main">{holding.ticker}</td>
+                      <td className="px-6 py-4 text-sm font-medium text-muted">{holding.quantity.toFixed(4)}</td>
+                      <td className="px-6 py-4 text-sm font-medium text-muted">{formatCurrency(holding.avg_buy_price)}</td>
+                      <td className="px-6 py-4 text-sm font-bold text-main">{formatCurrency(holding.quantity * holding.current_price)}</td>
+                      <td className="px-6 py-4">
+                        <span className={`text-[11px] font-bold flex items-center gap-1 ${holding.pnl_pct >= 0 ? 'text-emerald-500' : 'text-red-400'}`}>
+                          {holding.pnl_pct >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                          {holding.pnl_pct >= 0 ? '+' : ''}{holding.pnl_pct.toFixed(2)}%
+                        </span>
+                        <span className="text-[10px] text-muted mt-0.5 block">
+                          {holding.pnl >= 0 ? '+' : ''}{formatCurrency(holding.pnl)}
                         </span>
                       </td>
                     </tr>
@@ -207,7 +225,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ holdings, virtualBalance }) => {
             {/* Mobile Card View */}
             <div className="sm:hidden divide-y divide-border">
               {holdings.map((holding) => (
-                <div key={holding.id} className="p-6 space-y-4">
+                <div key={holding.ticker} className="p-6 space-y-4">
                   <div className="flex justify-between items-start">
                     <div>
                       <h4 className="font-bold text-main text-base">{holding.ticker}</h4>
@@ -216,10 +234,10 @@ const Portfolio: React.FC<PortfolioProps> = ({ holdings, virtualBalance }) => {
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-bold text-main">{formatCurrency(holding.quantity * holding.avg_buy_price)}</p>
-                      <span className="text-[10px] font-bold text-emerald-500 flex items-center justify-end gap-1 mt-0.5">
-                        <TrendingUp className="w-2.5 h-2.5" />
-                        +2.4%
+                      <p className="text-sm font-bold text-main">{formatCurrency(holding.quantity * holding.current_price)}</p>
+                      <span className={`text-[10px] font-bold flex items-center justify-end gap-1 mt-0.5 ${holding.pnl_pct >= 0 ? 'text-emerald-500' : 'text-red-400'}`}>
+                        {holding.pnl_pct >= 0 ? <TrendingUp className="w-2.5 h-2.5" /> : <TrendingDown className="w-2.5 h-2.5" />}
+                        {holding.pnl_pct >= 0 ? '+' : ''}{holding.pnl_pct.toFixed(2)}%
                       </span>
                     </div>
                   </div>
@@ -230,7 +248,7 @@ const Portfolio: React.FC<PortfolioProps> = ({ holdings, virtualBalance }) => {
                     </div>
                     <div className="text-right">
                       <p className="text-[10px] text-muted font-bold uppercase tracking-wider">Market Price</p>
-                      <p className="text-xs text-muted font-medium mt-1">{formatCurrency(holding.avg_buy_price * 1.024)}</p>
+                      <p className="text-xs text-muted font-medium mt-1">{formatCurrency(holding.current_price)}</p>
                     </div>
                   </div>
                 </div>
